@@ -1,0 +1,33 @@
+{
+  "name": "LiveSnooker",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "grunt": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-contrib-connect": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-karma": "latest",
+    "grunt-notify": "latest",
+    "karma": "latest",
+    "karma-chai": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-growl-reporter": "latest",
+    "karma-mocha": "latest",
+    "karma-phantomjs-launcher": "latest",
+    "karma-sinon": "latest",
+    "load-grunt-tasks": "latest",
+    "mocha": "latest",
+    "sinon": "latest"
+  },
+  "engines": {
+    "node": ">=0.10.29"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "bower": "bower install"
+  }
+}
