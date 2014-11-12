@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="/vendors/webcomponentsjs/webcomponents.js"></script>
+  <script src="/vendors/jquery/jquery.js"></script>
+  <link rel="import" href="/elements/live-snooker-input/element.html">
+  <link rel="import" href="/elements/live-snooker-stream/element.html">
+</head>
+<body>
+  <live-snooker-stream
+    stream_url="<!-- @echo BACKEND_HOST -->/framestream"
+  ></live-snooker-stream>
+  <live-snooker-input
+    action_url="<!-- @echo BACKEND_HOST -->/action"
+  ></live-snooker-input>
+</body>
+</html>

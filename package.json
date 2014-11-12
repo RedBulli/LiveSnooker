@@ -2,12 +2,16 @@
   "name": "LiveSnooker",
   "version": "0.0.0",
   "private": true,
-  "dependencies": {},
-  "devDependencies": {
-    "chai": "^1.10.0",
+  "dependencies": {
     "grunt": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-coffee": "latest",
+    "grunt-env": "latest",
+    "grunt-preprocess": "latest",
+    "load-grunt-tasks": "latest"
+  },
+  "devDependencies": {
+    "chai": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-karma": "latest",
@@ -19,7 +23,6 @@
     "karma-mocha": "latest",
     "karma-phantomjs-launcher": "latest",
     "karma-sinon": "latest",
-    "load-grunt-tasks": "latest",
     "mocha": "latest",
     "sinon": "latest"
   },

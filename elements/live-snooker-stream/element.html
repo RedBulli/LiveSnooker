@@ -1,0 +1,31 @@
+<link rel="import" href="/vendors/polymer/polymer.html">
+<polymer-element name="live-snooker-stream" attributes="stream_url">
+  <template>
+    <style>
+      :host {
+        background-color: black;
+      }
+      .points {
+        background-color: yellow;
+      }
+    </style>
+    <div id="message">{{message}}</div>
+  </template>
+
+  <script>
+    Polymer('live-snooker-stream', {
+      ready: function() {
+        var _this = this;
+        var source = new EventSource(this.stream_url);
+        source.onmessage = function (event) {
+          console.log(event);
+          //var data = JSON.parse(event.data);
+          _this.message = event.data;
+        };
+        return {
+          message: ""
+        }
+      }
+    });
+  </script>
+</polymer-element>

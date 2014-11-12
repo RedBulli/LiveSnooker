@@ -2,6 +2,13 @@ module.exports = (grunt) ->
   require('load-grunt-tasks')(grunt)
 
   grunt.initConfig
+    env:
+      options:
+        add: # Default env values
+          BACKEND_HOST: 'http://localhost:5000'
+      build:
+        src: '.env'
+
     coffee:
       config:
         options:
@@ -37,6 +44,17 @@ module.exports = (grunt) ->
         singleRun: false
         background: true
 
+    preprocess:
+      html:
+        src: 'index.html',
+        dest : 'public/index.html'
+
   grunt.registerTask 'serve', ['concurrent:serve']
 
-  grunt.registerTask 'default', ['karma:unit', 'clean', 'coffee', 'connect:server', 'watch']
+  grunt.registerTask 'build', [
+    'env:build', 'preprocess:html', 'clean', 'coffee'
+  ] 
+
+  grunt.registerTask 'default', [
+    'karma:unit', 'build', 'connect:server', 'watch'
+  ]
