@@ -3,11 +3,11 @@ module.exports = (grunt) ->
 
   grunt.initConfig
     env:
-      options:
-        add: # Default env values
-          BACKEND_HOST: 'http://localhost:5000'
-      build:
+      dev:
+        BACKEND_HOST: 'http://localhost:5000'
+      dist:
         src: '.env'
+        BACKEND_HOST: 'https://livesnooker-server.herokuapp.com'
 
     coffee:
       config:
@@ -36,7 +36,7 @@ module.exports = (grunt) ->
       server:
         options:
           port: 9000
-          base: "./public"
+          base: "./build"
 
     karma:
       unit:
@@ -47,14 +47,27 @@ module.exports = (grunt) ->
     preprocess:
       html:
         src: 'index.html',
-        dest : 'public/index.html'
+        dest : 'build/index.html'
 
-  grunt.registerTask 'serve', ['concurrent:serve']
+    concurrent:
+      serve: ['connect:server']
+
+    copy:
+      dist:
+        files: [
+          {expand: true, cwd: 'elements', src: ['**'], dest: 'build/elements'},
+        ]
+
+  grunt.registerTask 'serve', ['build', 'connect:server', 'watch']
 
   grunt.registerTask 'build', [
-    'env:build', 'preprocess:html', 'clean', 'coffee'
-  ] 
+    'preprocess:html', 'copy:dist'
+  ]
+
+  grunt.registerTask 'dist', [
+    'env:dist', 'preprocess:html', 'copy:dist'
+  ]
 
   grunt.registerTask 'default', [
-    'karma:unit', 'build', 'connect:server', 'watch'
+    'env:dev', 'karma:unit', 'build', 'connect:server', 'watch'
   ]
