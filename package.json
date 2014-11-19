@@ -26,9 +26,7 @@
     "karma-growl-reporter": "latest",
     "karma-mocha": "latest",
     "karma-phantomjs-launcher": "latest",
-    "karma-sinon": "latest",
-    "mocha": "latest",
-    "sinon": "latest"
+    "mocha": "latest"
   },
   "engines": {
     "node": ">=0.10.29"
@@ -36,7 +34,7 @@
   "scripts": {
     "bower": "node_modules/bower/bin/bower install",
     "postinstall": "npm run-script bower && node_modules/grunt-cli/bin/grunt dist",
-    "prestart": "npm install",
+    "test": "node_modules/grunt-cli/bin/grunt karma:ci",
     "start": "node_modules/grunt-cli/bin/grunt serve"
   }
 }

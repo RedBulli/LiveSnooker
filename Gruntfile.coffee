@@ -13,24 +13,41 @@ module.exports = (grunt) ->
       config:
         options:
           bare: true
-        files: [
-          {
-            expand: true
-            cwd: 'coffees'
-            src: ['**/*.coffee']
-            dest: 'build'
-            ext: '.js'
-          }
-        ]
+      app: 
+        files: [{
+          expand: true
+          cwd: 'elements'
+          src: ['**/*.coffee']
+          dest: 'build/elements'
+          ext: '.js'
+        }]
+      specs:
+        files: [{
+          expand: true
+          cwd: 'specs'
+          src: ['**/*.coffee']
+          dest: 'specs_build'
+          ext: '.js'
+        }]
 
     clean:
-      js:
-        src: ['build/**/*.js']
+      elements:
+        src: ['build/elements/**/*']
+      elements_html:
+        src: ['build/elements/**/*.html']
+      elements_js:
+        src: ['build/elements/**/*.js']
 
     watch:
       coffee:
-        files: 'coffees/**/*.coffee'
-        tasks: ['clean', 'coffee', 'karma:unit:run']
+        files: ['elements/**/*.coffee', 'specs/**/*.coffee']
+        tasks: ['clean:elements_js', 'coffee', 'karma:unit:run']
+      public_html:
+        files: ['public/*.html']
+        tasks: ['preprocess:html', 'karma:unit:run']
+      elements_html:
+        files: ['elements/**/*.html']
+        tasks: ['clean:elements_html', 'copy:html', 'karma:unit:run']
 
     connect:
       server:
@@ -43,31 +60,33 @@ module.exports = (grunt) ->
         configFile: 'karma.conf.js'
         singleRun: false
         background: true
+      ci:
+        configFile: 'karma.conf.js'
+        singleRun: true
 
     preprocess:
       html:
-        src: 'index.html',
+        src: 'public/index.html'
         dest : 'build/index.html'
 
     concurrent:
       serve: ['connect:server']
 
     copy:
-      dist:
+      html:
         files: [
-          {expand: true, cwd: 'elements', src: ['**'], dest: 'build/elements'},
+          {expand: true, cwd: 'elements', src: ['**/*.html'], dest: 'build/elements'},
         ]
 
-  grunt.registerTask 'serve', ['build', 'connect:server', 'watch']
+  grunt.registerTask 'serve', ['build:dev', 'connect:server', 'watch']
 
-  grunt.registerTask 'build', [
-    'preprocess:html', 'copy:dist'
-  ]
-
-  grunt.registerTask 'dist', [
-    'env:dist', 'preprocess:html', 'copy:dist'
-  ]
+  grunt.registerTask 'build', (target) ->
+    if target == 'dist'
+      grunt.task.run(['env:dist'])
+    else if target == 'dev'
+      grunt.task.run(['env:dev'])
+    grunt.task.run(['clean:elements', 'preprocess:html', 'coffee:app', 'copy:html'])
 
   grunt.registerTask 'default', [
-    'env:dev', 'karma:unit', 'build', 'connect:server', 'watch'
+    'karma:unit', 'serve'
   ]

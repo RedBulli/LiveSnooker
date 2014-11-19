@@ -1,0 +1,18 @@
+<link rel="import" href="../../vendors/polymer/polymer.html">
+<script src="../../vendors/jquery/jquery.js"></script>
+
+<polymer-element name="live-snooker-input" attributes="action_url">
+  <template>
+    <form method="POST" action="{{action_url}}" id="frameForm">
+      <ul>
+        <li>frame_id<input type="number" name="frame_id" value="2"></li>
+        <li>player_id<input type="number" name="player_id" value="2"></li>
+        <li>attempt<input type="text" name="attempt" value="pot"></li>
+        <li>result<input type="text" name="result" value="pot"></li>
+        <li>points<input type="number" name="points" value="2"></li>
+      </ul> 
+    </form>
+  </template>
+  
+  <script src="live-snooker-input.js"></script>
+</polymer-element>
