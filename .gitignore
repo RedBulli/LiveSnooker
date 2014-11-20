@@ -1,7 +1,6 @@
 bower_components
 build
 node_modules
-public
 *.sublime-*
 .env
 specs_build
