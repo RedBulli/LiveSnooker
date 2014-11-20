@@ -34,8 +34,9 @@
   },
   "scripts": {
     "bower": "node_modules/bower/bin/bower install",
-    "postinstall": "npm run-script bower && node_modules/grunt-cli/bin/grunt build:dist",
-    "test": "node_modules/grunt-cli/bin/grunt karma:ci",
+    "build": "npm run-script bower && node_modules/grunt-cli/bin/grunt build:dist",
+    "postinstall": "npm run-script build",
+    "test": "node_modules/grunt-cli/bin/grunt build:test && node_modules/grunt-cli/bin/grunt karma:ci",
     "start": "node_modules/grunt-cli/bin/grunt serve"
   }
 }

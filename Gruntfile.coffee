@@ -37,6 +37,8 @@ module.exports = (grunt) ->
         src: ['build/elements/**/*.html']
       elements_js:
         src: ['build/elements/**/*.js']
+      specs:
+        src: ['specs_build/**/*.js']
 
     watch:
       coffee:
@@ -85,6 +87,8 @@ module.exports = (grunt) ->
       grunt.task.run(['env:dist'])
     else if target == 'dev'
       grunt.task.run(['env:dev'])
+    else if target == 'test'
+      grunt.task.run(['env:dev', 'clean:specs', 'coffee:specs'])
     grunt.task.run(['clean:elements', 'preprocess:html', 'coffee:app', 'copy:html'])
 
   grunt.registerTask 'default', [
