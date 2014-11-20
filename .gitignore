@@ -4,3 +4,5 @@ node_modules
 public
 *.sublime-*
 .env
+specs_build
+npm-debug.log

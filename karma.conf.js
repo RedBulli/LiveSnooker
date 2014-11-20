@@ -12,12 +12,13 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-script-launcher',
       'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-chai'
     ],
     frameworks: ['mocha', 'chai'],
     browsers: [
-      //'PhantomJS',
-      'Chrome'
+      //'Chrome',
+      'Firefox'
     ],
     singleRun: false,
     autoWatch: false,
