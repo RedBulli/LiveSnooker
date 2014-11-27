@@ -4,7 +4,8 @@
   "dependencies": {
     "jquery": "~1.10.0",
     "polymer": "Polymer/polymer#~0.5.0",
-    "webcomponentsjs": "~0.5.0"
+    "webcomponentsjs": "~0.5.0",
+    "backbone": "~1.1.2"
   },
   "devDependencies": {
   }

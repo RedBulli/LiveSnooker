@@ -1,0 +1,23 @@
+<link rel="import" href="../../vendors/polymer/polymer.html">
+<link rel="import" href="points-input.html">
+
+<polymer-element name="frame-input" attributes="model">
+  <template>
+    <points-input on-shot="{{onShot}}"></points-input>
+  </template>
+  
+  <script>
+    Polymer({
+      onShot: function(event) {
+        action = {
+          frame: this.model,
+          player: this.model.currentPlayer,
+          attempt: "pot",
+          points: event.detail
+        };
+        this.model.pushAction(action);
+        console.log(this.model);
+      }
+    });
+  </script>
+</polymer-element>
