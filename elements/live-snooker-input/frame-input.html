@@ -9,14 +9,12 @@
   <script>
     Polymer({
       onShot: function(event) {
-        action = {
-          frame: this.model,
-          player: this.model.currentPlayer,
+        var action = this.model.createShot({
           attempt: "pot",
+          result: "pot",
           points: event.detail
-        };
+        });
         this.model.pushAction(action);
-        console.log(this.model);
       }
     });
   </script>
