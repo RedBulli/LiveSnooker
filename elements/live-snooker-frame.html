@@ -1,0 +1,17 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="frame-model.html">
+<link rel="import" href="frame-view.html">
+<link rel="import" href="input/frame-input.html">
+
+<polymer-element name="live-snooker-frame">
+  <template>
+    <frame-model model="{{model}}"></frame-model>
+    <frame-view model="{{model}}"></frame-view>
+    <frame-input model="{{model}}"></frame-input>
+  </template>
+  <script>
+    Polymer({
+
+    });
+  </script>
+</polymer-element>

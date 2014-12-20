@@ -9,12 +9,15 @@
   <script>
     Polymer({
       onShot: function(event) {
-        var action = this.model.createShot({
+        var attrs = {
           attempt: "pot",
           result: "pot",
           points: event.detail
-        });
-        this.model.pushAction(action);
+        };
+        if (attrs.points == 0) {
+          attrs.result = "nothing";
+        }
+        this.model.pushAction(this.model.createShot(attrs));
       }
     });
   </script>

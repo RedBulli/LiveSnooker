@@ -5,3 +5,4 @@ node_modules
 .env
 specs_build
 npm-debug.log
+.DS_Store

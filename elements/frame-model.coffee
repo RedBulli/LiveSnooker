@@ -1,8 +1,3 @@
-sequences = {}
-sequence = (name) ->
-  current = sequences[name] || 0
-  sequences[name] = current + 1
-
 sendAction = (url, data) ->
   $.ajax
     type: "POST"
@@ -11,46 +6,56 @@ sendAction = (url, data) ->
     headers:
       "Content-Type": "application/json"
 
-class Shot extends Backbone.Model
-  initialize: ->
-    @set('id', sequence('shot'))
-
-class Shots extends Backbone.Collection
-  model: Shot
-
-  initialize: ->
-    @on 'add', (shot) ->
-      sendAction('http://localhost:5000/action', JSON.stringify(shot.toJSON()))
-
 class Player extends Backbone.Model
+
+class Players extends Backbone.Collection
+  model: Player
+
+  getOtherPlayer: (playerId) ->
+    if @length != 2
+      throw new Error('getOtherPlayer is only defined to Players collection with 2 players')
+    else
+      @find((player) -> player.id != playerId)
 
 class Frame extends Backbone.Model
   initialize: (options) ->
     @set('actions', new Shots())
-    @set('currentPlayer', @get('players')[0])
+    @set('currentPlayer', @get('players').first())
+
+  getNonCurrentPlayer: ->
+    @get('players').getOtherPlayer(@get('currentPlayer').id)
 
   pushAction: (action) ->
     @get('actions').add(action)
+    if !action.isPot()
+      @set 'currentPlayer', @getNonCurrentPlayer()
+    @trigger('updateView')
 
   createShot: ({attempt, result, points}) ->
-    new Shot
+    shot = new Shot
       frame_id: @id,
       player_id: @get('currentPlayer').id,
       attempt: attempt,
       result: result,
-      points: points
+      points: parseInt(points)
+    if shot.validate(shot.attributes)
+      throw shot.validate(shot.attributes)
+    shot
+
+  getScores: ->
+    rawTotals = @get('actions').calculateTotals()
+    firstTotal = rawTotals[@get('players').models[0].id] || { points: 0, fouls: 0 }
+    secondTotal = rawTotals[@get('players').models[1].id] || { points: 0, fouls: 0 }
+    [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
 
 Polymer
-  attributeChanged: (event) ->
-    console.log "Frame attribute changed", event
-
   onAction: (data) ->
     sendAction(@actionURL, createShot(data.details))
 
   ready: ->
+    console.log "model ready"
     @model = new Frame
       id: 1
-      players: [new Player(id: 1, name: "Sampo"), new Player(id: 2, name: "Pekka")]
+      players: new Players([new Player(id: 1, name: "Sampo"), new Player(id: 2, name: "Pekka")])
     @actions = (action) ->
       console.log action
-

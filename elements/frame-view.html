@@ -1,14 +1,20 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="frame-model.html">
-<link rel="import" href="live-snooker-input/frame-input.html">
 
-<polymer-element name="frame-view">
+<polymer-element name="frame-view" attributes="model">
   <template>
-    <frame-model model="{{model}}"></frame-model>
-    <frame-input model="{{model}}"></frame-input>
+    <table>
+      <div>Player1: {{model.attributes.players[0].attributes.name}} Score: {{scores[0]}}</div>
+      <div>Player2: {{model.attributes.players[1].attributes.name}} Score: {{scores[1]}}</div>
+    </table>
   </template>
   <script>
     Polymer({
+      updateView: function() {
+        this.scores = this.model.getScores();
+      },
+      ready: function() {
+        this.model.listenTo(this.model, 'updateView', this.updateView.bind(this));
+      }
     });
   </script>
 </polymer-element>

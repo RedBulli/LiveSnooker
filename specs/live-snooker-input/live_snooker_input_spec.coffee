@@ -3,7 +3,7 @@ describe 'FrameController', ->
   before (done) ->
     link = document.createElement("link")
     link.rel = "import"
-    link.href = "/base/build/elements/live-snooker-input/frame-input.html"
+    link.href = "/base/build/elements/input/frame-input.html"
     link.onload = -> done()
     document.getElementsByTagName("head")[0].appendChild(link)
 
