@@ -1,22 +1,3 @@
-sendAction = (url, data) ->
-  $.ajax
-    type: "POST"
-    url: url
-    data: data
-    headers:
-      "Content-Type": "application/json"
-
-class Player extends Backbone.Model
-
-class Players extends Backbone.Collection
-  model: Player
-
-  getOtherPlayer: (playerId) ->
-    if @length != 2
-      throw new Error('getOtherPlayer is only defined to Players collection with 2 players')
-    else
-      @find((player) -> player.id != playerId)
-
 class Frame extends Backbone.Model
   initialize: (options) ->
     @set('actions', new Shots())
@@ -48,14 +29,4 @@ class Frame extends Backbone.Model
     secondTotal = rawTotals[@get('players').models[1].id] || { points: 0, fouls: 0 }
     [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
 
-Polymer
-  onAction: (data) ->
-    sendAction(@actionURL, createShot(data.details))
-
-  ready: ->
-    console.log "model ready"
-    @model = new Frame
-      id: 1
-      players: new Players([new Player(id: 1, name: "Sampo"), new Player(id: 2, name: "Pekka")])
-    @actions = (action) ->
-      console.log action
+((scope) -> scope.Frame = Frame)(@)

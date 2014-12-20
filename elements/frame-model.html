@@ -1,8 +1,16 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="vendor-elements/underscore.html">
-<link rel="import" href="vendor-elements/backbone.html">
-<link rel="import" href="shots.html">
+<link rel="import" href="js/frame.html">
+<link rel="import" href="js/players.html">
 
 <polymer-element name="frame-model" attributes="model actions" hidden>
-  <script src="frame-model.js"></script>
+  <script>
+    Polymer({
+      ready: function() {
+        this.model = new Frame({
+          id: 1,
+          players: new Players([{id: 1, name: "Sampo"}, {id: 2, name: "Pekka"}])
+        });
+      }
+    });
+  </script>
 </polymer-element>
