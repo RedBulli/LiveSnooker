@@ -1,0 +1,41 @@
+<!-- <script src="http://www.RTCMultiConnection.org/latest.js"></script> -->
+
+<polymer-element name="p2p-video" attributes="input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #cam {
+        background-color: green;
+      }
+    </style>
+    <video id="cam" width="640" height="480"></video>
+  </template>
+
+  <script>
+    Polymer({
+      ready: function() {
+        /*
+        var el = this.$.cam;
+        var connection = new RTCMultiConnection();
+
+        connection.session = {
+          audio: true,
+          video: true,
+          oneway: true
+        };
+
+        connection.onstream = function(e) {
+          el.insertBefore(e.mediaElement, el.firstChild);
+        };
+
+        connection.connect();
+        if (this.input) {
+          connection.open();
+        }
+        */
+      }
+    });
+  </script>
+</polymer-element>

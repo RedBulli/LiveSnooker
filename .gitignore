@@ -6,3 +6,4 @@ node_modules
 specs_build
 npm-debug.log
 .DS_Store
+sinon/

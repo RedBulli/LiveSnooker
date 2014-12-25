@@ -1,12 +1,28 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="frame-model.html">
-<link rel="import" href="frame-view.html">
+<link rel="import" href="frame-score-view.html">
 <link rel="import" href="input/frame-input.html">
+<link rel="import" href="/elements/p2p-video.html">
 
 <polymer-element name="live-snooker-frame">
   <template>
+    <style>
+      #gameview {
+        width: 640px;
+      }
+
+      #on-video-score {
+        position: relative;
+        top: -2em;
+        text-align: center;
+      }
+    </style>
     <frame-model model="{{model}}"></frame-model>
-    <frame-view model="{{model}}"></frame-view>
+    <div id="gameview">
+      <p2p-video input="true"></p2p-video>
+      <frame-score-view id="on-video-score" model="{{model}}"></frame-score-view>
+    </div>
+    
     <frame-input model="{{model}}"></frame-input>
   </template>
   <script>

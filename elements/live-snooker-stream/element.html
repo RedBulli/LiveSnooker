@@ -18,8 +18,6 @@
         var _this = this;
         var source = new EventSource(this.stream_url);
         source.onmessage = function (event) {
-          console.log(event);
-          //var data = JSON.parse(event.data);
           _this.message = event.data;
         };
         return {

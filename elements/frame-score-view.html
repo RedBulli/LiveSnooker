@@ -1,11 +1,25 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 
-<polymer-element name="frame-view" attributes="model">
+<polymer-element name="frame-score-view" attributes="model">
   <template>
-    <table>
-      <div>Player1: {{players[0].name}} Score: {{players[0].points}}</div>
-      <div>Player2: {{players[1].name}} Score: {{players[1].points}}</div>
-    </table>
+    <style>
+      :host {
+        background-color: black;
+        color: white;
+      }
+      .points {
+        background-color: yellow;
+        color: black;
+      }
+
+      div {
+        display: block;
+      }
+    </style>
+    <div>
+      <span>{{players[0].name}}</span><span class="points">{{players[0].points}}</span> - 
+      <span class="points">{{players[0].points}}</span><span>{{players[1].name}}</span>
+    </div>
   </template>
   <script>
     Polymer({
