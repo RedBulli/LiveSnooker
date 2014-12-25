@@ -1,24 +1,47 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
+<link rel="import" href="snooker-ball.html">
 
 <polymer-element name="points-input" attributes="{{onShot}}">
   <template>
-    <ul>
+    <style>
+      #balls li {
+        display: inline-block;
+        width: 40px;
+      }
+    </style>
+    <ul id="balls">
       <!-- <li><button on-click="{{onClick}}" value="S">S</button></li> -->
-      <li><button on-click="{{onShot}}" value="0">0</button></li>
-      <li><button on-click="{{onShot}}" value="1">1</button></li>
-      <li><button on-click="{{onShot}}" value="2">2</button></li>
-      <li><button on-click="{{onShot}}" value="3">3</button></li>
-      <li><button on-click="{{onShot}}" value="4">4</button></li>
-      <li><button on-click="{{onShot}}" value="5">5</button></li>
-      <li><button on-click="{{onShot}}" value="6">6</button></li>
-      <li><button on-click="{{onShot}}" value="7">7</button></li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="0" color="white"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="1" color="red"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="2" color="yellow"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="3" color="green"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="4" color="#f4a460"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="5" color="blue"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="6" color="pink"></snooker-ball>
+      </li>
+      <li>
+        <snooker-ball on-click="{{onShot}}" value="7" color="black"></snooker-ball>
+      </li>
     </ul>
   </template>
 
   <script>
     Polymer({
       onShot: function(event) {
-        this.fire('shot', event.target.value);
+        this.fire('shot', event.target.getAttribute("value"));
       }
     });
   </script>

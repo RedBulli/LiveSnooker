@@ -73,11 +73,13 @@ module.exports = (grunt) ->
 
     concurrent:
       serve: ['connect:server']
+      options:
+        livereload: true
 
     copy:
       html:
         files: [
-          {expand: true, cwd: 'elements', src: ['**/*.html'], dest: 'build/elements'},
+          {expand: true, cwd: 'elements', src: ['**/*'], dest: 'build/elements'},
         ]
 
   grunt.registerTask 'serve', ['build:dev', 'connect:server', 'watch']
