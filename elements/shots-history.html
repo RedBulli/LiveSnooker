@@ -1,0 +1,14 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<polymer-element name="shots-history" attributes="shots">
+  <template>
+    <ol>
+      <template repeat="{{shot, i in shots}}">
+        <li>{{shot}}</li>
+      </template>
+    </ol>
+  </template>
+  <script>
+    Polymer({});
+  </script>
+</polymer-element>

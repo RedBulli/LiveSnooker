@@ -1,4 +1,4 @@
-<!-- <script src="http://www.RTCMultiConnection.org/latest.js"></script> -->
+<script src="../vendors/rtcmulticonnection/RTCMultiConnection.min.js"></script>
 
 <polymer-element name="p2p-video" attributes="input">
   <template>
@@ -16,25 +16,23 @@
   <script>
     Polymer({
       ready: function() {
-        /*
-        var el = this.$.cam;
-        var connection = new RTCMultiConnection();
+        // var el = this.$.cam;
+        // var connection = new RTCMultiConnection();
 
-        connection.session = {
-          audio: true,
-          video: true,
-          oneway: true
-        };
+        // connection.session = {
+        //   audio: true,
+        //   video: true,
+        //   oneway: true
+        // };
 
-        connection.onstream = function(e) {
-          el.insertBefore(e.mediaElement, el.firstChild);
-        };
+        // connection.onstream = function(e) {
+        //   el.insertBefore(e.mediaElement, el.firstChild);
+        // };
 
-        connection.connect();
-        if (this.input) {
-          connection.open();
-        }
-        */
+        // connection.connect();
+        // if (this.input) {
+        //   connection.open();
+        // }
       }
     });
   </script>

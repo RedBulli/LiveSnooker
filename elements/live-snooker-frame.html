@@ -3,9 +3,12 @@
 <link rel="import" href="frame-score-view.html">
 <link rel="import" href="input/frame-input.html">
 <link rel="import" href="/elements/p2p-video.html">
+<link rel="import" href="shots-history.html">
+
 
 <polymer-element name="live-snooker-frame">
   <template>
+    <link rel="stylesheet" href="css/foundation.min.css">
     <style>
       #gameview {
         width: 640px;
@@ -18,16 +21,25 @@
       }
     </style>
     <frame-model model="{{model}}"></frame-model>
-    <div id="gameview">
-      <p2p-video input="true"></p2p-video>
-      <frame-score-view id="on-video-score" model="{{model}}"></frame-score-view>
-    </div>
     
-    <frame-input model="{{model}}"></frame-input>
+    <div class="row">
+      <div class="large-8 columns">
+        <div id="gameview">
+          <p2p-video input="true"></p2p-video>
+          <frame-score-view id="on-video-score" model="{{model}}"></frame-score-view>
+        </div>
+        <frame-input model="{{model}}"></frame-input>
+      </div>
+      <div class="large-4 columns">
+        <shots-history class="hidden-for-medium-down" shots="{{actions}}"></shots-history>
+      </div>
+    </div>
   </template>
   <script>
     Polymer({
-
+      ready: function() {
+        this.actions = this.model.get('actions').models;
+      }
     });
   </script>
 </polymer-element>

@@ -6,7 +6,9 @@
     "polymer": "Polymer/polymer#~0.5.0",
     "webcomponentsjs": "~0.5.0",
     "backbone": "~1.1.2",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "rtcmulticonnection": "latest",
+    "zurb/bower-foundation": "latest"
   },
   "devDependencies": {}
 }
