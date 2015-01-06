@@ -31,14 +31,14 @@
         <frame-input model="{{model}}"></frame-input>
       </div>
       <div class="large-4 columns">
-        <shots-history class="hidden-for-medium-down" shots="{{actions}}"></shots-history>
+        <shots-history class="hidden-for-medium-down" shots="{{shotGroups}}"></shots-history>
       </div>
     </div>
   </template>
   <script>
     Polymer({
       ready: function() {
-        this.actions = this.model.get('actions').models;
+        this.shotGroups = this.model.get('shotGroups').models;
       }
     });
   </script>

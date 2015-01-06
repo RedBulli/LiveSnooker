@@ -1,4 +1,5 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="js/vendor/jquery.html">
 
 <polymer-element name="frame-score-view" attributes="model">
   <template>
@@ -15,20 +16,36 @@
       div {
         display: block;
       }
+
+      .inTurn {
+        border: 1px solid black;
+      }
     </style>
     <div>
-      <span>{{players[0].name}}</span><span class="points">{{players[0].points}}</span> - 
-      <span class="points">{{players[1].points}}</span><span>{{players[1].name}}</span>
+      <span id="player0">{{players[0].name}}</span><span class="points">{{players[0].points}}</span> - 
+      <span class="points">{{players[1].points}}</span><span id="player1">{{players[1].name}}</span>
     </div>
   </template>
   <script>
     Polymer({
       updateView: function() {
         var scores = this.model.getScores();
+        var p0 = this.model.get('players').at(0);
+        var p1 = this.model.get('players').at(1);
         this.players = [
-          {name: this.model.get('players').at(0).get('name'), points: scores[0]},
-          {name: this.model.get('players').at(1).get('name'), points: scores[1]}
+          {name: p0.get('name'), points: scores[0]},
+          {name: p1.get('name'), points: scores[1]}
         ];
+        this.setCurrentPlayer();
+      },
+      setCurrentPlayer: function() {
+        if (this.model.currentPlayerIndex() === 0) {
+          $(this.$.player0).addClass("inTurn");
+          $(this.$.player1).removeClass("inTurn");
+        } else {
+          $(this.$.player0).removeClass("inTurn");
+          $(this.$.player1).addClass("inTurn");
+        }
       },
       ready: function() {
         this.model.listenTo(this.model, 'updateView', this.updateView.bind(this));

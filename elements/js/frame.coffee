@@ -1,14 +1,17 @@
 class Frame extends Backbone.Model
   initialize: (options) ->
-    @set('actions', new Shots())
+    @set('shotGroups', new ShotGroups())
     @set('currentPlayer', @get('players').first())
 
   getNonCurrentPlayer: ->
     @get('players').getOtherPlayer(@get('currentPlayer').id)
 
-  pushAction: (action) ->
-    @get('actions').add(action)
-    if !action.isPot()
+  currentPlayerIndex: ->
+    @get('players').indexOf(@get('currentPlayer'))
+
+  addShot: (shot) ->
+    @get('shotGroups').addShot(shot)
+    if !shot.isPot()
       @set 'currentPlayer', @getNonCurrentPlayer()
     @trigger('updateView')
 
@@ -24,7 +27,7 @@ class Frame extends Backbone.Model
     shot
 
   getScores: ->
-    rawTotals = @get('actions').calculateTotals()
+    rawTotals = @get('shotGroups').calculateTotalScores()
     firstTotal = rawTotals[@get('players').models[0].id] || { points: 0, fouls: 0 }
     secondTotal = rawTotals[@get('players').models[1].id] || { points: 0, fouls: 0 }
     [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
