@@ -1,0 +1,28 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<polymer-element name="break-history-view" attributes="breaks">
+  <template>
+    <ol>
+      <template repeat="{{break, i in breakViewModels}}">
+        <template if="{{break.pots}}">
+          <li>{{break.player.attributes.name}}: {{break.points.points}}</li>
+        </template>
+        <template if="{{!break.pots}}">
+          <li>No pots for {{break.shots}} shots</li>
+        </template>
+      </template>
+    </ol>
+  </template>
+  <script>
+    Polymer({
+      updateView: function() {
+        this.breakViewModels = this.breaks.map(function(shotGroup) {
+          return shotGroup.totals();
+        });
+      },
+      ready: function() {
+        this.breaks.listenTo(this.breaks, 'update', this.updateView.bind(this)); 
+      }
+    });
+  </script>
+</polymer-element>

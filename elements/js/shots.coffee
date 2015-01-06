@@ -25,11 +25,12 @@ class Shots extends Backbone.Collection
     totals
 
 class ShotGroup extends Backbone.Model
-  initialize: (options) ->
-    @set('shots', new Shots(options.shots))
-
   belongsTo: (shot) ->
     !shot.isPot()
+
+  totals: ->
+    pots: false
+    shots: @get('shots').length
 
 class Break extends ShotGroup
   lastShot: ->
@@ -38,20 +39,30 @@ class Break extends ShotGroup
   belongsTo: (shot) ->
     shot.isPot() && @lastShot().get('player_id') == shot.get('player_id')
 
+  totals: ->
+    pots: true
+    player: @get('frame').getPlayer(@lastShot().get('player_id'))
+    points: @get('shots').calculateTotals()[@lastShot().get('player_id')]
+
 class ShotGroups extends Backbone.Collection
   model: ShotGroup
+
+  initialize: (models, options) ->
+    @frame = options.frame
 
   addShot: (shot) ->
     if !@last() || !@last().belongsTo(shot)
       @add @newGroup(shot)
     else
       @last().get('shots').add(shot)
+    @trigger 'update'
 
   newGroup: (shot) ->
+    shots = new Shots([shot])
     if shot.isPot()
-      new Break(shots: [shot])
+      new Break(frame: @frame, shots: shots)
     else
-      new ShotGroup(shots: [shot])
+      new ShotGroup(frame: @frame, shots: shots)
 
   calculateTotalScores: ->
     calc = (memo, group) ->

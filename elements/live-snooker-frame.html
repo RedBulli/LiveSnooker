@@ -3,8 +3,7 @@
 <link rel="import" href="frame-score-view.html">
 <link rel="import" href="input/frame-input.html">
 <link rel="import" href="/elements/p2p-video.html">
-<link rel="import" href="shots-history.html">
-
+<link rel="import" href="break-history-view.html">
 
 <polymer-element name="live-snooker-frame">
   <template>
@@ -31,15 +30,11 @@
         <frame-input model="{{model}}"></frame-input>
       </div>
       <div class="large-4 columns">
-        <shots-history class="hidden-for-medium-down" shots="{{shotGroups}}"></shots-history>
+        <break-history-view class="hidden-for-medium-down" breaks="{{model.attributes.shotGroups}}"></break-history-view>
       </div>
     </div>
   </template>
   <script>
-    Polymer({
-      ready: function() {
-        this.shotGroups = this.model.get('shotGroups').models;
-      }
-    });
+    Polymer({});
   </script>
 </polymer-element>

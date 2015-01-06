@@ -1,6 +1,6 @@
 class Frame extends Backbone.Model
   initialize: (options) ->
-    @set('shotGroups', new ShotGroups())
+    @set('shotGroups', new ShotGroups([], frame: @))
     @set('currentPlayer', @get('players').first())
 
   getNonCurrentPlayer: ->
@@ -31,5 +31,8 @@ class Frame extends Backbone.Model
     firstTotal = rawTotals[@get('players').models[0].id] || { points: 0, fouls: 0 }
     secondTotal = rawTotals[@get('players').models[1].id] || { points: 0, fouls: 0 }
     [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
+
+  getPlayer: (id) ->
+    @get('players').get(id)
 
 ((scope) -> scope.Frame = Frame)(@)
