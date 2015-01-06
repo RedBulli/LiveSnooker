@@ -27,6 +27,7 @@
     "karma-growl-reporter": "^0.1.1",
     "karma-mocha": "latest",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon-chai": "^0.2.0",
     "mocha": "latest"
   },
   "engines": {

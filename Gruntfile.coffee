@@ -38,12 +38,12 @@ module.exports = (grunt) ->
       elements_js:
         src: ['build/elements/**/*.js']
       specs:
-        src: ['specs_build/**/*.js']
+        src: ['specs_build/**/*']
 
     watch:
       coffee:
         files: ['elements/**/*.coffee', 'specs/**/*.coffee']
-        tasks: ['clean:elements_js', 'coffee', 'karma:unit:run']
+        tasks: ['clean:elements_js', 'clean:specs', 'coffee', 'karma:unit:run']
       public_html:
         files: ['public/*.html']
         tasks: ['preprocess:html', 'karma:unit:run']

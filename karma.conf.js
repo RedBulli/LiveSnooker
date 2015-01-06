@@ -6,6 +6,7 @@ module.exports = function(config) {
       "build/vendors/webcomponentsjs/webcomponents.js",
       {pattern: 'build/vendors/**', included: false, served: true},
       {pattern: 'build/elements/**', included: false, served: true},
+      'specs_build/helper.js',
       'specs_build/**/*_spec.js'
     ],
     plugins: [
@@ -13,10 +14,17 @@ module.exports = function(config) {
       'karma-script-launcher',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
-      'karma-chai',
-      'karma-growl-reporter'
+      'karma-growl-reporter',
+      'karma-sinon-chai'
     ],
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'sinon-chai'],
+    client: {
+      mocha: {
+        reporter: 'html', // change Karma's debug.html to the mocha web reporter
+        ui: 'tdd',
+        require: ['specs_build/helper.js']
+      }
+    },
     browsers: [
       'Chrome',
       //'Firefox'
