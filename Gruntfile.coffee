@@ -43,13 +43,13 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: ['elements/**/*.coffee', 'specs/**/*.coffee']
-        tasks: ['clean:elements_js', 'clean:specs', 'coffee', 'karma:unit:run']
+        tasks: ['clean:elements_js', 'copy', 'clean:specs', 'coffee', 'karma:unit:run']
       public_html:
         files: ['public/*.html']
         tasks: ['preprocess:html', 'karma:unit:run']
       elements_html:
         files: ['elements/**/*.html']
-        tasks: ['clean:elements_html', 'copy:html', 'karma:unit:run']
+        tasks: ['clean:elements_html', 'copy', 'karma:unit:run']
 
     connect:
       server:
@@ -80,6 +80,13 @@ module.exports = (grunt) ->
       html:
         files: [
           {expand: true, cwd: 'elements', src: ['**/*'], dest: 'build/elements'},
+        ]
+      vendors:
+        files : [
+          expand: false,
+          cwd: 'build/vendors',
+          dest: 'build/elements/js/vendor',
+          src: ['build/vendors/jquery/jquery.js', 'build/vendors/underscore/underscore.js', 'build/vendors/backbone/backbone.js']
         ]
 
   grunt.registerTask 'serve', ['build:dev', 'connect:server', 'watch']

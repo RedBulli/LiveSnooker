@@ -7,6 +7,7 @@ module.exports = function(config) {
       {pattern: 'build/vendors/**', included: false, served: true},
       {pattern: 'build/elements/**', included: false, served: true},
       'specs_build/helper.js',
+      'specs_build/fixtures.js',
       'specs_build/**/*_spec.js'
     ],
     plugins: [
