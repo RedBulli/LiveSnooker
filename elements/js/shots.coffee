@@ -10,8 +10,15 @@ class Shots extends Backbone.Collection
   model: Shot
 
   initialize: ->
+    
     @on 'add', (shot) ->
       sendAction('http://localhost:5000/action', JSON.stringify(shot.toJSON()))
+
+  # undo: ->
+  #   @undoManager.undo()
+
+  # redo: ->
+  #   @undoManager.redo()
 
   calculateTotals: (totals) ->
     totals = totals || {}
@@ -49,6 +56,8 @@ class ShotGroups extends Backbone.Collection
 
   initialize: (models, options) ->
     @frame = options.frame
+    @on 'add', (shotGroup) =>
+      @frame.undoManager.register(shotGroup.get('shots'))
 
   addShot: (shot) ->
     if !@last() || !@last().belongsTo(shot)

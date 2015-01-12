@@ -4,6 +4,8 @@
 <polymer-element name="frame-input" attributes="model">
   <template>
     <points-input on-shot="{{onShot}}"></points-input>
+    <button on-click="{{onUndo}}">Undo</button>
+    <button on-click="{{onRedo}}">Redo</button>
   </template>
   
   <script>
@@ -18,6 +20,12 @@
           attrs.result = "nothing";
         }
         this.model.addShot(this.model.createShot(attrs));
+      },
+      onUndo: function() {
+        this.model.undoShot();
+      },
+      onRedo: function() {
+        this.model.redoShot();
       }
     });
   </script>

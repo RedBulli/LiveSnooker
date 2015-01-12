@@ -1,27 +1,41 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 
+<polymer-element name="break-points" attributes="shotGroup">
+  <template>
+    <template if="{{shotGroupViewModel.pots}}">
+      {{shotGroupViewModel.player.attributes.name}}: {{shotGroupViewModel.points.points}}
+    </template>
+    <template if="{{!shotGroupViewModel.pots}}">
+      No pots for {{shotGroupViewModel.shots}} shots
+    </template>
+  </template>
+  <script>
+    Polymer({
+      updateView: function() {
+        this.shotGroupViewModel = this.shotGroup.totals();
+      },
+      ready: function() {
+        this.shotGroup.listenTo(this.shotGroup.get('shots'), 'add remove change update', this.updateView.bind(this)); 
+        this.updateView();
+      }
+    });
+  </script>
+</polymer-element>
+
 <polymer-element name="break-history-view" attributes="breaks">
   <template>
     <ol>
       <template repeat="{{break, i in breakViewModels}}">
-        <template if="{{break.pots}}">
-          <li>{{break.player.attributes.name}}: {{break.points.points}}</li>
-        </template>
-        <template if="{{!break.pots}}">
-          <li>No pots for {{break.shots}} shots</li>
-        </template>
+        <li>
+          <break-points shotGroup="{{break}}"></break-points>
+        </li>
       </template>
     </ol>
   </template>
   <script>
     Polymer({
-      updateView: function() {
-        this.breakViewModels = this.breaks.map(function(shotGroup) {
-          return shotGroup.totals();
-        });
-      },
       ready: function() {
-        this.breaks.listenTo(this.breaks, 'update', this.updateView.bind(this)); 
+        this.breakViewModels = this.breaks.models;
       }
     });
   </script>

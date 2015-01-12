@@ -2,6 +2,9 @@ class Frame extends Backbone.Model
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
     @set('currentPlayer', @get('players').first())
+    @undoManager = new Backbone.UndoManager
+      register: [@get('shotGroups')],
+      track: true
 
   getNonCurrentPlayer: ->
     @get('players').getOtherPlayer(@get('currentPlayer').id)
@@ -25,6 +28,14 @@ class Frame extends Backbone.Model
     if shot.validate(shot.attributes)
       throw shot.validate(shot.attributes)
     shot
+
+  undoShot: ->
+    @undoManager.undo()
+    @trigger('updateView')
+
+  redoShot: ->
+    @undoManager.redo()
+    @trigger('updateView')
 
   getScores: ->
     rawTotals = @get('shotGroups').calculateTotalScores()
