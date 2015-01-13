@@ -10,15 +10,16 @@ class Shots extends Backbone.Collection
   model: Shot
 
   initialize: ->
-    
     @on 'add', (shot) ->
       sendAction('http://localhost:5000/action', JSON.stringify(shot.toJSON()))
 
-  # undo: ->
-  #   @undoManager.undo()
-
-  # redo: ->
-  #   @undoManager.redo()
+    @on 'remove', (shot) ->
+      $.ajax
+        type: "DELETE"
+        url: 'http://localhost:5000/action'
+        data: JSON.stringify(shot.toJSON())
+        headers:
+          "Content-Type": "application/json"
 
   calculateTotals: (totals) ->
     totals = totals || {}
