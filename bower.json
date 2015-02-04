@@ -1,14 +1,14 @@
 {
   "name": "LiveSnooker",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {
-    "jquery": "~1.10.0",
+    "jquery": "~2.1.3",
     "polymer": "Polymer/polymer#~0.5.0",
     "webcomponentsjs": "~0.5.0",
     "backbone": "~1.1.2",
     "underscore": "~1.7.0",
     "rtcmulticonnection": "latest",
-    "zurb/bower-foundation": "latest"
+    "foundation": "zurb/bower-foundation#~5.5.1"
   },
   "devDependencies": {}
 }
