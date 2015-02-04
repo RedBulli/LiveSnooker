@@ -4,10 +4,9 @@ module.exports = (grunt) ->
   grunt.initConfig
     env:
       dev:
-        BACKEND_HOST: 'http://localhost:5000'
+        src: 'environments/development.env'
       dist:
-        src: '.env'
-        BACKEND_HOST: 'https://livesnooker-server.herokuapp.com'
+        src: 'environments/dist.env'
 
     coffee:
       config:
@@ -86,7 +85,11 @@ module.exports = (grunt) ->
           expand: false,
           cwd: 'build/vendors',
           dest: 'build/elements/js/vendor',
-          src: ['build/vendors/jquery/jquery.js', 'build/vendors/underscore/underscore.js', 'build/vendors/backbone/backbone.js']
+          src: [
+            'build/vendors/jquery/jquery.js',
+            'build/vendors/underscore/underscore.js',
+            'build/vendors/backbone/backbone.js'
+          ]
         ]
 
   grunt.registerTask 'serve', ['build:dev', 'connect:server', 'watch']

@@ -7,3 +7,5 @@ specs_build
 npm-debug.log
 .DS_Store
 sinon/
+environments/development.env
+environments/dist.env

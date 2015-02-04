@@ -2,8 +2,9 @@
 <link rel="import" href="frame-model.html">
 <link rel="import" href="frame-score-view.html">
 <link rel="import" href="input/frame-input.html">
-<link rel="import" href="/elements/p2p-video.html">
+<link rel="import" href="p2p-video.html">
 <link rel="import" href="break-history-view.html">
+<link rel="import" href="live-snooker-api.html">
 
 <polymer-element name="live-snooker-frame">
   <template>
@@ -19,8 +20,9 @@
         text-align: center;
       }
     </style>
+    <live-snooker-api id="api"></live-snooker-api>
     <frame-model model="{{model}}"></frame-model>
-    
+    <div id="logged"></div>
     <div class="row">
       <div class="large-8 columns">
         <div id="gameview">
@@ -35,6 +37,18 @@
     </div>
   </template>
   <script>
-    Polymer({});
+    Polymer({
+      onAuthentication: function() {
+        var _this = this;
+        this.$.api.ajax('/account', {
+          success: function(response) {
+            _this.$.logged.textContent = response.message;
+          }
+        });
+      },
+      ready: function() {
+        this.$.api.hookToAuth(this.onAuthentication.bind(this));
+      }
+    });
   </script>
 </polymer-element>

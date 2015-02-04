@@ -3,9 +3,15 @@
 <head>
   <script src="/vendors/webcomponentsjs/webcomponents.js"></script>
   <script src="/vendors/jquery/jquery.js"></script>
+  <link rel="import" href="/elements/management/google-auth.html">
   <link rel="import" href="/elements/live-snooker-frame.html">
+  <link rel="import" href="/elements/live-snooker-api.html">
 </head>
 <body>
-  <live-snooker-frame></live-snooker-frame>
+  <template id="auto-bind-demo" is="auto-binding">
+    <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->" onAuth="{{googleAuth}}"></google-auth>
+    <live-snooker-api host="<!-- @echo BACKEND_HOST -->" onAuth="{{googleAuth}}"></live-snooker-api>
+    <live-snooker-frame></live-snooker-frame>
+  </template>
 </body>
 </html>
