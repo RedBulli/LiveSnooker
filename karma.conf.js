@@ -1,7 +1,6 @@
 module.exports = function(config) {
   //var common = require('./build/vendors/polymer-test-tools/karma-common.conf.js');
-
-  config.set({
+  cfg = {
     files: [
       "build/vendors/webcomponentsjs/webcomponents.js",
       {pattern: 'build/vendors/**', included: false, served: true},
@@ -28,12 +27,23 @@ module.exports = function(config) {
     },
     browsers: [
       'Chrome',
-      //'Firefox'
     ],
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
     singleRun: false,
     autoWatch: false,
     reporters: ['progress', 'growl'],
     port: 9876,
     logLevel: config.LOG_INFO
-  });
+  };
+
+  if (process.env.TRAVIS) {
+    cfg.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(cfg);
 };
