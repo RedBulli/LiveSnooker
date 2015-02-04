@@ -1,5 +1,4 @@
 module.exports = function(config) {
-  //var common = require('./build/vendors/polymer-test-tools/karma-common.conf.js');
   cfg = {
     files: [
       "build/vendors/webcomponentsjs/webcomponents.js",
@@ -11,9 +10,7 @@ module.exports = function(config) {
     ],
     plugins: [
       'karma-mocha',
-      'karma-script-launcher',
       'karma-chrome-launcher',
-      'karma-firefox-launcher',
       'karma-growl-reporter',
       'karma-sinon-chai'
     ],
