@@ -42,7 +42,10 @@
         var _this = this;
         this.$.api.ajax('/account', {
           success: function(response) {
-            _this.$.logged.textContent = response.message;
+            user = response.user
+            _this.$.logged.textContent = "Logged in as "
+              + user.email + ". Last login: "
+              + new Date(user.last_login).toLocaleString();
           }
         });
       },
