@@ -9,3 +9,4 @@ npm-debug.log
 sinon/
 environments/development.env
 environments/dist.env
+environments/production.env

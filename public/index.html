@@ -9,7 +9,7 @@
 <body>
   <template id="auto-bind-demo" is="auto-binding">
     <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->" onAuth="{{googleAuth}}"></google-auth>
-    <live-snooker-api host="<!-- @echo BACKEND_HOST -->" onAuth="{{googleAuth}}"></live-snooker-api>
+    <live-snooker-api host="<!-- @echo BACKEND_HOST -->" triggerAuth="{{googleAuth}}"></live-snooker-api>
     <live-snooker-frame></live-snooker-frame>
   </template>
 </body>

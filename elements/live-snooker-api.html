@@ -2,38 +2,6 @@
 <link rel="import" href="js/vendor/jquery.html">
 <link rel="import" href="js/vendor/underscore.html">
 
-<polymer-element name="live-snooker-api" attributes="onAuth host" hidden>
-  <script>
-    (function() {
-      var _this = null;
-      var host = null;
-      var authentication = null;
-      var onAuthListeners = [];
-
-      Polymer({
-        onAuth: function(auth) {
-          authentication = auth;
-          _this.authentication = authentication;
-          _.each(onAuthListeners, function(cb) { cb(authentication); });
-          onAuthListeners = [];
-        },
-        ajax: function(path, settings) {
-          settings = settings || {};
-          settings["headers"] = settings["headers"] || {};
-          _.extend(settings.headers, {
-            "X-AUTH-GOOGLE-ID-TOKEN": _this.authentication["id_token"]
-          });
-          $.ajax(host + path, settings);
-        },
-        hookToAuth: function(callback) {
-          if (!authentication) onAuthListeners.push(callback);
-          else callback(authentication);
-        },
-        ready: function() {
-          if (this.host) host = this.host
-          _this = this;
-        }
-      });
-    })();
-  </script>
+<polymer-element name="live-snooker-api" attributes="triggerAuth host" hidden>
+  <script src="live-snooker-api.js"></script>
 </polymer-element>
