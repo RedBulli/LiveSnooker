@@ -2,9 +2,8 @@ _this = host = authentication = null
 onAuthListeners = []
 
 Polymer
-  triggerAuth: (auth) ->
+  setAuthentication: (auth) ->
     authentication = auth
-    _this.authentication = authentication
     _.each(onAuthListeners, (cb) -> cb(authentication))
     onAuthListeners = []
 
@@ -12,7 +11,7 @@ Polymer
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
     _.extend(settings.headers, {
-      "X-AUTH-GOOGLE-ID-TOKEN": _this.authentication["id_token"]
+      "X-AUTH-GOOGLE-ID-TOKEN": authentication["id_token"]
     })
     $.ajax(host + path, settings)
 
