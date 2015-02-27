@@ -3,17 +3,25 @@
 <link rel="import" href="js/players.html">
 <link rel="import" href="live-snooker-api.html">
 
-<polymer-element name="frame-model" attributes="model actions" hidden>
+<polymer-element name="new-frame-form" attributes="frame">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
+    <form>
+      <select id="player1" name="player1">
+        <option value="1">Sampo</option>
+      </select>
+      <button on-click="{{createButtonClick}}">Create</button>
+    </form>
   </template>
   <script>
     Polymer({
-      ready: function() {
-        this.model = new Frame({
+      createButtonClick: function(event) {
+        event.preventDefault();
+        var frame = new Frame({
           id: 1,
           players: new Players([{id: 1, name: "Sampo"}, {id: 2, name: "Pekka"}])
         });
+        this.frame = frame;
       }
     });
   </script>

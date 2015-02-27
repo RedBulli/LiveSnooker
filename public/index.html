@@ -3,14 +3,14 @@
 <head>
   <script src="vendors/webcomponentsjs/webcomponents.js"></script>
   <link rel="import" href="elements/management/google-auth.html">
-  <link rel="import" href="elements/live-snooker-frame.html">
+  <link rel="import" href="elements/live-snooker.html">
   <link rel="import" href="elements/live-snooker-api.html">
 </head>
 <body>
   <template id="auto-bind-demo" is="auto-binding">
     <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
     <live-snooker-api host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
-    <live-snooker-frame></live-snooker-frame>
+    <live-snooker></live-snooker>
   </template>
 </body>
 </html>

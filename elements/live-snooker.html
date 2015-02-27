@@ -1,0 +1,37 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="live-snooker-api.html">
+<link rel="import" href="live-snooker-frame.html">
+<link rel="import" href="js/frame.html">
+<link rel="import" href="js/players.html">
+<link rel="import" href="new-frame-form.html">
+
+<polymer-element name="live-snooker">
+  <template>
+    <live-snooker-api id="api"></live-snooker-api>
+    <div id="logged"></div>
+      <template if="{{ frame }}">
+        <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
+      </template>
+      <template if="{{ !frame }}">
+        No Frame going try here: <br>
+        <new-frame-form frame="{{ frame }}"></new-frame-form>
+      </template>
+  </template>
+  <script>
+    Polymer({
+      onAuthentication: function() {
+        var _this = this;
+        this.$.api.ajax('/account', {
+          success: function(response) {
+            user = response.user
+            _this.$.logged.textContent = "Logged in as " + user.email;
+          }
+        });
+      },
+      frame: null,
+      ready: function() {
+        this.$.api.onAuth(this.onAuthentication.bind(this));
+      }
+    });
+  </script>
+</polymer-element>
