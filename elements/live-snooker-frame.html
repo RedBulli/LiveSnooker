@@ -32,9 +32,15 @@
         <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
       </div>
     </div>
+    <button on-click="{{ endFrame }}">End frame</button>
   </template>
   <script>
     Polymer({
+      endFrame: function(event) {
+        event.preventDefault();
+        this.fire('end');
+        this.frame = null;
+      },
       ready: function() {
       }
     });

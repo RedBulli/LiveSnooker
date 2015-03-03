@@ -1,5 +1,6 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/frame.html">
+<link rel="import" href="js/leagues.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="live-snooker-api.html">
 
@@ -7,21 +8,53 @@
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <form>
-      <select id="player1" name="player1">
-        <option value="1">Sampo</option>
+      <select id="league" name="league" on-change="{{ leagueChange }}">
+        <!-- <option disabled selected> -- select league -- </option>-->
+        <template repeat="{{ league in leagues.models }}">
+          <option value="{{ league.id }}">{{league.attributes.name}}</option>
+        </template>
       </select>
-      <button on-click="{{createButtonClick}}">Create</button>
+
+      <select id="player1" name="player1">
+        <!-- <option disabled selected> -- select player -- </option> -->
+        <template id="playerOptions" repeat="{{ player in league.attributes.players.models }}">
+          <option value="{{ player.id }}">{{player.attributes.name}}</option>
+        </template>
+      </select>
+
+      <select id="player2" name="player2">
+        <!-- <option disabled selected> -- select player -- </option> -->
+        <template repeat="{{ player in league.attributes.players.models }}" ref="playerOptions"></template>
+      </select>
+
+      <button on-click="{{ createButtonClick }}">Create</button>
     </form>
   </template>
   <script>
     Polymer({
+      leagueChange: function(event) {
+        this.league = this.leagues.get(this.$.league.value);
+      },
       createButtonClick: function(event) {
         event.preventDefault();
+        var p1 = this.league.get('players').get(this.$.player1.value);
+        var p2 = this.league.get('players').get(this.$.player2.value);
         var frame = new Frame({
           id: 1,
-          players: new Players([{id: 1, name: "Sampo"}, {id: 2, name: "Pekka"}])
+          league: this.league,
+          player1: p1,
+          player2: p2
         });
         this.frame = frame;
+      },
+      ready: function() {
+        var biklu = new League({
+          id: 1,
+          name: "Biklu",
+          players: new Players([{id: 1, name: "Sampo"}, {id: 2, name: "Pekka"}])
+        });
+        this.leagues = new Leagues([biklu]);
+        this.league = this.leagues.first();
       }
     });
   </script>

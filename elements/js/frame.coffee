@@ -1,16 +1,22 @@
 class Frame extends Backbone.Model
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
-    @set('currentPlayer', @get('players').first())
+    @set('currentPlayer', @get('player1'))
     @undoManager = new Backbone.UndoManager
       register: [@get('shotGroups')],
       track: true
 
   getNonCurrentPlayer: ->
-    @get('players').getOtherPlayer(@get('currentPlayer').id)
+    if @get('currentPlayer') == @get('player1')
+      @get('player2')
+    else
+      @get('player1')
 
   currentPlayerIndex: ->
-    @get('players').indexOf(@get('currentPlayer'))
+    if @get('currentPlayer') == @get('player1')
+      0
+    else
+      1
 
   addShot: (shot) ->
     @get('shotGroups').addShot(shot)
@@ -39,11 +45,14 @@ class Frame extends Backbone.Model
 
   getScores: ->
     rawTotals = @get('shotGroups').calculateTotalScores()
-    firstTotal = rawTotals[@get('players').models[0].id] || { points: 0, fouls: 0 }
-    secondTotal = rawTotals[@get('players').models[1].id] || { points: 0, fouls: 0 }
+    firstTotal = rawTotals[@get('player1').id] || { points: 0, fouls: 0 }
+    secondTotal = rawTotals[@get('player2').id] || { points: 0, fouls: 0 }
     [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
 
   getPlayer: (id) ->
-    @get('players').get(id)
+    if @get('player1').id == id
+      @get('player1')
+    else if @get('player2').id == id
+      @get('player2')
 
 ((scope) -> scope.Frame = Frame)(@)

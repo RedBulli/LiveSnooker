@@ -9,13 +9,13 @@
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <div id="logged"></div>
-      <template if="{{ frame }}">
-        <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
-      </template>
-      <template if="{{ !frame }}">
-        No Frame going try here: <br>
-        <new-frame-form frame="{{ frame }}"></new-frame-form>
-      </template>
+    <template id="frameTemplate" if="{{ frame }}">
+      <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
+    </template>
+    <template if="{{ !frame }}">
+      No Frame going try here: <br>
+      <new-frame-form frame="{{ frame }}"></new-frame-form>
+    </template>
   </template>
   <script>
     Polymer({
