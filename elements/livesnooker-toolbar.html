@@ -1,0 +1,35 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="../vendors/core-menu-button/core-menu-button.html">
+<link rel="import" href="../vendors/core-icon-button/core-icon-button.html">
+<link rel="import" href="../vendors/core-menu/core-menu.html">
+<link rel="import" href="../vendors/core-dropdown/core-dropdown.html">
+<link rel="import" href="../vendors/core-item/core-item.html">
+<link rel="import" href="../vendors/core-toolbar/core-toolbar.html">
+
+<polymer-element name="livesnooker-toolbar">
+  <template>
+    <live-snooker-api user="{{user}}"></live-snooker-api>
+    <core-toolbar>
+      <core-menu-button>
+        <core-icon-button icon="menu"></core-icon-button>
+        <core-dropdown class="dropdown">
+          <core-menu>
+            <core-item horizontal center layout label="Home"><a href="/#/"></a></core-item>
+            <core-item horizontal center layout label="New league"><a href="/#/leagues/new"></a></core-item>
+          </core-menu>
+        </core-dropdown>
+      </core-menu-button>
+      <template if="{{user}}">
+        <a href="/#/users/me"><core-icon-button icon="face" title="{{user.email}}"></core-icon-button></a>
+      </template>
+      <div flex>LiveSnooker</div>
+    </core-toolbar>
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+        this.user = this.user || null;
+      }
+    });
+  </script>
+</polymer-element>

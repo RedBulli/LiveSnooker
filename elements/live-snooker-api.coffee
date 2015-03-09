@@ -1,26 +1,44 @@
-_this = host = authentication = null
-onAuthListeners = []
+_this = null
+data =
+  authentication: null
+  user: null
+  host: null
 
 Polymer
-  setAuthentication: (auth) ->
-    authentication = auth
-    _.each(onAuthListeners, (cb) -> cb(authentication))
-    onAuthListeners = []
+  created: ->
+    _this = this
+    this.data = data
+
+  setAutentication: (auth) ->
+    data.authentication = auth
+    this.maybeFetchUser()
+
+  maybeFetchUser: ->
+    this.fetchUser() if data.host && data.authentication
+
+  fetchUser: ->
+    this.ajax '/account',
+      success: (response) ->
+        _this.setUser(response.user)
+
+  setUser: (user) ->
+    data.user = user
+    this.asyncFire('core-signal', {name: "authenticated", data: user})
+    this.user = data.user
 
   ajax: (path, settings) ->
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
     _.extend(settings.headers, {
-      "X-AUTH-GOOGLE-ID-TOKEN": authentication["id_token"]
+      "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
     })
-    $.ajax(host + path, settings)
+    $.ajax(data.host + path, settings)
 
-  onAuth: (callback) ->
-    unless authentication
-      onAuthListeners.push(callback)
-    else
-      callback(authentication)
+  onAuth: ->
+    this.user = data.user
 
   ready: ->
-    host = this.host if this.host 
-    _this = this
+    data.host = this.host if this.host
+    this.user = data.user
+    this.addEventListener "google-auth", (auth) ->
+      _this.setAutentication(auth.detail)

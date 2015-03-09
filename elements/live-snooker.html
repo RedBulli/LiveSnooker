@@ -18,20 +18,6 @@
     </template>
   </template>
   <script>
-    Polymer({
-      onAuthentication: function() {
-        var _this = this;
-        this.$.api.ajax('/account', {
-          success: function(response) {
-            user = response.user
-            _this.$.logged.textContent = "Logged in as " + user.email;
-          }
-        });
-      },
-      frame: null,
-      ready: function() {
-        this.$.api.onAuth(this.onAuthentication.bind(this));
-      }
-    });
+    Polymer({});
   </script>
 </polymer-element>

@@ -2,15 +2,23 @@
 <html>
 <head>
   <script src="vendors/webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="vendors/app-router/app-router.html">
   <link rel="import" href="elements/management/google-auth.html">
-  <link rel="import" href="elements/live-snooker.html">
   <link rel="import" href="elements/live-snooker-api.html">
+  <link rel="import" href="elements/livesnooker-toolbar.html">
+
 </head>
 <body>
   <template id="auto-bind-demo" is="auto-binding">
-    <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
     <live-snooker-api host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
-    <live-snooker></live-snooker>
+    <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
+    <livesnooker-toolbar></livesnooker-toolbar>
+    <app-router>
+      <app-route path="/" import="elements/live-snooker.html"></app-route>
+      <app-route path="/leagues/new" import="elements/new-league-form.html"></app-route>
+      <app-route path="/leagues/:id" import="elements/league.html"></app-route>
+      <app-route path="/users/me" import="elements/livesnooker-user.html"></app-route>
+    </app-router>
   </template>
 </body>
 </html>

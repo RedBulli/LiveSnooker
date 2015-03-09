@@ -8,7 +8,16 @@
     "backbone": "~1.1.2",
     "underscore": "~1.7.0",
     "rtcmulticonnection": "latest",
-    "foundation": "zurb/bower-foundation#~5.5.1"
+    "foundation": "zurb/bower-foundation#~5.5.1",
+    "app-router": "~2.6.0",
+    "core-menu-button": "Polymer/core-menu-button#~0.5.5",
+    "core-icon-button": "Polymer/core-icon-button#~0.5.5",
+    "core-menu": "Polymer/core-menu#~0.5.5",
+    "core-dropdown": "Polymer/core-dropdown#~0.5.5",
+    "core-item": "Polymer/core-item#~0.5.5",
+    "core-toolbar": "Polymer/core-toolbar#~0.5.5",
+    "core-signals": "Polymer/core-signals#~0.5.5",
+    "core-ajax": "Polymer/core-ajax#~0.5.5"
   },
   "devDependencies": {}
 }

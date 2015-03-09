@@ -1,0 +1,28 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="js/frame.html">
+<link rel="import" href="js/league.html">
+<link rel="import" href="js/leagues.html">
+<link rel="import" href="js/players.html">
+<link rel="import" href="live-snooker-api.html">
+
+<polymer-element name="new-league-form">
+  <template>
+    <form>
+      <input type="text" id="leagueName" name="name">
+      <button on-click="{{ newLeague }}">Create league</button>
+    </form>
+  </template>
+  <script>
+    function createUuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+    }
+
+    Polymer({
+      ready: function() {
+      }
+    });
+  </script>
+</polymer-element>

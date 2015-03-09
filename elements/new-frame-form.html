@@ -1,5 +1,6 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/frame.html">
+<link rel="import" href="js/league.html">
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="live-snooker-api.html">
@@ -31,7 +32,20 @@
     </form>
   </template>
   <script>
+    function createUuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+    }
+
     Polymer({
+      newLeague: function(event) {
+        event.preventDefault();
+        var league = new League({id: createUuid(), name: this.$.leagueName.value});
+        this.leagues.add(league);
+        this.league = league;
+      },
       leagueChange: function(event) {
         this.league = this.leagues.get(this.$.league.value);
       },
@@ -51,7 +65,7 @@
         var biklu = new League({
           id: 1,
           name: "Biklu",
-          players: new Players([{id: 1, name: "Sampo"}, {id: 2, name: "Pekka"}])
+          players: new Players([{id: createUuid(), name: "Sampo"}, {id: createUuid(), name: "Pekka"}])
         });
         this.leagues = new Leagues([biklu]);
         this.league = this.leagues.first();
