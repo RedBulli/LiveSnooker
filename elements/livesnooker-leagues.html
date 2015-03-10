@@ -1,0 +1,20 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<polymer-element name="livesnooker-leagues">
+  <template>
+    <live-snooker-api id="api"></live-snooker-api>
+    This shows  {{leagueId}}
+    {{leagues}}
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+        this.leagues = this.leagues || [];
+        var _this = this;
+        this.$.api.ajax('/leagues').then(function(response) {
+          _this.leagues = response;
+        });
+      }
+    });
+  </script>
+</polymer-element>

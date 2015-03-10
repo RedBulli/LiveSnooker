@@ -3,8 +3,9 @@
 <link rel="import" href="js/vendor/underscore.html">
 <link rel="import" href="../vendors/core-signals/core-signals.html">
 
-<polymer-element name="live-snooker-api" attributes="host user onAuth" hidden>
+<polymer-element name="live-snooker-api" attributes="host user onAccount" hidden>
   <template>
+    <core-signals on-core-signal-account="{{onAccount}}"></core-signals>
     <core-signals on-core-signal-authenticated="{{onAuth}}"></core-signals>
   </template>
   <script src="live-snooker-api.js"></script>
