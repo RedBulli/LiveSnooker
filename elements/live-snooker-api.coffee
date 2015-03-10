@@ -31,7 +31,7 @@ Polymer
       this.ajaxPromise(path, settings)
     else
       new Promise (resolve, reject) ->
-        _this.addEventListener "authenticated", ->
+        _this.addEventListener "api-ready", ->
           _this.ajaxPromise(path, settings).then(resolve, reject)
 
   ajaxPromise: (path, settings) ->
@@ -47,9 +47,18 @@ Polymer
 
   onAuth: ->
     this.fire('authenticated')
+    this.asyncFire('core-signal', {name: "api-ready"}) if data.host
+
+  onHost: ->
+    this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
+
+  onApiReady: ->
+    this.fire('api-ready')
 
   ready: ->
-    data.host = this.host if this.host
+    if this.host
+      data.host = this.host if this.host
+      this.asyncFire('core-signal', {name: "host-set"})
     this.user = data.user
     _this = this
     this.addEventListener "google-auth", (auth) ->
