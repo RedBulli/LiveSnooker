@@ -1,4 +1,4 @@
-class Frame extends Backbone.Model
+class Frame extends Livesnooker.Model
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
     @set('currentPlayer', @get('player1'))

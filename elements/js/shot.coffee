@@ -3,7 +3,7 @@ sequence = (name) ->
   current = sequences[name] || 0
   sequences[name] = current + 1
 
-class Shot extends Backbone.Model
+class Shot extends Livesnooker.Model
   initialize: ->
     @set('id', sequence('shot'))
 

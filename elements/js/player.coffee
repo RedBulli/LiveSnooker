@@ -1,3 +1,3 @@
-class Player extends Backbone.Model
+class Player extends Livesnooker.Model
 
 ((scope) -> scope.Player = Player)(@)

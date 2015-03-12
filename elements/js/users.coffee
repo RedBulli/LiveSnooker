@@ -1,7 +1,7 @@
-class User extends Backbone.Model
+class User extends Livesnooker.Model
   urlRoot: '/users'
 
-class Users extends Backbone.Collection
+class Users extends Livesnooker.Collection
   url: '/users'
 
 ((scope) ->

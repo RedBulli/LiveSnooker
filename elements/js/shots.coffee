@@ -6,7 +6,7 @@ sendAction = (url, data) ->
     headers:
       "Content-Type": "application/json"
 
-class Shots extends Backbone.Collection
+class Shots extends Livesnooker.Collection
   model: Shot
 
   initialize: ->
@@ -32,7 +32,7 @@ class Shots extends Backbone.Collection
         totals[shot.get('player_id')].fouls += parseInt(shot.get('points'))
     totals
 
-class ShotGroup extends Backbone.Model
+class ShotGroup extends Livesnooker.Model
   belongsTo: (shot) ->
     !shot.isPot()
 
@@ -52,7 +52,7 @@ class Break extends ShotGroup
     player: @get('frame').getPlayer(@lastShot().get('player_id'))
     points: @get('shots').calculateTotals()[@lastShot().get('player_id')]
 
-class ShotGroups extends Backbone.Collection
+class ShotGroups extends Livesnooker.Collection
   model: ShotGroup
 
   initialize: (models, options) ->
