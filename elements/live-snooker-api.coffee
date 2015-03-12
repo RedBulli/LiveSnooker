@@ -7,10 +7,10 @@ Polymer
   created: ->
     this.data = data
 
-  setAutentication: (auth) ->
+  setAuthentication: (auth) ->
     data.authentication = auth
     this.maybeFetchUser()
-    this.asyncFire('core-signal', {name: "authenticated"})
+    this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
 
   maybeFetchUser: ->
     this.fetchUser() if data.host && data.authentication
@@ -27,10 +27,11 @@ Polymer
 
   ajax: (path, settings) ->
     _this = this
-    if data.authentication
+    if data.authentication && data.host
       this.ajaxPromise(path, settings)
     else
       new Promise (resolve, reject) ->
+        _this.queue = true
         _this.addEventListener "api-ready", ->
           _this.ajaxPromise(path, settings).then(resolve, reject)
 
@@ -45,21 +46,11 @@ Polymer
   onAccount: ->
     this.user = data.user
 
-  onAuth: ->
-    this.fire('authenticated')
-    this.asyncFire('core-signal', {name: "api-ready"}) if data.host
-
-  onHost: ->
-    this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
-
   onApiReady: ->
-    this.fire('api-ready')
+    this.asyncFire('api-ready')
 
   ready: ->
     if this.host
       data.host = this.host if this.host
-      this.asyncFire('core-signal', {name: "host-set"})
+      this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
     this.user = data.user
-    _this = this
-    this.addEventListener "google-auth", (auth) ->
-      _this.setAutentication(auth.detail)
