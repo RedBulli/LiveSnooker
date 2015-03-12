@@ -7,21 +7,23 @@
 
 <polymer-element name="new-league-form">
   <template>
+    <live-snooker-api id="api"></live-snooker-api>
     <form>
       <input type="text" id="leagueName" name="name">
       <button on-click="{{ newLeague }}">Create league</button>
     </form>
   </template>
   <script>
-    function createUuid() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-      });
-    }
-
     Polymer({
-      ready: function() {
+      newLeague: function() {
+        event.preventDefault();
+        var opts = {
+          uuid: createUuid(),
+          name: this.$.leagueName.value
+        };
+        var league = new League(opts);
+        league.setApiClient(this.$.api);
+        league.save();
       }
     });
   </script>

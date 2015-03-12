@@ -3,6 +3,9 @@ data =
   user: null
   host: null
 
+apiIsReady = ->
+  data.authentication && data.host
+
 Polymer
   created: ->
     this.data = data
@@ -27,7 +30,7 @@ Polymer
 
   ajax: (path, settings) ->
     _this = this
-    if data.authentication && data.host
+    if apiIsReady()
       this.ajaxPromise(path, settings)
     else
       new Promise (resolve, reject) ->
@@ -36,12 +39,23 @@ Polymer
           _this.ajaxPromise(path, settings).then(resolve, reject)
 
   ajaxPromise: (path, settings) ->
+    Promise.resolve(this.ajaxCall(path, settings))
+
+  callbackAjax: (path, settings) ->
+    _this = this
+    if apiIsReady()
+      _this.ajaxCall(path, settings)
+    else
+      _this.addEventListener "api-ready", ->
+        _this.ajaxCall(path, settings)
+
+  ajaxCall: (path, settings) ->
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
     _.extend(settings.headers, {
       "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
     })
-    Promise.resolve($.ajax(data.host + path, settings))
+    $.ajax(data.host + path, settings)
 
   onAccount: ->
     this.user = data.user
