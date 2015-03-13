@@ -10,29 +10,29 @@
         background-color: green;
       }
     </style>
-    <video id="cam" width="640" height="480"></video>
+    <div id="cam" width="640" height="480"></div>
   </template>
 
   <script>
     Polymer({
       ready: function() {
-        // var el = this.$.cam;
-        // var connection = new RTCMultiConnection();
+        var el = this.$.cam;
+        var connection = new RTCMultiConnection();
 
-        // connection.session = {
-        //   audio: true,
-        //   video: true,
-        //   oneway: true
-        // };
+        connection.session = {
+          audio: true,
+          video: true,
+          oneway: true
+        };
 
-        // connection.onstream = function(e) {
-        //   el.insertBefore(e.mediaElement, el.firstChild);
-        // };
+        connection.onstream = function(e) {
+          el.insertBefore(e.mediaElement, el.firstChild);
+        };
 
-        // connection.connect();
-        // if (this.input) {
-        //   connection.open();
-        // }
+        connection.connect();
+        if (this.input) {
+          connection.open();
+        }
       }
     });
   </script>
