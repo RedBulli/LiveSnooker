@@ -10,7 +10,7 @@
     <ul>
       <template repeat="{{league, i in leagues.models}}">
         <li>
-          {{league.attributes.name}}
+          <a href="/#/leagues/{{league.id}}">{{league.attributes.name}}</a>
         </li>
       </template>
     </ul>

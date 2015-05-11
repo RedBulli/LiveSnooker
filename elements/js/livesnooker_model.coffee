@@ -3,10 +3,7 @@ class Model extends Backbone.Model
     @client = client
 
   sync: (method, model, options) ->
-    options = if options
-      _.clone(options)
-    else
-      {}
+    options = options || {}
     options.client = @client
     super(method, model, options)
 

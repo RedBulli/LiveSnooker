@@ -1,0 +1,17 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<polymer-element name="validation-errors" attributes="errors">
+  <template>
+    <ul>
+      <template repeat="{{error in errors}}">
+        <li>
+          {{error.message}}
+        </li>
+      </template>
+    </ul>
+  </template>
+  <script>
+    Polymer({
+    });
+  </script>
+</polymer-element>

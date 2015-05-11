@@ -4,6 +4,7 @@
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="live-snooker-api.html">
+<link rel="import" href="validation-errors.html">
 
 <polymer-element name="new-league-form">
   <template>
@@ -11,19 +12,29 @@
     <form>
       <input type="text" id="leagueName" name="name">
       <button on-click="{{ newLeague }}">Create league</button>
+      <validation-errors id="errors"></validation-errors>
     </form>
   </template>
   <script>
     Polymer({
       newLeague: function() {
+        var errorsEl = this.$.errors;
         event.preventDefault();
+        var uuid = createUuid()
         var opts = {
-          uuid: createUuid(),
+          uuid: uuid,
           name: this.$.leagueName.value
         };
         var league = new League(opts);
         league.setApiClient(this.$.api);
-        league.save();
+        league.save(league.attributes, {
+          success: function() {
+            document.querySelector('app-router').go("/leagues/" + uuid);
+          },
+          error: function(data, response) {
+            errorsEl.errors = response.responseJSON.error.errors;
+          }
+        });
       }
     });
   </script>
