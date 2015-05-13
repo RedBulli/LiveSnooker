@@ -4,20 +4,50 @@
 <link rel="import" href="js/frame.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="new-frame-form.html">
+<link rel="import" href="js/league.html">
 
-<polymer-element name="live-snooker">
+<polymer-element name="live-snooker" attributes="league">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <div id="logged"></div>
-    <template id="frameTemplate" if="{{ frame }}">
-      <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
+    <template if="{{ league }}">
+      <template id="frameTemplate" if="{{ frame }}">
+        <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
+      </template>
+      <template if="{{ !frame }}">
+        No Frame going try here: <br>
+        <new-frame-form frame="{{ frame }}" league="{{league}}"></new-frame-form>
+      </template>
     </template>
-    <template if="{{ !frame }}">
-      No Frame going try here: <br>
-      <new-frame-form frame="{{ frame }}"></new-frame-form>
+    <template id="noframe" if="{{ !league }}">
+      {{ noframe }}
     </template>
   </template>
   <script>
-    Polymer({});
+    Polymer({
+      domReady: function() {
+        if (this.leagueId) localStorage.leagueId = this.leagueId;
+        else if (localStorage.leagueId) {
+          this.router.go('/' + localStorage.leagueId);
+        }
+        else {
+          this.router.go('/leagues/');
+        }
+        this.noframe = "Loading!";
+        if (!this.league) {
+          var league = new League({id: this.leagueId});
+          league.setApiClient(this.$.api);
+          var _this = this;
+          league.fetch({
+            success: function() {
+              _this.league = league;
+              _this.router.templateInstance.model.league = league;
+            },
+            error: function(model, response) {
+              _this.noframe = response.responseJSON.error.message;
+            }
+          });
+        }
+      }
+    });
   </script>
 </polymer-element>

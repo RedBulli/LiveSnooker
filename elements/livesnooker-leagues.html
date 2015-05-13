@@ -6,20 +6,21 @@
     <live-snooker-api id="api"></live-snooker-api>
     <a href="/#/leagues/new">Create new league</a>
     <br>
-    This shows leagues list
+    Change the current league:
     <ul>
       <template repeat="{{league, i in leagues.models}}">
         <li>
-          <a href="/#/leagues/{{league.id}}">{{league.attributes.name}}</a>
+          <a href="/#/{{league.id}}">{{league.attributes.name}}</a>
         </li>
       </template>
     </ul>
   </template>
   <script>
     Polymer({
-      ready: function() {
+      domReady: function() {
         this.leagues = new Leagues();
         this.leagues.setApiClient(this.$.api);
+        var _this = this;
         this.leagues.fetch();
       }
     });

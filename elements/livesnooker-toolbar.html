@@ -6,7 +6,7 @@
 <link rel="import" href="../vendors/core-item/core-item.html">
 <link rel="import" href="../vendors/core-toolbar/core-toolbar.html">
 
-<polymer-element name="livesnooker-toolbar">
+<polymer-element name="livesnooker-toolbar" attributes="league">
   <template>
     <live-snooker-api user="{{user}}"></live-snooker-api>
     <core-toolbar>
@@ -26,7 +26,7 @@
       <template if="{{user}}">
         <a href="/#/users/me"><core-icon-button icon="face" title="{{user.email}}"></core-icon-button></a>
       </template>
-      <div flex>LiveSnooker</div>
+      <div flex><a href="/#/">LiveSnooker</a> - <a href="/#/leagues/{{ league.id }}">{{league.attributes.name}}</a></div>
     </core-toolbar>
   </template>
   <script>

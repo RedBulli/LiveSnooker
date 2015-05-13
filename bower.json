@@ -17,7 +17,8 @@
     "core-item": "Polymer/core-item#~0.5.5",
     "core-toolbar": "Polymer/core-toolbar#~0.5.5",
     "core-signals": "Polymer/core-signals#~0.5.5",
-    "core-ajax": "Polymer/core-ajax#~0.5.5"
+    "core-ajax": "Polymer/core-ajax#~0.5.5",
+    "backbone-relational": "latest"
   },
   "devDependencies": {}
 }

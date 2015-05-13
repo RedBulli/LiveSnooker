@@ -88,7 +88,8 @@ module.exports = (grunt) ->
           src: [
             'build/vendors/jquery/jquery.js',
             'build/vendors/underscore/underscore.js',
-            'build/vendors/backbone/backbone.js'
+            'build/vendors/backbone/backbone.js',
+            'build/vendors/backbone-relational/backbone-relational.js'
           ]
         ]
 

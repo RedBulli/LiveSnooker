@@ -1,21 +1,11 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/frame.html">
-<link rel="import" href="js/league.html">
-<link rel="import" href="js/leagues.html">
-<link rel="import" href="js/players.html">
 <link rel="import" href="live-snooker-api.html">
 
-<polymer-element name="new-frame-form" attributes="frame">
+<polymer-element name="new-frame-form" attributes="frame league">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <form>
-      <select id="league" name="league" on-change="{{ leagueChange }}">
-        <!-- <option disabled selected> -- select league -- </option>-->
-        <template repeat="{{ league in leagues.models }}">
-          <option value="{{ league.id }}">{{league.attributes.name}}</option>
-        </template>
-      </select>
-
       <select id="player1" name="player1">
         <!-- <option disabled selected> -- select player -- </option> -->
         <template id="playerOptions" repeat="{{ player in league.attributes.players.models }}">
@@ -32,23 +22,7 @@
     </form>
   </template>
   <script>
-    function createUuid() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-      });
-    }
-
     Polymer({
-      newLeague: function(event) {
-        event.preventDefault();
-        var league = new League({id: createUuid(), name: this.$.leagueName.value});
-        this.leagues.add(league);
-        this.league = league;
-      },
-      leagueChange: function(event) {
-        this.league = this.leagues.get(this.$.league.value);
-      },
       createButtonClick: function(event) {
         event.preventDefault();
         var p1 = this.league.get('players').get(this.$.player1.value);
@@ -60,15 +34,6 @@
           player2: p2
         });
         this.frame = frame;
-      },
-      ready: function() {
-        var biklu = new League({
-          id: 1,
-          name: "Biklu",
-          players: new Players([{id: createUuid(), name: "Sampo"}, {id: createUuid(), name: "Pekka"}])
-        });
-        this.leagues = new Leagues([biklu]);
-        this.league = this.leagues.first();
       }
     });
   </script>

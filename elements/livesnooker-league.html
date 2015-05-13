@@ -1,20 +1,58 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="live-snooker-api.html">
+<link rel="import" href="js/player.html">
 <link rel="import" href="js/league.html">
 
 <polymer-element name="livesnooker-league" attributes="league">
   <template id="template">
     <live-snooker-api id="api"></live-snooker-api>
-    <template if="{{ league }}">
-      This shows information about the league {{leagueId}}
-      Name: {{league.attributes.name}}
-    </template>
-    <template if="{{ error }}">
-      {{ error }}
-    </template>
+    <div id="league">
+      <template if="{{ league }}">
+        This shows information about the league {{leagueId}}
+        Name: {{league.attributes.name}}
+        Players:
+        <ul>
+          <template repeat="{{ player in league.attributes.players.models }}">
+            <li>{{ player.attributes.name }}</li>
+          </template>
+        </ul>
+        <form>
+          <label for="name">Player name: </label>
+          <input type="text" id="playerName" name="name">
+          <button on-click="{{ newPlayer }}">Create player</button>
+          <validation-errors id="errors"></validation-errors>
+        </form>
+      </template>
+      <template if="{{ error }}">
+        {{ error }}
+      </template>
+    </div>
   </template>
   <script>
     Polymer({
+      newPlayer: function() {
+        var _this = this;
+        var errorsEl = this.$.errors;
+        event.preventDefault();
+        var uuid = createUuid();
+        var playerInput = this.$.league.querySelector('#playerName');
+        var opts = {
+          uuid: uuid,
+          name: playerInput.value,
+          LeagueId: this.league.id
+        };
+        var player = new Player(opts);
+        player.setApiClient(this.$.api);
+        player.save(player.attributes, {
+          success: function(model) {
+            _this.league.get('players').add(model);
+            playerInput.value = "";
+          },
+          error: function(data, response) {
+            errorsEl.errors = response.responseJSON.error.errors;
+          }
+        });
+      },
       domReady: function() {
         if (!this.league) {
           var league = new League({id: this.leagueId});
