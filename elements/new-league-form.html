@@ -20,16 +20,14 @@
       newLeague: function() {
         var errorsEl = this.$.errors;
         event.preventDefault();
-        var uuid = createUuid();
         var opts = {
-          uuid: uuid,
           name: this.$.leagueName.value
         };
         var league = new League(opts);
         league.setApiClient(this.$.api);
         league.save(league.attributes, {
           success: function() {
-            document.querySelector('app-router').go("/leagues/" + uuid);
+            document.querySelector('app-router').go("/leagues/" + league.id);
           },
           error: function(data, response) {
             errorsEl.errors = response.responseJSON.error.errors;

@@ -7,7 +7,7 @@ class League extends Livesnooker.Model
     collectionType: 'Players',
     reverseRelation: {
       key: 'league',
-      includeInJSON: 'id'
+      includeInJSON: 'LeagueId'
     }
   }]
 

@@ -2,9 +2,10 @@
 <link rel="import" href="live-snooker-api.html">
 <link rel="import" href="js/player.html">
 <link rel="import" href="js/league.html">
+<link rel="import" href="validation-errors.html">
 
 <polymer-element name="livesnooker-league" attributes="league">
-  <template id="template">
+  <template>
     <live-snooker-api id="api"></live-snooker-api>
     <div id="league">
       <template if="{{ league }}">
@@ -35,27 +36,29 @@
   <script>
     Polymer({
       newPlayer: function() {
-        var _this = this;
-        var errorsEl = this.$.errors;
         event.preventDefault();
-        var uuid = createUuid();
+        var league = this.league;
+        var errorsEl = this.$.league.querySelector("#errors");
         var playerInput = this.$.league.querySelector('#playerName');
         var opts = {
-          uuid: uuid,
           name: playerInput.value,
-          LeagueId: this.league.id
+          LeagueId: league.id
         };
         var player = new Player(opts);
         player.setApiClient(this.$.api);
         player.save(player.attributes, {
           success: function(model) {
-            _this.league.get('Players').add(model);
+            league.get('Players').add(model);
             playerInput.value = "";
+            errorsEl.errors = [];
           },
           error: function(data, response) {
-            errorsEl.errors = response.responseJSON.error.errors;
+            errorsEl.errors = [response.responseJSON.error.errors[0]];
           }
         });
+      },
+      ready: function() {
+        this.playerErrors = [];
       },
       domReady: function() {
         if (!this.league) {
