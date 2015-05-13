@@ -23,29 +23,28 @@
     </template>
   </template>
   <script>
+    function routeToLeague(router) {
+      if (localStorage.leagueId) router.go('/' + localStorage.leagueId);
+      else router.go('/leagues/');
+    }
     Polymer({
       domReady: function() {
         if (this.leagueId) localStorage.leagueId = this.leagueId;
-        else if (localStorage.leagueId) {
-          this.router.go('/' + localStorage.leagueId);
-        }
         else {
-          this.router.go('/leagues/');
+          routeToLeague(this.router);
+          return;
         }
         this.noframe = "Loading!";
+        var _this = this;
         if (!this.league) {
-          var league = new League({id: this.leagueId});
-          league.setApiClient(this.$.api);
-          var _this = this;
-          league.fetch({
-            success: function() {
+          this.$.api.findOrFetchModel(League, this.leagueId)
+            .then(function(league) {
               _this.league = league;
               _this.router.templateInstance.model.league = league;
-            },
-            error: function(model, response) {
+            })
+            .catch(function(model, response) {
               _this.noframe = response.responseJSON.error.message;
-            }
-          });
+            });
         }
       }
     });

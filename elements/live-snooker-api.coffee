@@ -7,6 +7,18 @@ apiIsReady = ->
   data.authentication && data.host
 
 Polymer
+  findOrFetchModel: (klass, id) ->
+    model = klass.findModel({id: id})
+    if model
+      Promise.resolve(model)
+    else
+      model = new klass({id: id})
+      model.setApiClient(@)
+      new Promise (resolve, reject) ->
+        model.fetch
+          success: resolve
+          error: reject
+
   created: ->
     this.data = data
 

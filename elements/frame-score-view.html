@@ -30,8 +30,8 @@
     Polymer({
       updateView: function() {
         var scores = this.model.getScores();
-        var p0 = this.model.get('player1');
-        var p1 = this.model.get('player2');
+        var p0 = this.model.get('Player1');
+        var p1 = this.model.get('Player2');
         this.players = [
           {name: p0.get('name'), points: scores[0]},
           {name: p1.get('name'), points: scores[1]}

@@ -8,14 +8,14 @@
     <form>
       <select id="player1" name="player1">
         <!-- <option disabled selected> -- select player -- </option> -->
-        <template id="playerOptions" repeat="{{ player in league.attributes.players.models }}">
+        <template id="playerOptions" repeat="{{ player in league.attributes.Players.models }}">
           <option value="{{ player.id }}">{{player.attributes.name}}</option>
         </template>
       </select>
 
       <select id="player2" name="player2">
         <!-- <option disabled selected> -- select player -- </option> -->
-        <template repeat="{{ player in league.attributes.players.models }}" ref="playerOptions"></template>
+        <template repeat="{{ player in league.attributes.Players.models }}" ref="playerOptions"></template>
       </select>
 
       <button on-click="{{ createButtonClick }}">Create</button>
@@ -25,8 +25,8 @@
     Polymer({
       createButtonClick: function(event) {
         event.preventDefault();
-        var p1 = this.league.get('players').get(this.$.player1.value);
-        var p2 = this.league.get('players').get(this.$.player2.value);
+        var p1 = this.league.get('Players').get(this.$.player1.value);
+        var p2 = this.league.get('Players').get(this.$.player2.value);
         var frame = new Frame({
           id: 1,
           league: this.league,

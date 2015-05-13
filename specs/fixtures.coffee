@@ -14,5 +14,5 @@ mocha.globals.fixtures =
   frame: ->
     new Frame(
       id: sequence('frame'),
-      players: @framePlayers()
+      Players: @framePlayers()
     )

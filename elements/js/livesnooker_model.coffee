@@ -1,4 +1,4 @@
-class Model extends Backbone.Model
+class Model extends Backbone.RelationalModel
   setApiClient: (client) ->
     @client = client
 

@@ -8,17 +8,21 @@
     <live-snooker-api id="api"></live-snooker-api>
     <div id="league">
       <template if="{{ league }}">
-        This shows information about the league {{leagueId}}
-        Name: {{league.attributes.name}}
-        Players:
+        <h2>{{league.attributes.name}}</h2>
+
         <ul>
-          <template repeat="{{ player in league.attributes.players.models }}">
-            <li>{{ player.attributes.name }}</li>
-          </template>
+          <li>ID: {{league.id}}</li>
+          <li>Players:
+            <ul>
+              <template repeat="{{ player in league.attributes.Players.models }}">
+                <li>{{ player.attributes.name }}</li>
+              </template>
+            </ul>
+          </li>
         </ul>
         <form>
-          <label for="name">Player name: </label>
-          <input type="text" id="playerName" name="name">
+          <label for="name">Add a new player: </label>
+          <input type="text" id="playerName" name="name" placeholder="Name">
           <button on-click="{{ newPlayer }}">Create player</button>
           <validation-errors id="errors"></validation-errors>
         </form>
@@ -45,7 +49,7 @@
         player.setApiClient(this.$.api);
         player.save(player.attributes, {
           success: function(model) {
-            _this.league.get('players').add(model);
+            _this.league.get('Players').add(model);
             playerInput.value = "";
           },
           error: function(data, response) {
@@ -55,17 +59,14 @@
       },
       domReady: function() {
         if (!this.league) {
-          var league = new League({id: this.leagueId});
-          league.setApiClient(this.$.api);
           var _this = this;
-          league.fetch({
-            success: function() {
+          this.$.api.findOrFetchModel(League, this.leagueId)
+            .then(function(league) {
               _this.league = league;
-            },
-            error: function(model, response) {
-              _this.error = response.status
-            }
-          });
+            })
+            .catch(function(model, response) {
+              _this.error = response.status;
+            });
         }
       }
     });
