@@ -1,19 +1,19 @@
 class Frame extends Livesnooker.Model
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
-    @set('currentPlayer', @get('player1'))
+    @set('currentPlayer', @get('Player1'))
     @undoManager = new Backbone.UndoManager
       register: [@get('shotGroups')],
       track: true
 
   getNonCurrentPlayer: ->
-    if @get('currentPlayer') == @get('player1')
-      @get('player2')
+    if @get('currentPlayer') == @get('Player1')
+      @get('Player2')
     else
-      @get('player1')
+      @get('Player1')
 
   currentPlayerIndex: ->
-    if @get('currentPlayer') == @get('player1')
+    if @get('currentPlayer') == @get('Player1')
       0
     else
       1
@@ -45,14 +45,14 @@ class Frame extends Livesnooker.Model
 
   getScores: ->
     rawTotals = @get('shotGroups').calculateTotalScores()
-    firstTotal = rawTotals[@get('player1').id] || { points: 0, fouls: 0 }
-    secondTotal = rawTotals[@get('player2').id] || { points: 0, fouls: 0 }
+    firstTotal = rawTotals[@get('Player1').id] || { points: 0, fouls: 0 }
+    secondTotal = rawTotals[@get('Player2').id] || { points: 0, fouls: 0 }
     [firstTotal.points + secondTotal.fouls, secondTotal.points + firstTotal.fouls]
 
   getPlayer: (id) ->
-    if @get('player1').id == id
-      @get('player1')
-    else if @get('player2').id == id
-      @get('player2')
+    if @get('Player1').id == id
+      @get('Player1')
+    else if @get('Player2').id == id
+      @get('Player2')
 
 ((scope) -> scope.Frame = Frame)(@)
