@@ -36,6 +36,8 @@
           frame.fetch({
             success: function() {
               _this.frame = frame;
+              frame.get('Shots').populateAssociations();
+              frame.calculateShotGroups();
             }
           });
         }

@@ -19,7 +19,7 @@
         if (attrs.points == 0) {
           attrs.result = "nothing";
         }
-        this.model.addShot(this.model.createShot(attrs));
+        this.model.createShot(attrs);
       },
       onUndo: function() {
         this.model.undoShot();

@@ -21,4 +21,4 @@ describe 'Frame-Input', ->
   it 'adds shots to the frame when points-input triggers onShot', ->
     pointsInput = element.shadowRoot.getElementsByTagName('points-input')[0]
     pointsInput.onShot(createEvent())
-    expect(element.model.addShot).to.have.been.called
+    expect(element.model.createShot).to.have.been.called

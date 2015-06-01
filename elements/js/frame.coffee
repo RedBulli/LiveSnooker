@@ -21,6 +21,12 @@ class Frame extends Livesnooker.Model
       relatedModel: 'League',
       keyDestination: 'LeagueId',
       includeInJSON: 'id'
+    },
+    {
+      type: Backbone.HasMany,
+      key: 'Shots',
+      relatedModel: 'Shot',
+      collectionType: 'Shots'
     }
   ]
 
@@ -30,19 +36,33 @@ class Frame extends Livesnooker.Model
       register: [@get('shotGroups')],
       track: true
 
+  calculateShotGroups: ->
+    shots = @get('Shots')
+    shots.sort()
+    shotGroups = new ShotGroups([], { frame: @ })
+    shots.each (shot) -> shotGroups.addShot(shot)
+    @set('shotGroups', shotGroups)
+
   lastShot: ->
     @get('shotGroups').last()?.lastShot()
 
   getCurrentPlayer: ->
-    if @lastShot()?.isPot()
-      @lastShot().get('Player')
+    lastShot = @lastShot()
+    if lastShot
+      if lastShot.isPot()
+        lastShot.get('Player')
+      else
+        @getOtherPlayer(lastShot.get('Player'))
     else
       @get('Player1')
 
   getNonCurrentPlayer: ->
-    if @getCurrentPlayer() == @get('Player1')
+    @getOtherPlayer(@getCurrentPlayer())
+
+  getOtherPlayer: (player) ->
+    if @get('Player1') == player
       @get('Player2')
-    else
+    else if @get('Player2') == player
       @get('Player1')
 
   currentPlayerIndex: ->
@@ -51,10 +71,6 @@ class Frame extends Livesnooker.Model
     else
       1
 
-  addShot: (shot) ->
-    @get('shotGroups').addShot(shot)
-    @trigger('updateView')
-
   createShot: ({attempt, result, points}) ->
     shot = new Shot
       Frame: @,
@@ -62,8 +78,14 @@ class Frame extends Livesnooker.Model
       attempt: attempt,
       result: result,
       points: parseInt(points)
+      shotNumber: @get('Shots').length + 1
     if shot.validate(shot.attributes)
       throw shot.validate(shot.attributes)
+    shot.setApiClient(@client)
+    shot.save(shot.attributes)
+    @get('Shots').add(shot)
+    @get('shotGroups').addShot(shot)
+    @trigger('updateView')
     shot
 
   undoShot: ->

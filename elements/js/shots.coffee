@@ -9,18 +9,7 @@ sendAction = (url, data) ->
 class Shots extends Livesnooker.Collection
   model: Shot
   url: '/shots'
-
-  initialize: ->
-    @on 'add', (shot) ->
-      sendAction('http://localhost:5000/action', JSON.stringify(shot.toJSON()))
-
-    @on 'remove', (shot) ->
-      $.ajax
-        type: "DELETE"
-        url: 'http://localhost:5000/action'
-        data: JSON.stringify(shot.toJSON())
-        headers:
-          "Content-Type": "application/json"
+  comparator: 'shotNumber'
 
   calculateTotals: (totals) ->
     totals = totals || {}
@@ -33,7 +22,13 @@ class Shots extends Livesnooker.Collection
         totals[shot.get('Player').id].fouls += parseInt(shot.get('points'))
     totals
 
+  populateAssociations: ->
+    @each (shot) -> shot.populateAssociations()
+
 class ShotGroup extends Livesnooker.Model
+  lastShot: ->
+    @get('shots').last()
+
   belongsTo: (shot) ->
     !shot.isPot()
 
@@ -42,11 +37,8 @@ class ShotGroup extends Livesnooker.Model
     shots: @get('shots').length
 
 class Break extends ShotGroup
-  lastShot: ->
-    @get('shots').last()
-
   belongsTo: (shot) ->
-    shot.isPot() && @lastShot().get('Player') == shot.get('Player')
+    shot.isPot() && @lastShot().get('Player').id == shot.get('Player').id
 
   totals: ->
     pots: true
@@ -57,9 +49,10 @@ class ShotGroups extends Livesnooker.Collection
   model: ShotGroup
 
   initialize: (models, options) ->
-    @frame = options.frame
-    @on 'add', (shotGroup) =>
-      @frame.undoManager.register(shotGroup.get('shots'))
+    if options?.frame
+      @frame = options.frame
+      @on 'add', (shotGroup) =>
+        @frame.undoManager.register(shotGroup.get('shots'))
 
   addShot: (shot) ->
     if !@last() || !@last().belongsTo(shot)
