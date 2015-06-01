@@ -1,15 +1,23 @@
 class League extends Livesnooker.Model
   urlRoot: "/leagues"
-  relations: [{
-    type: Backbone.HasMany,
-    key: 'Players',
-    relatedModel: 'Player',
-    collectionType: 'Players',
-    reverseRelation: {
-      key: 'league',
-      includeInJSON: 'LeagueId'
+  relations: [
+    {
+      type: Backbone.HasMany,
+      key: 'Players',
+      relatedModel: 'Player',
+      collectionType: 'Players',
+      reverseRelation: {
+        key: 'league',
+        includeInJSON: 'LeagueId'
+      }
+    },
+    {
+      type: Backbone.HasMany,
+      key: 'Frames',
+      relatedModel: 'Frame',
+      collectionType: 'Frames'
     }
-  }]
+  ]
 
 League.setup()
 

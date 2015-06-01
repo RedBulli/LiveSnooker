@@ -2,7 +2,7 @@
 <link rel="import" href="js/frame.html">
 <link rel="import" href="live-snooker-api.html">
 
-<polymer-element name="new-frame-form" attributes="frame league">
+<polymer-element name="new-frame-form" attributes="league">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <form>
@@ -28,12 +28,18 @@
         var p1 = this.league.get('Players').get(this.$.player1.value);
         var p2 = this.league.get('Players').get(this.$.player2.value);
         var frame = new Frame({
-          id: 1,
           League: this.league,
           Player1: p1,
           Player2: p2
         });
-        this.frame = frame;
+        frame.setApiClient(this.$.api);
+        var _this = this;
+        frame.save(frame.attributes, {
+          success: function() {
+            window.open("/frame.html?frameId=" + frame.id, "", "width=800, height=600");
+            _this.trigger("newFrame", frame);
+          }
+        });
       }
     });
   </script>

@@ -67,8 +67,10 @@ module.exports = (grunt) ->
 
     preprocess:
       html:
-        src: 'public/index.html'
-        dest : 'build/index.html'
+        files: {
+          'build/index.html': 'public/index.html',
+          'build/frame.html': 'public/frame.html'
+        }
 
     concurrent:
       serve: ['connect:server']

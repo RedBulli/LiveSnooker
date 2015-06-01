@@ -8,6 +8,7 @@ sendAction = (url, data) ->
 
 class Shots extends Livesnooker.Collection
   model: Shot
+  url: '/shots'
 
   initialize: ->
     @on 'add', (shot) ->
@@ -24,12 +25,12 @@ class Shots extends Livesnooker.Collection
   calculateTotals: (totals) ->
     totals = totals || {}
     @each (shot) ->
-      if !totals[shot.get('player_id')]?
-        totals[shot.get('player_id')] = {points: 0, fouls: 0}
+      if !totals[shot.get('Player').id]?
+        totals[shot.get('Player').id] = {points: 0, fouls: 0}
       if shot.get('result') == "pot"
-        totals[shot.get('player_id')].points += parseInt(shot.get('points'))
+        totals[shot.get('Player').id].points += parseInt(shot.get('points'))
       else if shot.get('result') == "foul"
-        totals[shot.get('player_id')].fouls += parseInt(shot.get('points'))
+        totals[shot.get('Player').id].fouls += parseInt(shot.get('points'))
     totals
 
 class ShotGroup extends Livesnooker.Model
@@ -45,12 +46,12 @@ class Break extends ShotGroup
     @get('shots').last()
 
   belongsTo: (shot) ->
-    shot.isPot() && @lastShot().get('player_id') == shot.get('player_id')
+    shot.isPot() && @lastShot().get('Player') == shot.get('Player')
 
   totals: ->
     pots: true
-    player: @get('frame').getPlayer(@lastShot().get('player_id'))
-    points: @get('shots').calculateTotals()[@lastShot().get('player_id')]
+    player: @lastShot().get('Player')
+    points: @get('shots').calculateTotals()[@lastShot().get('Player').id]
 
 class ShotGroups extends Livesnooker.Collection
   model: ShotGroup

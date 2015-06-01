@@ -4,6 +4,24 @@ sequence = (name) ->
   sequences[name] = current + 1
 
 class Shot extends Livesnooker.Model
+  urlRoot: "/shots"
+  relations: [
+    {
+      type: Backbone.HasOne,
+      key: 'Player',
+      relatedModel: 'Player',
+      keyDestination: 'PlayerId',
+      includeInJSON: 'id'
+    },
+    {
+      type: Backbone.HasOne,
+      key: 'Frame',
+      relatedModel: 'Frame',
+      keyDestination: 'FrameId',
+      includeInJSON: 'id'
+    }
+  ]
+
   initialize: ->
     @set('id', sequence('shot'))
 

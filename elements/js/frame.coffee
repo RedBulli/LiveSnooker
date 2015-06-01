@@ -1,33 +1,64 @@
 class Frame extends Livesnooker.Model
+  urlRoot: "/frames"
+  relations: [
+    {
+      type: Backbone.HasOne,
+      key: 'Player1',
+      relatedModel: 'Player',
+      keyDestination: 'Player1Id',
+      includeInJSON: 'id'
+    },
+    {
+      type: Backbone.HasOne,
+      key: 'Player2',
+      relatedModel: 'Player',
+      keyDestination: 'Player2Id',
+      includeInJSON: 'id'
+    },
+    {
+      type: Backbone.HasOne,
+      key: 'League',
+      relatedModel: 'League',
+      keyDestination: 'LeagueId',
+      includeInJSON: 'id'
+    }
+  ]
+
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
-    @set('currentPlayer', @get('Player1'))
     @undoManager = new Backbone.UndoManager
       register: [@get('shotGroups')],
       track: true
 
+  lastShot: ->
+    @get('shotGroups').last()?.lastShot()
+
+  getCurrentPlayer: ->
+    if @lastShot()?.isPot()
+      @lastShot().get('Player')
+    else
+      @get('Player1')
+
   getNonCurrentPlayer: ->
-    if @get('currentPlayer') == @get('Player1')
+    if @getCurrentPlayer() == @get('Player1')
       @get('Player2')
     else
       @get('Player1')
 
   currentPlayerIndex: ->
-    if @get('currentPlayer') == @get('Player1')
+    if @getCurrentPlayer() == @get('Player1')
       0
     else
       1
 
   addShot: (shot) ->
     @get('shotGroups').addShot(shot)
-    if !shot.isPot()
-      @set 'currentPlayer', @getNonCurrentPlayer()
     @trigger('updateView')
 
   createShot: ({attempt, result, points}) ->
     shot = new Shot
-      frame_id: @id,
-      player_id: @get('currentPlayer').id,
+      Frame: @,
+      Player: @getCurrentPlayer(),
       attempt: attempt,
       result: result,
       points: parseInt(points)
@@ -54,5 +85,7 @@ class Frame extends Livesnooker.Model
       @get('Player1')
     else if @get('Player2').id == id
       @get('Player2')
+
+Frame.setup()
 
 ((scope) -> scope.Frame = Frame)(@)

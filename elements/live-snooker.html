@@ -10,16 +10,20 @@
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <template if="{{ league }}">
-      <template id="frameTemplate" if="{{ frame }}">
-        <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
-      </template>
-      <template if="{{ !frame }}">
-        No Frame going try here: <br>
-        <new-frame-form frame="{{ frame }}" league="{{league}}"></new-frame-form>
-      </template>
+      <ol>
+        <template repeat="{{ frame in league.attributes.Frames.models}}">
+        <li>
+          {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
+          <a href="/frame.html?frameId={{ frame.id }}" on-click="{{ showFrame }}">Show</a>
+          <a href="/frame.html?frameId={{ frame.id }}" on-click="{{ controlFrame }}">Control</a>
+        </li>
+        </template>
+      </ol>
+      Create a new frame <br>
+      <new-frame-form league="{{league}}"></new-frame-form>
     </template>
-    <template id="noframe" if="{{ !league }}">
-      {{ noframe }}
+    <template if="{{ !league }}">
+      {{ noleague }}
     </template>
   </template>
   <script>
@@ -28,13 +32,21 @@
       else router.go('/leagues/');
     }
     Polymer({
+      showFrame: function() {
+        event.preventDefault();
+        window.open(event.currentTarget.href, "", "width=800, height=600")
+      },
+      controlFrame: function(event) {
+        event.preventDefault();
+        window.open(event.currentTarget.href, "", "width=800, height=600")
+      },
       domReady: function() {
         if (this.leagueId) localStorage.leagueId = this.leagueId;
         else {
           routeToLeague(this.router);
           return;
         }
-        this.noframe = "Loading!";
+        this.noleague = "Loading!";
         var _this = this;
         if (!this.league) {
           this.$.api.findOrFetchModel(League, this.leagueId)
@@ -43,7 +55,7 @@
               _this.router.templateInstance.model.league = league;
             })
             .catch(function(model, response) {
-              _this.noframe = response.responseJSON.error.message;
+              _this.noleague = response.responseJSON.error.message;
             });
         }
       }
