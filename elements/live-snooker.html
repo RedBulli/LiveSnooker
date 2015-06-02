@@ -1,6 +1,5 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="live-snooker-api.html">
-<link rel="import" href="live-snooker-frame.html">
 <link rel="import" href="js/frame.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="new-frame-form.html">
@@ -14,8 +13,8 @@
         <template repeat="{{ frame in league.attributes.Frames.models}}">
         <li>
           {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
-          <a href="/frame.html?frameId={{ frame.id }}" on-click="{{ showFrame }}">Show</a>
-          <a href="/frame.html?frameId={{ frame.id }}" on-click="{{ controlFrame }}">Control</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=false" on-click="{{ showFrame }}">Show</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=false" on-click="{{ controlFrame }}">Control</a>
         </li>
         </template>
       </ol>

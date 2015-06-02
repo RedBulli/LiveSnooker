@@ -74,9 +74,12 @@ Polymer
 
   onApiReady: ->
     this.asyncFire('api-ready')
+    this.fire('api')
 
   ready: ->
     if this.host
-      data.host = this.host if this.host
+      data.host = this.host
       this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
+    else if data.host
+      this.host = data.host
     this.user = data.user

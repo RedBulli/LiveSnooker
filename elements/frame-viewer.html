@@ -1,11 +1,10 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="frame-score-view.html">
-<link rel="import" href="input/frame-input.html">
-<link rel="import" href="p2p-video.html">
 <link rel="import" href="break-history-view.html">
 <link rel="import" href="live-snooker-api.html">
+<link rel="import" href="event-stream.html">
 
-<polymer-element name="live-snooker-frame" attributes="frame">
+<polymer-element name="frame-viewer" attributes="frame video">
   <template>
     <link rel="stylesheet" href="css/foundation.min.css">
     <style>
@@ -19,29 +18,32 @@
         text-align: center;
       }
     </style>
-    <live-snooker-api id="api"></live-snooker-api>
+    <live-snooker-api id="api" on-api="{{onApiReady}}"></live-snooker-api>
+    <template if="{{streamUrl}}">
+      <event-stream streamUrl="{{streamUrl}}" on-event="{{onStreamEvent}}"></event-stream>
+    </template>
     <div class="row">
       <div class="large-8 columns">
         <div id="gameview">
-          <p2p-video input="true"></p2p-video>
+          <template if="{{video}}">
+            <link rel="import" href="p2p-video.html">
+            <p2p-video frameId="{{frame.id}}"></p2p-video>
+          </template>
           <frame-score-view id="on-video-score" model="{{frame}}"></frame-score-view>
         </div>
-        <frame-input model="{{frame}}"></frame-input>
       </div>
       <div class="large-4 columns">
         <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
       </div>
     </div>
-    <button on-click="{{ endFrame }}">End frame</button>
   </template>
   <script>
     Polymer({
-      endFrame: function(event) {
-        event.preventDefault();
-        this.fire('end');
-        this.frame = null;
+      onStreamEvent: function(event) {
+        this.frame.newShot(event.detail.shot);
       },
-      ready: function() {
+      domReady: function() {
+        this.streamUrl = this.$.api.host + "/framestream";
       }
     });
   </script>

@@ -7,6 +7,8 @@
   <link rel="import" href="elements/live-snooker-api.html">
   <link rel="import" href="elements/live-snooker.html">
   <link rel="import" href="elements/js/frame.html">
+  <link rel="import" href="elements/frame-controller.html">
+  <link rel="import" href="elements/frame-viewer.html">
 </head>
 <body>
   <template id="auto-bind-demo" is="auto-binding">
@@ -17,11 +19,16 @@
     </app-router>
   </template>
 
-  <polymer-element name="frame-loader" attributes="frameId">
+  <polymer-element name="frame-loader" attributes="frameId input video">
     <template>
       <live-snooker-api id="api"></live-snooker-api>
       <template if="{{frame}}">
-        <live-snooker-frame frame="{{ frame }}"></live-snooker-frame>
+        <template if="{{input}}">
+          <frame-controller frame="{{ frame }}" video="{{video}}"></frame-controller>
+        </template>
+        <template if="{{!input}}">
+          <frame-viewer frame="{{frame}}" video="{{video}}"></frame-viewer>
+        </template>
       </template>
       <template if="{{!frame}}">
         Loading!
