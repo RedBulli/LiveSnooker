@@ -20,8 +20,8 @@
       <template repeat="{{ frame in league.attributes.Frames.models}}" id="frames">
         <li data-id="{{frame.id}}">
           {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
-          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=true" on-click="{{ showFrame }}">Show</a>
-          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=true" on-click="{{ controlFrame }}">Control</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=false" on-click="{{ showFrame }}">Show</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=false" on-click="{{ controlFrame }}">Control</a>
           <span class="video-status">VIDEO</span>
         </li>
       </template>

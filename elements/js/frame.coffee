@@ -94,16 +94,35 @@ class Frame extends Livesnooker.Model
       throw shot.validate(shot.attributes)
     @get('Shots').add(shot)
     @get('shotGroups').addShot(shot)
-    @trigger('updateView')
+    @updateState()
     shot
+
+  updateState: () ->
+    @state = @getState()
 
   undoShot: ->
     @undoManager.undo()
-    @trigger('updateView')
+    @updateState()
 
   redoShot: ->
     @undoManager.redo()
-    @trigger('updateView')
+    @updateState()
+
+  getState: ->
+    scores = @getScores()
+    currentPlayer = @getCurrentPlayer()
+    [
+      {
+        player: @get('Player1'),
+        score: scores[0],
+        currentPlayer: currentPlayer == @get('Player1')
+      },
+      {
+        player: @get('Player2'),
+        score: scores[1],
+        currentPlayer: currentPlayer == @get('Player2')
+      },
+    ]
 
   getScores: ->
     rawTotals = @get('shotGroups').calculateTotalScores()
