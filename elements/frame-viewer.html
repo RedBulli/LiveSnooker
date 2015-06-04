@@ -3,6 +3,8 @@
 <link rel="import" href="break-history-view.html">
 <link rel="import" href="live-snooker-api.html">
 <link rel="import" href="event-stream.html">
+<link rel="import" href="p2p-video.html">
+
 
 <polymer-element name="frame-viewer" attributes="frame video">
   <template>
@@ -26,8 +28,7 @@
       <div class="large-8 columns">
         <div id="gameview">
           <template if="{{video}}">
-            <link rel="import" href="p2p-video.html">
-            <p2p-video frameId="{{frame.id}}"></p2p-video>
+            <p2p-video leagueId="{{frame.attributes.League.id}}" frameId="{{frame.id}}"></p2p-video>
           </template>
           <frame-score-view id="on-video-score" model="{{frame}}"></frame-score-view>
         </div>

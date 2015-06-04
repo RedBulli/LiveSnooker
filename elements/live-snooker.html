@@ -4,40 +4,90 @@
 <link rel="import" href="js/players.html">
 <link rel="import" href="new-frame-form.html">
 <link rel="import" href="js/league.html">
+<script src="../vendors/rtcmulticonnection/RTCMultiConnection-stable.js"></script>
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
 
 <polymer-element name="live-snooker" attributes="league">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <template if="{{ league }}">
-      <ol>
-        <template repeat="{{ frame in league.attributes.Frames.models}}">
-        <li>
+    <ol id="framelist">
+      <template repeat="{{ frame in league.attributes.Frames.models}}" id="frames">
+        <li data-id="{{frame.id}}">
           {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
-          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=false" on-click="{{ showFrame }}">Show</a>
-          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=false" on-click="{{ controlFrame }}">Control</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=true" on-click="{{ showFrame }}">Show</a>
+          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=true" on-click="{{ controlFrame }}">Control</a>
         </li>
-        </template>
-      </ol>
-      Create a new frame <br>
-      <new-frame-form league="{{league}}"></new-frame-form>
-    </template>
-    <template if="{{ !league }}">
-      {{ noleague }}
-    </template>
+      </template>
+    </ol>
+    Create a new frame <br>
+    <new-frame-form league="{{league}}"></new-frame-form>
   </template>
   <script>
     function routeToLeague(router) {
       if (localStorage.leagueId) router.go('/' + localStorage.leagueId);
       else router.go('/leagues/');
     }
+
     Polymer({
       showFrame: function() {
         event.preventDefault();
-        window.open(event.currentTarget.href, "", "width=800, height=600")
+        window.open(event.currentTarget.href, "", "width=1050, height=600")
       },
       controlFrame: function(event) {
         event.preventDefault();
-        window.open(event.currentTarget.href, "", "width=800, height=600")
+        window.open(event.currentTarget.href, "", "width=1050, height=600")
+      },
+      RTCConnect: function() {
+        var _this = this;
+        var connection = new RTCMultiConnection(this.leagueId);
+        var onMessageCallbacks = {};
+        var socket = io.connect('http://localhost:5000/');
+
+        socket.on('message', function(data) {
+            if(data.sender == connection.userid) return;
+
+            if (onMessageCallbacks[data.channel]) {
+                onMessageCallbacks[data.channel](data.message);
+            };
+        });
+
+        socket.on('presence', function (isChannelPresent) {
+            console.log('is channel present', isChannelPresent);
+            //if (!isChannelPresent) playRoleOfSessionInitiator();
+        });
+        socket.emit('presence', this.leagueId);
+
+        connection.openSignalingChannel = (function(config) {
+          var channel = config.channel || _this.leagueId;
+              onMessageCallbacks[channel] = config.onmessage;
+
+              if (config.onopen) setTimeout(config.onopen, 1000);
+              return {
+                  send: function (message) {
+                      socket.emit('message', {
+                          sender: connection.userid,
+                          channel: channel,
+                          message: message
+                      });
+                  },
+                  channel: channel
+              };
+        });
+
+        connection.ondisconnected = (function(e) {
+          console.error("Someone disconnected the whole channel. This shouldn't happen.");
+        }).bind(this);
+
+        connection.onNewSession = (function(e) {
+          var frameId = e.sessionid;
+          var el = this.$.framelist.querySelector('li[data-id="' + frameId + '"]');
+          var videoEl = document.createElement("span");
+          videoEl.className = "video-on";
+          videoEl.innerText = "VIDEO"
+          el.appendChild(videoEl);
+        }).bind(this);
+
+        connection.connect();
       },
       domReady: function() {
         if (this.leagueId) localStorage.leagueId = this.leagueId;
@@ -52,6 +102,7 @@
             .then(function(league) {
               _this.league = league;
               _this.router.templateInstance.model.league = league;
+              _this.RTCConnect.call(_this);
             })
             .catch(function(model, response) {
               _this.noleague = response.responseJSON.error.message;

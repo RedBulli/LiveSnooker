@@ -1,6 +1,7 @@
-<script src="../vendors/rtcmulticonnection/RTCMultiConnection.min.js"></script>
+<script src="../vendors/rtcmulticonnection/RTCMultiConnection-stable.js"></script>
+<script src="http://localhost:5000/socket.io/socket.io.js"> </script>
 
-<polymer-element name="p2p-video" attributes="input">
+<polymer-element name="p2p-video" attributes="input leagueId frameId">
   <template>
     <style>
       :host {
@@ -15,23 +16,54 @@
 
   <script>
     Polymer({
-      ready: function() {
+      domReady: function() {
         var el = this.$.cam;
-        var connection = new RTCMultiConnection();
-
-        connection.session = {
+        var leagueId = this.leagueId;
+        var connection = new RTCMultiConnection(this.leagueId);
+        var session = connection.session = {
           audio: true,
           video: true,
           oneway: true
         };
 
+        var onMessageCallbacks = {};
+        var socket = io.connect('http://localhost:5000/');
+
+        socket.on('message', function(data) {
+            if(data.sender == connection.userid) return;
+
+            if (onMessageCallbacks[data.channel]) {
+                onMessageCallbacks[data.channel](data.message);
+            };
+        });
+
+        connection.openSignalingChannel = (function(config) {
+          var channel = config.channel || leagueId;
+          onMessageCallbacks[channel] = config.onmessage;
+
+          if (config.onopen) setTimeout(config.onopen, 1000);
+          return {
+            send: function (message) {
+              socket.emit('message', {
+                sender: connection.userid,
+                channel: channel,
+                message: message
+              });
+            },
+            channel: channel
+          };
+        });
+
+        // connection.leaveOnPageUnload = true;
+        // connection.autoCloseEntireSession = true;
+
         connection.onstream = function(e) {
           el.insertBefore(e.mediaElement, el.firstChild);
         };
 
-        connection.connect();
+        var connected = connection.connect(this.frameId);
         if (this.input) {
-          connection.open();
+          connection.open(this.frameId);
         }
       }
     });
