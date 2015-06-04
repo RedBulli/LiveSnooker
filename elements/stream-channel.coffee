@@ -3,8 +3,12 @@ RTCConnection = (leagueId) ->
   onMessageCallbacks = {}
   socket = io.connect('http://localhost:5000/')
 
+
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
+    frameId = data.message?.sessionid
+    extra = connection.sessionDescriptions[frameId]?.extra
+    extra.lastMessage = new Date() if extra
 
     if onMessageCallbacks[data.channel]
       onMessageCallbacks[data.channel](data.message)
@@ -34,9 +38,20 @@ RTCConnection = (leagueId) ->
 
   connection.connect()
 
+clearOldSessions = (connection) ->
+  for frameId of connection.sessionDescriptions
+    if connection.sessionDescriptions[frameId].extra.lastMessage
+      diff = new Date() - connection.sessionDescriptions[frameId].extra.lastMessage
+      delete connection.sessionDescriptions[frameId] if diff > 10000
+      this.fire('stream-closed', frameId)
+    else
+      connection.sessionDescriptions[frameId].extra.lastMessage = new Date()
+
 Polymer
   domReady: ->
     connection = RTCConnection(this.leagueId)
+    window.web_connection = connection
     _this = @
     connection.onNewSession = (e) ->
       _this.fire("new-stream", e.sessionid)
+    setInterval(clearOldSessions.bind(@, connection), 10000)
