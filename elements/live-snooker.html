@@ -5,19 +5,27 @@
 <link rel="import" href="new-frame-form.html">
 <link rel="import" href="js/league.html">
 <link rel="import" href="stream-channel.html">
+<link rel="import" href="event-stream.html">
 <link rel="import" href="js/vendor/jquery.html">
 
-<polymer-element name="live-snooker" attributes="league">
+<polymer-element name="live-snooker" attributes="league frames">
   <template>
     <style>
       .video-status {
         display: none;
       }
+      .winner {
+        font-weight: bold;
+      }
     </style>
     <live-snooker-api id="api"></live-snooker-api>
+    <template if="{{streamUrl}}">
+      <event-stream streamUrl="{{streamUrl}}" on-event="{{onStreamEvent}}"></event-stream>
+    </template>
     <stream-channel id="stream-channel" leagueId="{{leagueId}}" on-new-stream="{{newStream}}" on-stream-closed="{{streamClosed}}"></stream-channel>
+    <h2>Ongoing frames</h2>
     <ol id="framelist">
-      <template repeat="{{ frame in league.attributes.Frames.models}}" id="frames">
+      <template repeat="{{ frame in frames | frameFinished(false) }}">
         <li data-id="{{frame.id}}">
           {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
           <a href="/frame.html?frameId={{ frame.id }}&input=false&video=false" on-click="{{ showFrame }}">Show</a>
@@ -26,52 +34,21 @@
         </li>
       </template>
     </ol>
+    <h2>Finished frames</h2>
+    <ol>
+      <template repeat="{{ frame in frames | frameFinished(true) }}">
+        <li>
+          <span class="{{ {winner: frame.attributes.Player1 === frame.attributes.Winner} | tokenList }}">
+            {{frame.attributes.Player1.attributes.name}}
+          </span> - 
+          <span class="{{ {winner: frame.attributes.Player2 === frame.attributes.Winner} | tokenList }}">
+            {{frame.attributes.Player2.attributes.name}}</span>
+          <a href="/" on-click="{{ showBreaks }}">View breaks</a>
+        </li>
+      </template>
+    </ol>
     Create a new frame <br>
-    <new-frame-form league="{{league}}"></new-frame-form>
+    <new-frame-form league="{{league}}" on-new-frame="{{newFrame}}"></new-frame-form>
   </template>
-  <script>
-    function routeToLeague(router) {
-      if (localStorage.leagueId) router.go('/' + localStorage.leagueId);
-      else router.go('/leagues/');
-    }
-
-    Polymer({
-      getVideoStatusElement: function(frameId) {
-        return $(this.$.framelist.querySelector('li[data-id="' + frameId + '"] > .video-status'));
-      },
-      showFrame: function() {
-        event.preventDefault();
-        window.open(event.currentTarget.href, "", "width=1050, height=600");
-      },
-      controlFrame: function(event) {
-        event.preventDefault();
-        window.open(event.currentTarget.href, "", "width=1050, height=600");
-      },
-      newStream: function(event) {
-        this.getVideoStatusElement(event.detail).show();
-      },
-      streamClosed: function(event) {
-        this.getVideoStatusElement(event.detail).hide();
-      },
-      domReady: function() {
-        if (this.leagueId) localStorage.leagueId = this.leagueId;
-        else {
-          routeToLeague(this.router);
-          return;
-        }
-        this.noleague = "Loading!";
-        var _this = this;
-        if (!this.league) {
-          this.$.api.findOrFetchModel(League, this.leagueId)
-            .then(function(league) {
-              _this.league = league;
-              _this.router.templateInstance.model.league = league;
-            })
-            .catch(function(model, response) {
-              _this.noleague = response.responseJSON.error.message;
-            });
-        }
-      }
-    });
-  </script>
+  <script src="live-snooker.js"></script>
 </polymer-element>

@@ -26,6 +26,6 @@ class Shot extends Livesnooker.Model
 
   populateAssociations: ->
     @set('Player', Player.findModel(@get('PlayerId')))
-    @set('Frame', Player.findModel(@get('FrameId')))
+    @set('Frame', Frame.findModel(@get('FrameId')))
 
 ((scope) -> scope.Shot = Shot)(@)

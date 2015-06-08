@@ -44,10 +44,18 @@
     Polymer({
       endFrame: function(event) {
         event.preventDefault();
-        this.fire('end');
-        this.frame = null;
-      },
-      ready: function() {
+        if (winner == "tie") throw "Cannot end frame in a tie";
+        var winner = this.frame.getLeader();
+        var confirmationResult = window.confirm(winner.get('name') + " will win the frame. This cannot be undone. Are you sure?");
+        if (confirmationResult) {
+          this.frame.set("WinnerId", winner.id);
+          this.frame.save({WinnerId: winner.id}, {
+            patch: true,
+            success: function() {
+              window.close();
+            }
+          });
+        }
       }
     });
   </script>

@@ -36,8 +36,8 @@
         var _this = this;
         frame.save(frame.attributes, {
           success: function() {
-            window.open("/frame.html?frameId=" + frame.id, "", "width=800, height=600");
-            _this.trigger("newFrame", frame);
+            window.open("/frame.html?frameId=" + frame.id + "&input=true&video=true", "", "width=1050, height=600");
+            _this.fire("new-frame", frame);
           }
         });
       }

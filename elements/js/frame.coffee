@@ -27,6 +27,13 @@ class Frame extends Livesnooker.Model
       key: 'Shots',
       relatedModel: 'Shot',
       collectionType: 'Shots'
+    },
+    {
+      type: Backbone.HasOne,
+      key: 'Winner',
+      relatedModel: 'Player',
+      keyDestination: 'WinnerId',
+      includeInJSON: 'id'
     }
   ]
 
@@ -135,6 +142,21 @@ class Frame extends Livesnooker.Model
       @get('Player1')
     else if @get('Player2').id == id
       @get('Player2')
+
+  getLeader: ->
+    scores = @getScores()
+    if scores[0] > scores[1]
+      @get('Player1')
+    else if scores[1] > scores[0]
+      @get('Player2')
+    else
+      "tie"
+
+  populateAssociations: ->
+    @set('Player1', Player.findModel(@get('Player1Id')))
+    @set('Player2', Player.findModel(@get('Player2Id')))
+    @set('League', League.findModel(@get('LeagueId')))
+    @set('Winner', Player.findModel(@get('WinnerId')))
 
 Frame.setup()
 
