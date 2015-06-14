@@ -6,33 +6,33 @@
 <link rel="import" href="p2p-video.html">
 <link rel="import" href="frame-novideo-view.html">
 
-<polymer-element name="frame-viewer" attributes="frame video">
-  <template>
-    <link rel="stylesheet" href="css/foundation.min.css">
-    <style>
-      #gameview {
-        width: 640px;
-      }
+<dom-module id="frame-viewer">
+  <style>
+    #gameview {
+      width: 640px;
+    }
 
-      #on-video-score {
-        position: relative;
-        top: -2em;
-        text-align: center;
-      }
-    </style>
-    <live-snooker-api id="api" on-api="{{onApiReady}}"></live-snooker-api>
-    <template if="{{streamUrl}}">
-      <event-stream streamUrl="{{streamUrl}}" on-event="{{onStreamEvent}}"></event-stream>
-    </template>
+    #on-video-score {
+      position: relative;
+      top: -2em;
+      text-align: center;
+    }
+  </style>
+
+  <link rel="stylesheet" href="css/foundation.min.css">
+
+  <template>
+    <live-snooker-api id="api"></live-snooker-api>
+    <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
     <div class="row">
       <div class="large-8 columns">
         <div id="gameview">
-          <template if="{{video}}">
+          <template is="dom-if" if="{{video}}">
             <p2p-video leagueId="{{frame.attributes.League.id}}" frameId="{{frame.id}}"></p2p-video>
-            <frame-score-view id="on-video-score" state="{{frame.state}}"></frame-score-view>
+            <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
           </template>
-          <template if="{{!video}}">
-            <frame-novideo-view model="{{frame}}" state="{{frame.state}}"></frame-novideo-view>
+          <template is="dom-if" if="{{!video}}">
+            <frame-novideo-view frame="{{frame}}" state="{{frame.state}}"></frame-novideo-view>
           </template>
         </div>
       </div>
@@ -41,14 +41,35 @@
       </div>
     </div>
   </template>
-  <script>
-    Polymer({
-      onStreamEvent: function(event) {
-        this.frame.newShot(event.detail.shot);
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'frame-viewer',
+    properties: {
+      frame: Object,
+      frameId: {
+        type: String,
+        observer: '_frameIdChanged'
       },
-      domReady: function() {
-        this.streamUrl = this.$.api.host + "/framestream";
-      }
-    });
-  </script>
-</polymer-element>
+      streamUrl: String
+    },
+    _frameIdChanged: function() {
+      var frame = new Frame({id: this.frameId});
+      frame.setApiClient(this.$.api);
+      frame.fetch({
+        success: (function() {
+          frame.get('Shots').populateAssociations();
+          frame.calculateShotGroups();
+          this.frame = frame;
+        }).bind(this)
+      });
+    },
+    onStreamEvent: function(event) {
+      this.frame.newShot(event.detail.shot);
+    },
+    ready: function() {
+      this.streamUrl = this.$.api.host + "/framestream";
+    }
+  });
+</script>

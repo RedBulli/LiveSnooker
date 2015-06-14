@@ -1,7 +1,7 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 <!-- <script src="https://apis.google.com/js/client:platform.js"></script>-->
 
-<polymer-element name="google-auth" attributes="googleId">
+<dom-module id="google-auth" attributes="googleId">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <div id="gSignInWrapper">
@@ -10,47 +10,48 @@
       </div>
     </div>
   </template>
+</dom-module>
 
-  <script>
-    var signinCallback = function () {};
-    var gapi = {
-      signin: {
-        render: function() {
-          signinCallback({
-              status: {
-                signed_in: "dsd"
-              }
-          });
-        }
+<script>
+  var signinCallback = function () {};
+  var gapi = {
+    signin: {
+      render: function() {
+        signinCallback({
+            status: {
+              signed_in: "dsd"
+            }
+        });
       }
-    };
+    }
+  };
 
-    Polymer({
-      googleId: "",
-      signinCallback: function(authResult) {
-        if (authResult['status']['signed_in']) {
-          this.$.myButton.setAttribute('style', 'display: none');
-          this.$.api.setAuthentication(authResult);
-        } else {
-          // Update the app to reflect a signed out user
-          // Possible error values:
-          //   "user_signed_out" - User is signed-out
-          //   "access_denied" - User denied access to your app
-          //   "immediate_failed" - Could not automatically log in the user
-          console.error('Sign-in state: ' + authResult['error']);
-        }
-      },
-      ready: function() {
-        signinCallback = this.signinCallback.bind(this);
-        var additionalParams = {
-          'theme' : 'dark',
-          'clientid': this.googleId,
-          'cookiepolicy': "single_host_origin",
-          'callback': 'signinCallback',
-          'scope': "https://www.googleapis.com/auth/plus.login"
-        };
-        gapi.signin.render(this.$.myButton, additionalParams);
+  Polymer({
+    is: 'google-auth',
+    googleId: "",
+    signinCallback: function(authResult) {
+      if (authResult['status']['signed_in']) {
+        this.$.myButton.setAttribute('style', 'display: none');
+        this.$.api.setAuthentication(authResult);
+      } else {
+        // Update the app to reflect a signed out user
+        // Possible error values:
+        //   "user_signed_out" - User is signed-out
+        //   "access_denied" - User denied access to your app
+        //   "immediate_failed" - Could not automatically log in the user
+        console.error('Sign-in state: ' + authResult['error']);
       }
-    });
-  </script>
-</polymer-element>
+    },
+    ready: function() {
+      signinCallback = this.signinCallback.bind(this);
+      var additionalParams = {
+        'theme' : 'dark',
+        'clientid': this.googleId,
+        'cookiepolicy': "single_host_origin",
+        'callback': 'signinCallback',
+        'scope': "https://www.googleapis.com/auth/plus.login"
+      };
+      gapi.signin.render(this.$.myButton, additionalParams);
+    }
+  });
+</script>

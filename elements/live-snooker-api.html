@@ -1,12 +1,13 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/vendor/jquery.html">
 <link rel="import" href="js/vendor/underscore.html">
-<link rel="import" href="../vendors/core-signals/core-signals.html">
+<link rel="import" href="../vendors/iron-signals/iron-signals.html">
 
-<polymer-element name="live-snooker-api" attributes="host user onAccount" hidden>
+<dom-module id="live-snooker-api" attributes="user onAccount" hidden>
   <template>
-    <core-signals on-core-signal-account="{{onAccount}}"></core-signals>
-    <core-signals on-core-signal-api-ready="{{onApiReady}}"></core-signals>
+    <iron-signals on-iron-signal-account="onAccount"></iron-signals>
+    <iron-signals on-iron-signal-api-ready="onApiReady"></iron-signals>
   </template>
-  <script src="live-snooker-api.js"></script>
-</polymer-element>
+</dom-module>
+
+<script src="live-snooker-api.js"></script>

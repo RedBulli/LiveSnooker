@@ -1,77 +1,99 @@
--<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="live-snooker-api.html">
 <link rel="import" href="js/player.html">
 <link rel="import" href="js/league.html">
 <link rel="import" href="validation-errors.html">
 
-<polymer-element name="league-controller" attributes="league">
+<dom-module id="league-controller">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <div id="league">
-      <template if="{{ league }}">
-        <h2>{{league.attributes.name}}</h2>
-
-        <ul>
-          <li>ID: {{league.id}}</li>
-          <li>Players:
-            <ul>
-              <template repeat="{{ player in league.attributes.Players.models }}">
-                <li>{{ player.attributes.name }}</li>
-              </template>
-            </ul>
-          </li>
-        </ul>
-        <form>
-          <label for="name">Add a new player: </label>
-          <input type="text" id="playerName" name="name" placeholder="Name">
-          <button on-click="{{ newPlayer }}">Create player</button>
-          <validation-errors id="errors"></validation-errors>
-        </form>
-      </template>
+      <h2>{{leagueAttrs.name}}</h2>
+      <ul>
+        <li>ID: <span>{{leagueAttrs.id}}</span></li>
+        <li>Players:
+          <ul>
+            <template is="dom-repeat" items="{{playerModels}}">
+              <li>{{ item.attributes.name }}</li>
+            </template>
+          </ul>
+        </li>
+      </ul>
+      <form>
+        <label for="name">Add a new player: </label>
+        <input type="text" id="playerName" name="name" placeholder="Name">
+        <button on-click="newPlayer">Create player</button>
+        <validation-errors id="errors"></validation-errors>
+      </form>
       <template if="{{ error }}">
         {{ error }}
       </template>
     </div>
   </template>
-  <script>
-    Polymer({
-      newPlayer: function() {
-        event.preventDefault();
-        var league = this.league;
-        var errorsEl = this.$.league.querySelector("#errors");
-        var playerInput = this.$.league.querySelector('#playerName');
-        var opts = {
-          name: playerInput.value,
-          LeagueId: league.id
-        };
-        var player = new Player(opts);
-        player.setApiClient(this.$.api);
-        player.save(player.attributes, {
-          success: function(model) {
-            league.get('Players').add(model);
-            playerInput.value = "";
-            errorsEl.errors = [];
-          },
-          error: function(data, response) {
-            errorsEl.errors = [response.responseJSON.error.errors[0]];
-          }
-        });
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'league-controller',
+    properties: {
+      leagueId: {
+        type: String,
+        observer: '_leagueIdChanged'
       },
-      ready: function() {
-        this.playerErrors = [];
+      leagueAttrs: Object,
+      players: {
+        type: Object,
+        observer: '_onPlayersChange'
       },
-      domReady: function() {
-        if (!this.league) {
-          var _this = this;
-          this.$.api.findOrFetchModel(League, this.leagueId)
-            .then(function(league) {
-              _this.league = league;
-            })
-            .catch(function(model, response) {
-              _this.error = response.status;
-            });
+      playerModels: Array
+    },
+    newPlayer: function() {
+      event.preventDefault();
+      var league = this.league;
+      var errorsEl = this.$.league.querySelector("#errors");
+      var playerInput = this.$.league.querySelector('#playerName');
+      var opts = {
+        name: playerInput.value,
+        LeagueId: league.id
+      };
+      var player = new Player(opts);
+      player.setApiClient(this.$.api);
+      player.save(player.attributes, {
+        success: function(model) {
+          league.get('Players').add(model);
+          playerInput.value = "";
+          errorsEl.errors = [];
+        },
+        error: function(data, response) {
+          errorsEl.errors = [response.responseJSON.error.errors[0]];
         }
+      });
+    },
+    _onPlayersChange: function() {
+      if (this.playerModels) {
+        this.splice('playerModels', 0, this.breaks.length);
       }
-    });
-  </script>
-</polymer-element>
+      this.playerModels = _.clone(this.players.models);
+      this.players.on('add remove change update', (function(model) {
+        this.splice('playerModels', 0, this.playerModels.length);
+        this.players.each((function(playerModel) {
+          this.push('playerModels', playerModel);
+        }).bind(this));
+      }).bind(this));
+    },
+    _leagueIdChanged: function() {
+      if (this.leagueId) {
+        var _this = this;
+        this.$.api.findOrFetchModel(League, this.leagueId)
+          .then(function(league) {
+            _this.league = league;
+            _this.leagueAttrs = league.attributes;
+            _this.players = league.get('Players');
+          })
+          .catch(function(model, response) {
+            _this.error = response.status;
+          });
+      }
+    }
+  });
+</script>

@@ -6,34 +6,36 @@
 <link rel="import" href="live-snooker-api.html">
 <link rel="import" href="validation-errors.html">
 
-<polymer-element name="new-league-form">
+<dom-module id="new-league-form">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
     <form>
       <input type="text" id="leagueName" name="name">
-      <button on-click="{{ newLeague }}">Create league</button>
+      <button on-click="newLeague">Create league</button>
       <validation-errors id="errors"></validation-errors>
     </form>
   </template>
-  <script>
-    Polymer({
-      newLeague: function() {
-        var errorsEl = this.$.errors;
-        event.preventDefault();
-        var opts = {
-          name: this.$.leagueName.value
-        };
-        var league = new League(opts);
-        league.setApiClient(this.$.api);
-        league.save(league.attributes, {
-          success: function() {
-            document.querySelector('app-router').go("/leagues/" + league.id);
-          },
-          error: function(data, response) {
-            errorsEl.errors = response.responseJSON.error.errors;
-          }
-        });
-      }
-    });
-  </script>
-</polymer-element>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'new-league-form',
+    newLeague: function() {
+      var errorsEl = this.$.errors;
+      event.preventDefault();
+      var opts = {
+        name: this.$.leagueName.value
+      };
+      var league = new League(opts);
+      league.setApiClient(this.$.api);
+      league.save(league.attributes, {
+        success: function() {
+          MoreRouting.navigateTo("league", {leagueId: league.id});
+        },
+        error: function(data, response) {
+          errorsEl.errors = response.responseJSON.error.errors;
+        }
+      });
+    }
+  });
+</script>

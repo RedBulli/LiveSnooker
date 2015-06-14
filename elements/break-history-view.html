@@ -1,42 +1,73 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 
-<polymer-element name="break-points" attributes="shotGroup">
+<dom-module id="break-points">
   <template>
-    <template if="{{shotGroupViewModel.pots}}">
-      {{shotGroupViewModel.player.attributes.name}}: {{shotGroupViewModel.points.points}}
+    <template is="dom-if" if="{{shotGroupViewModel.pots}}">
+      <span>{{shotGroupViewModel.player.attributes.name}}</span>: <span>{{shotGroupViewModel.points.points}}</span>
     </template>
-    <template if="{{!shotGroupViewModel.pots}}">
-      No pots for {{shotGroupViewModel.shots}} shots
+    <template is="dom-if" if="{{!shotGroupViewModel.pots}}">
+      No pots for <span>{{shotGroupViewModel.shots}}</span> shots
     </template>
   </template>
-  <script>
-    Polymer({
-      updateView: function() {
-        this.shotGroupViewModel = this.shotGroup.totals();
-      },
-      ready: function() {
-        this.shotGroup.listenTo(this.shotGroup.get('shots'), 'add remove change update', this.updateView.bind(this)); 
-        this.updateView();
-      }
-    });
-  </script>
-</polymer-element>
+</dom-module>
 
-<polymer-element name="break-history-view" attributes="breaks">
+<script>
+  Polymer({
+    is: "break-points",
+    properties: {
+      shotGroup: {
+        type: Object,
+        observer: '_onShotGroupChange'
+      },
+      shotGroupViewModel: Array
+    },
+    updateView: function() {
+      this.shotGroupViewModel = this.shotGroup.totals();
+    },
+    _onShotGroupChange: function() {
+      this.shotGroup.get('shots').on('add remove change update', this.updateView.bind(this));
+      this.updateView();
+    }
+  });
+</script>
+
+
+<dom-module id="break-history-view">
   <template>
     <ol>
-      <template repeat="{{break, i in breakViewModels}}">
+      <template id="breaks" is="dom-repeat" items="{{breakModels}}" filter="isEngineer">
         <li>
-          <break-points shotGroup="{{break}}"></break-points>
+          <break-points shot-group="{{item}}"></break-points>
         </li>
       </template>
     </ol>
   </template>
-  <script>
-    Polymer({
-      domReady: function() {
-        this.breakViewModels = this.breaks.models;
+</dom-module>
+
+<script>
+  Polymer({
+    is: "break-history-view",
+    properties: {
+      breaks: {
+        type: Object,
+        observer: '_onBreaksChange'
+      },
+      breakModels: Array
+    },
+    isEngineer: function(item) {
+      return true;
+    },
+    _onBreaksChange: function() {
+      if (this.breakModels) {
+        this.splice('breakModels', 0, this.breaks.length);
       }
-    });
-  </script>
-</polymer-element>
+      this.breakModels = _.clone(this.breaks.models);
+      this.breaks.on('add remove change update', (function(model) {
+        this.splice('breakModels', 0, this.breakModels.length);
+        this.breaks.each((function(breakModel) {
+          this.push('breakModels', breakModel);
+        }).bind(this));
+      }).bind(this));
+    },
+  });
+</script>

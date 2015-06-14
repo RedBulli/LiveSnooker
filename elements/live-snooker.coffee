@@ -1,31 +1,54 @@
-routeToLeague = (router) ->
-  if localStorage.leagueId
-    router.go('/' + localStorage.leagueId)
-  else
-    router.go('/leagues/')
+# routeToLeague = (router) ->
+#   if localStorage.leagueId
+#     router.go('/' + localStorage.leagueId)
+#   else
+#     router.go('/leagues/')
 
 Polymer
-  frameFinished: (frames, finished) ->
-    if frames
-      _.filter frames, (frame) ->
-        (frame.get('endedAt') != null) == finished
+  is: 'live-snooker'
 
-  framesChanged: ->
-    debugger
+  properties:
+    leagueId:
+      type: String,
+      observer: '_leagueIdChanged'
+    league: Object
+    frames: Array
+
+  unfinishedFrame: (frame) ->
+    if !frame.get('endedAt')
+      true
+    else
+      false
+
+  finishedFrame: (frame) ->
+    if frame.get('endedAt')
+      true
+    else
+      false
+
+  computeControlLink: (frame) ->
+    "/frame.html?frameId=" + frame.id + "&input=true&video=true"
+
+  computeViewLink: (frame) ->
+    "/frame.html?frameId=" + frame.id + "&input=false&video=true"
+
+  computeWinnerClass: (frame, player) ->
+    if frame.attributes.Winner == player
+      "winner"
 
   onStreamEvent: (event) ->
     if event.detail.event == 'frameStart'
-      frame = new Frame(event.frame)
-      frame.populateAssociations()
+      frame = Frame.findModel(event.detail.frame.id)
+      if !frame
+        frame = new Frame(event.detail.frame)
+        frame.populateAssociations()
       @league.get('Frames').add(frame)
-      @frames = []
-      @frames = @league.get('Frames').models
     else if event.detail.event == 'frameEnd'
-      @frames = []
       frame = @league.get('Frames').get(event.detail.frame.id)
       frame.set(event.detail.frame)
       frame.populateAssociations()
-      @frames = @league.get('Frames').models
+      @$.unfinished.render()
+      @$.finished.render()
     else if event.detail.event == 'frameDelete'
       1
     else if event.detail.event == 'newPlayer'
@@ -53,22 +76,25 @@ Polymer
     event.preventDefault()
     console.log("Not implemented yet")
 
-  domReady: ->
-    @frames = []
+  setFrames: (framesCollection) ->
+    @frames = _.clone(framesCollection.models)
+    framesCollection.on 'add remove', =>
+      @splice('frames', 0, @frames.length)
+      framesCollection.each (frame) =>
+        @push('frames', frame)
+
+  _leagueIdChanged: ->
     if @leagueId
       localStorage.leagueId = @leagueId
-    else
-      routeToLeague @router
-      return
-
-    @noleague = "Loading!"
-    _this = @
-    if !@league
       @streamUrl = @$.api.host + "/framestream"
       @$.api.findOrFetchModel(League, @leagueId)
-        .then (league) ->
-          _this.league = league
-          _this.frames = league.attributes.Frames.models
-          _this.router.templateInstance.model.league = league
-        .catch (model, response) ->
-          _this.noleague = response.responseJSON.error.message
+        .then (league) =>
+          league.setApiClient(@$.api) if not league.client
+          @league = league
+          league.get('Frames').leagueId = league.id
+          league.get('Frames').setApiClient(league.client)
+          league.get('Frames').fetch({
+            success: @setFrames.bind(@)
+          })
+        .catch (model, response) =>
+          @noleague = response.responseJSON.error.message

@@ -46,9 +46,7 @@ class Frame extends Livesnooker.Model
   calculateShotGroups: ->
     shots = @get('Shots')
     shots.sort()
-    shotGroups = new ShotGroups([], { frame: @ })
-    shots.each (shot) -> shotGroups.addShot(shot)
-    @set('shotGroups', shotGroups)
+    shots.each (shot) => @get('shotGroups').addShot(shot)
 
   lastShot: ->
     @get('shotGroups').last()?.lastShot()
@@ -101,19 +99,16 @@ class Frame extends Livesnooker.Model
       throw shot.validate(shot.attributes)
     @get('Shots').add(shot)
     @get('shotGroups').addShot(shot)
-    @updateState()
+    @trigger("update")
     shot
-
-  updateState: () ->
-    @state = @getState()
 
   undoShot: ->
     @undoManager.undo()
-    @updateState()
+    @trigger("update")
 
   redoShot: ->
     @undoManager.redo()
-    @updateState()
+    @trigger("update")
 
   getState: ->
     scores = @getScores()

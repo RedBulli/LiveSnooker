@@ -8,47 +8,46 @@
 <link rel="import" href="event-stream.html">
 <link rel="import" href="js/vendor/jquery.html">
 
-<polymer-element name="live-snooker" attributes="league frames">
+<dom-module name="live-snooker">
+  <style>
+    .video-status {
+      display: none;
+    }
+    .winner {
+      font-weight: bold;
+    }
+  </style>
+
   <template>
-    <style>
-      .video-status {
-        display: none;
-      }
-      .winner {
-        font-weight: bold;
-      }
-    </style>
     <live-snooker-api id="api"></live-snooker-api>
-    <template if="{{streamUrl}}">
-      <event-stream streamUrl="{{streamUrl}}" on-event="{{onStreamEvent}}"></event-stream>
+    <template is="dom-if" if="{{streamUrl}}">
+      <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
     </template>
-    <stream-channel id="stream-channel" leagueId="{{leagueId}}" on-new-stream="{{newStream}}" on-stream-closed="{{streamClosed}}"></stream-channel>
+    <stream-channel id="stream-channel" leagueId="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
     <h2>Ongoing frames</h2>
     <ol id="framelist">
-      <template repeat="{{ frame in frames | frameFinished(false) }}">
-        <li data-id="{{frame.id}}">
-          {{frame.attributes.Player1.attributes.name}} - {{frame.attributes.Player2.attributes.name}}
-          <a href="/frame.html?frameId={{ frame.id }}&input=false&video=false" on-click="{{ showFrame }}">Show</a>
-          <a href="/frame.html?frameId={{ frame.id }}&input=true&video=false" on-click="{{ controlFrame }}">Control</a>
+      <template id="unfinished" is="dom-repeat" items="{{frames}}" filter="unfinishedFrame">
+        <li data-id$="{{item.id}}">
+          <span>{{item.attributes.Player1.attributes.name}}</span> - <span>{{item.attributes.Player2.attributes.name}}</span>
+          <a href$="{{computeViewLink(item)}}" on-click="showFrame">Show</a>
+          <a href$="{{computeControlLink(item)}}" on-click="controlFrame">Control</a>
           <span class="video-status">VIDEO</span>
         </li>
       </template>
     </ol>
     <h2>Finished frames</h2>
     <ol>
-      <template repeat="{{ frame in frames | frameFinished(true) }}">
+      <template id="finished" is="dom-repeat" items="{{frames}}" filter="finishedFrame">
         <li>
-          <span class="{{ {winner: frame.attributes.Player1 === frame.attributes.Winner} | tokenList }}">
-            {{frame.attributes.Player1.attributes.name}}
-          </span> - 
-          <span class="{{ {winner: frame.attributes.Player2 === frame.attributes.Winner} | tokenList }}">
-            {{frame.attributes.Player2.attributes.name}}</span>
-          <a href="/" on-click="{{ showBreaks }}">View breaks</a>
+          <span class$="{{ computeWinnerClass(item, item.attributes.Player1) }}">{{item.attributes.Player1.attributes.name}}</span> - 
+          <span class$="{{ computeWinnerClass(item, item.attributes.Player2) }}">{{item.attributes.Player2.attributes.name}}</span>
+          <a href="/" on-click="showBreaks">View breaks</a>
         </li>
       </template>
     </ol>
     Create a new frame <br>
-    <new-frame-form league="{{league}}" on-new-frame="{{newFrame}}"></new-frame-form>
+    <new-frame-form league="{{league}}"></new-frame-form>
   </template>
-  <script src="live-snooker.js"></script>
-</polymer-element>
+</dom-module>
+
+<script src="live-snooker.js"></script>

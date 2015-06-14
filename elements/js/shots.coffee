@@ -52,7 +52,7 @@ class ShotGroups extends Livesnooker.Collection
     if options?.frame
       @frame = options.frame
       @on 'add', (shotGroup) =>
-        @frame.undoManager.register(shotGroup.get('shots'))
+        @frame.undoManager.register(shotGroup.get('shots'), {track: true})
 
   addShot: (shot) ->
     if !@last() || !@last().belongsTo(shot)

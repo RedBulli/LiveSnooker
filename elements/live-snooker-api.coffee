@@ -7,6 +7,13 @@ apiIsReady = ->
   data.authentication && data.host
 
 Polymer
+  is: 'live-snooker-api'
+
+  properties:
+    host: String
+    user: Object
+    onAccount: Object
+
   findOrFetchModel: (klass, id) ->
     model = klass.findModel({id: id})
     if model
@@ -16,7 +23,8 @@ Polymer
       model.setApiClient(@)
       new Promise (resolve, reject) ->
         model.fetch
-          success: resolve
+          success: ->
+            resolve(model)
           error: reject
 
   created: ->
@@ -25,7 +33,7 @@ Polymer
   setAuthentication: (auth) ->
     data.authentication = auth
     this.maybeFetchUser()
-    this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
+    this.fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
 
   maybeFetchUser: ->
     this.fetchUser() if data.host && data.authentication
@@ -37,7 +45,7 @@ Polymer
 
   setUser: (user) ->
     data.user = user
-    this.asyncFire('core-signal', {name: "account", data: user})
+    this.fire('iron-signal', {name: "account", data: user}) # Prev async
     this.user = data.user
 
   ajax: (path, settings) ->
@@ -73,13 +81,13 @@ Polymer
     this.user = data.user
 
   onApiReady: ->
-    this.asyncFire('api-ready')
+    this.fire('api-ready') # Prev async
     this.fire('api')
 
   ready: ->
     if this.host
       data.host = this.host
-      this.asyncFire('core-signal', {name: "api-ready"}) if data.authentication
+      this.fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
     else if data.host
       this.host = data.host
     this.user = data.user

@@ -1,7 +1,7 @@
 module.exports = function(config) {
   cfg = {
     files: [
-      "build/vendors/webcomponentsjs/webcomponents.js",
+      "build/vendors/webcomponentsjs/webcomponents-lite.min.js",
       {pattern: 'build/vendors/**', included: false, served: true},
       {pattern: 'build/elements/**', included: false, served: true},
       'specs_build/helper.js',

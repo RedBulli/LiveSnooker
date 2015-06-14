@@ -1,13 +1,15 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 
-<polymer-element name="livesnooker-user">
+<dom-module id="livesnooker-user">
   <template>
     <live-snooker-api user="{{user}}"></live-snooker-api>
     This shows information about the user {{user.email}}
   </template>
-  <script>
-    Polymer({
-      user: null
-    });
-  </script>
-</polymer-element>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'livesnooker-user',
+    user: null
+  });
+</script>

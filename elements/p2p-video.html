@@ -1,71 +1,78 @@
 <script src="../vendors/rtcmulticonnection/RTCMultiConnection-stable.js"></script>
 <script src="http://localhost:5000/socket.io/socket.io.js"> </script>
 
-<polymer-element name="p2p-video" attributes="input leagueId frameId">
+<dom-module id="p2p-video">
+  <style>
+    :host {
+      display: block;
+    }
+    #cam {
+      background-color: green;
+    }
+  </style>
+
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-      #cam {
-        background-color: green;
-      }
-    </style>
     <div id="cam" width="640" height="480"></div>
   </template>
+</dom-module>
 
-  <script>
-    Polymer({
-      domReady: function() {
-        var el = this.$.cam;
-        var leagueId = this.leagueId;
-        var connection = new RTCMultiConnection(this.leagueId);
-        var session = connection.session = {
-          audio: true,
-          video: true,
-          oneway: true
-        };
+<script>
+  Polymer({
+    is: 'p2p-video',
+    properties: {
+      input: Boolean,
+      leagueId: String,
+      frameId: String
+    },
+    ready: function() {
+      var el = this.$.cam;
+      var leagueId = this.leagueId;
+      var connection = new RTCMultiConnection(this.leagueId);
+      var session = connection.session = {
+        audio: true,
+        video: true,
+        oneway: true
+      };
 
-        var onMessageCallbacks = {};
-        var socket = io.connect('http://localhost:5000/');
+      var onMessageCallbacks = {};
+      var socket = io.connect('http://localhost:5000/');
 
-        socket.on('message', function(data) {
-            if(data.sender == connection.userid) return;
+      socket.on('message', function(data) {
+          if(data.sender == connection.userid) return;
 
-            if (onMessageCallbacks[data.channel]) {
-                onMessageCallbacks[data.channel](data.message);
-            };
-        });
-
-        connection.openSignalingChannel = (function(config) {
-          var channel = config.channel || leagueId;
-          onMessageCallbacks[channel] = config.onmessage;
-
-          if (config.onopen) setTimeout(config.onopen, 1000);
-          return {
-            send: function (message) {
-              socket.emit('message', {
-                sender: connection.userid,
-                channel: channel,
-                message: message
-              });
-            },
-            channel: channel
+          if (onMessageCallbacks[data.channel]) {
+              onMessageCallbacks[data.channel](data.message);
           };
-        });
+      });
 
-        // connection.leaveOnPageUnload = true;
-        // connection.autoCloseEntireSession = true;
+      connection.openSignalingChannel = (function(config) {
+        var channel = config.channel || leagueId;
+        onMessageCallbacks[channel] = config.onmessage;
 
-        connection.onstream = function(e) {
-          el.insertBefore(e.mediaElement, el.firstChild);
+        if (config.onopen) setTimeout(config.onopen, 1000);
+        return {
+          send: function (message) {
+            socket.emit('message', {
+              sender: connection.userid,
+              channel: channel,
+              message: message
+            });
+          },
+          channel: channel
         };
+      });
 
-        var connected = connection.connect(this.frameId);
-        if (this.input) {
-          connection.open(this.frameId);
-        }
+      // connection.leaveOnPageUnload = true;
+      // connection.autoCloseEntireSession = true;
+
+      connection.onstream = function(e) {
+        el.insertBefore(e.mediaElement, el.firstChild);
+      };
+
+      var connected = connection.connect(this.frameId);
+      if (this.input) {
+        connection.open(this.frameId);
       }
-    });
-  </script>
-</polymer-element>
+    }
+  });
+</script>

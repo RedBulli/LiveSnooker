@@ -1,32 +1,36 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 <link rel="import" href="points-input.html">
 
-<polymer-element name="frame-input" attributes="model">
+<dom-module id="frame-input">
   <template>
-    <points-input on-shot="{{onShot}}"></points-input>
-    <button on-click="{{onUndo}}">Undo</button>
-    <button on-click="{{onRedo}}">Redo</button>
+    <points-input on-shot="onShot"></points-input>
+    <button on-click="onUndo">Undo</button>
+    <button on-click="onRedo">Redo</button>
   </template>
-  
-  <script>
-    Polymer({
-      onShot: function(event) {
-        var attrs = {
-          attempt: "pot",
-          result: "pot",
-          points: event.detail
-        };
-        if (attrs.points == 0) {
-          attrs.result = "nothing";
-        }
-        this.model.createShot(attrs);
-      },
-      onUndo: function() {
-        this.model.undoShot();
-      },
-      onRedo: function() {
-        this.model.redoShot();
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'frame-input',
+    properties: {
+      frame: Object
+    },
+    onShot: function(event) {
+      var attrs = {
+        attempt: "pot",
+        result: "pot",
+        points: event.detail
+      };
+      if (attrs.points == 0) {
+        attrs.result = "nothing";
       }
-    });
-  </script>
-</polymer-element>
+      this.frame.createShot(attrs);
+    },
+    onUndo: function() {
+      this.frame.undoShot();
+    },
+    onRedo: function() {
+      this.frame.redoShot();
+    }
+  });
+</script>

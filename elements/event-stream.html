@@ -1,15 +1,22 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 
-<polymer-element name="event-stream" attributes="streamUrl" hidden>
-  <script>
-    Polymer('event-stream', {
-      domReady: function() {
-        var _this = this;
-        var source = new EventSource(this.streamUrl);
-        source.onmessage = function (event) {
-          _this.fire("event", JSON.parse(event.data));
-        };
+<dom-module id="event-stream" hidden>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'event-stream',
+    properties: {
+      streamUrl: {
+        type: String,
+        observer: '_onStreamUrlChange'
       }
-    });
-  </script>
-</polymer-element>
+    },
+    _onStreamUrlChange: function() {
+      var source = new EventSource(this.streamUrl);
+      source.onmessage = (function (event) {
+        this.fire("event", JSON.parse(event.data));
+      }).bind(this);
+    }
+  });
+</script>

@@ -1,20 +1,22 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
-<polymer-element name="snooker-ball" attributes="color">
+
+<dom-module id="snooker-ball" attributes="color">
+  <style>
+    object{
+      pointer-events: none;
+      display: block;
+    }
+  </style>
   <template>
-    <style>
-      object{
-        pointer-events: none;
-        display: block;
-      }
-    </style>
     <object id="ball" type="image/svg+xml" data="elements/input/ball.svg">
       <param name="color" value="{{color}}" />
     </object>
   </template>
+</dom-module>
 
-  <script>
-    Polymer({
-      color: "white"
-    });
-  </script>
-</polymer-element>
+<script>
+  Polymer({
+    is: 'snooker-ball',
+    color: "white"
+  });
+</script>

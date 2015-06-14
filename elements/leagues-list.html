@@ -1,28 +1,43 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/leagues.html">
 
-<polymer-element name="leagues-list">
+<dom-module id="leagues-list">
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <a href="/#/leagues/new">Create new league</a>
+    <a href="{{ newLeagueUrl() }}">Create new league</a>
     <br>
     Change the current league:
     <ul>
-      <template repeat="{{league, i in leagues.models}}">
+      <template is="dom-repeat" items="{{leagues}}">
         <li>
-          <a href="/#/{{league.id}}">{{league.attributes.name}}</a>
+          <a href="{{ leagueUrl(item) }}">{{item.attributes.name}}</a>
         </li>
       </template>
     </ul>
   </template>
-  <script>
-    Polymer({
-      domReady: function() {
-        this.leagues = new Leagues();
-        this.leagues.setApiClient(this.$.api);
-        var _this = this;
-        this.leagues.fetch();
-      }
-    });
-  </script>
-</polymer-element>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'leagues-list',
+    properties: {
+      leagues: Array
+    },
+    newLeagueUrl: function() {
+      return MoreRouting.urlFor('newLeague');
+    },
+    leagueUrl: function(league) {
+      return MoreRouting.urlFor('livesnooker', {leagueId: league.id});
+    },
+    ready: function() {
+      this.leaguesCollection = new Leagues();
+      this.leaguesCollection.setApiClient(this.$.api);
+      var _this = this;
+      this.leaguesCollection.fetch({
+        success: function() {
+          _this.leagues = _this.leaguesCollection.models;
+        }
+      });
+    }
+  });
+</script>

@@ -3,7 +3,6 @@ RTCConnection = (leagueId) ->
   onMessageCallbacks = {}
   socket = io.connect('http://localhost:5000/')
 
-
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
     frameId = data.message?.sessionid
@@ -48,9 +47,9 @@ clearOldSessions = (connection) ->
       connection.sessionDescriptions[frameId].extra.lastMessage = new Date()
 
 Polymer
-  domReady: ->
+  is: 'stream-channel',
+  ready: ->
     connection = RTCConnection(this.leagueId)
-    window.web_connection = connection
     _this = @
     connection.onNewSession = (e) ->
       _this.fire("new-stream", e.sessionid)
