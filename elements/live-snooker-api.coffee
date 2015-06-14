@@ -28,20 +28,19 @@ Polymer
           error: reject
 
   created: ->
-    this.data = data
+    @data = data
 
   setAuthentication: (auth) ->
     data.authentication = auth
-    this.maybeFetchUser()
-    this.fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
+    @maybeFetchUser()
+    @fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
 
   maybeFetchUser: ->
-    this.fetchUser() if data.host && data.authentication
+    @fetchUser() if data.host && data.authentication
 
   fetchUser: ->
-    _this = this
-    this.ajax('/account').then (response) ->
-      _this.setUser(response.user)
+    @ajax('/account').then (response) =>
+      @setUser(response.user)
 
   setUser: (user) ->
     data.user = user

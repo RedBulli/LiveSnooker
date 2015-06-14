@@ -85,7 +85,6 @@ Polymer
 
   _leagueIdChanged: ->
     if @leagueId
-      localStorage.leagueId = @leagueId
       @streamUrl = @$.api.host + "/framestream"
       @$.api.findOrFetchModel(League, @leagueId)
         .then (league) =>
@@ -96,5 +95,6 @@ Polymer
           league.get('Frames').fetch({
             success: @setFrames.bind(@)
           })
+          @fire('iron-signal', {name: "league", data: league})
         .catch (model, response) =>
           @noleague = response.responseJSON.error.message

@@ -1,15 +1,22 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="../vendors/iron-signals/iron-signals.html">
 
 <dom-module id="livesnooker-user">
   <template>
-    <live-snooker-api user="{{user}}"></live-snooker-api>
-    This shows information about the user {{user.email}}
+    <iron-signals on-iron-signal-account="accountSignal"></iron-signals>
+    <live-snooker-api></live-snooker-api>
+    This shows information about the user <span>{{user.email}}</span>
   </template>
 </dom-module>
 
 <script>
   Polymer({
     is: 'livesnooker-user',
-    user: null
+    properties: {
+      user: Object
+    },
+    accountSignal: function(signal) {
+      this.user = signal.detail;
+    }
   });
 </script>

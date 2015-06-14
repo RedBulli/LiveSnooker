@@ -13,14 +13,14 @@
   <link rel="import" href="elements/new-league-form.html">
   <link rel="import" href="elements/leagues-list.html">
   <link rel="import" href="elements/livesnooker-toolbar.html">
-
 </head>
+
 <body>
   <dom-module id="auto-bind-demo">
     <template>
       <live-snooker-api host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
-      <livesnooker-toolbar league="{{league}}"></livesnooker-toolbar>
+      <livesnooker-toolbar></livesnooker-toolbar>
 
       <more-routing-config driver="hash"></more-routing-config>
       <more-route name="leagues" path="/leagues"></more-route>

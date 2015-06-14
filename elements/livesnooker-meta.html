@@ -1,0 +1,20 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="../vendors/iron-meta/iron-meta.html">
+
+<dom-module id="livesnooker-meta">
+  <template>
+    <iron-meta id="meta" key="livesnooker" keyUrl="kskks"></iron-meta>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "livesnooker-meta",
+    properties: {
+      league: {
+        type: Object,
+        observer: '_onLeagueChange'
+      }
+    }
+  });
+</script>
