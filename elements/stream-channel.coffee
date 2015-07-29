@@ -1,4 +1,6 @@
-RTCConnection = (leagueId) ->
+activeSessions = {}
+
+RTCConnection = (leagueId, element) ->
   connection = new RTCMultiConnection(leagueId)
   onMessageCallbacks = {}
   socket = io.connect('http://localhost:5555/')
@@ -6,8 +8,9 @@ RTCConnection = (leagueId) ->
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
     frameId = data.message?.sessionid
-    extra = connection.sessionDescriptions[frameId]?.extra
-    extra.lastMessage = new Date() if extra
+    if frameId
+      element.fire("new-stream", frameId) unless activeSessions[frameId]
+      activeSessions[frameId] = new Date()
 
     if onMessageCallbacks[data.channel]
       onMessageCallbacks[data.channel](data.message)
@@ -38,13 +41,11 @@ RTCConnection = (leagueId) ->
   connection.connect()
 
 clearOldSessions = (connection) ->
-  for frameId of connection.sessionDescriptions
-    if connection.sessionDescriptions[frameId].extra.lastMessage
-      diff = new Date() - connection.sessionDescriptions[frameId].extra.lastMessage
-      delete connection.sessionDescriptions[frameId] if diff > 10000
+  for frameId, val of activeSessions
+    diff = new Date() - val
+    if diff > 10000
+      delete activeSessions[frameId]
       this.fire('stream-closed', frameId)
-    else
-      connection.sessionDescriptions[frameId].extra.lastMessage = new Date()
 
 Polymer
   is: 'stream-channel',
@@ -52,8 +53,6 @@ Polymer
     leagueId: String
   },
   ready: ->
-    connection = RTCConnection(this.leagueId)
-    _this = @
+    connection = RTCConnection(this.leagueId, @)
     connection.onNewSession = (e) ->
-      _this.fire("new-stream", e.sessionid)
     setInterval(clearOldSessions.bind(@, connection), 10000)
