@@ -56,7 +56,7 @@ Polymer
       #Add frame
 
   getVideoStatusElement: (frameId) ->
-    $(@$.framelist.querySelector('li[data-id="' + frameId + '"] > .video-status'))
+    $(Polymer.dom(this).node.querySelector('li[data-id="' + frameId + '"] > .video-status'))
 
   showFrame: ->
     event.preventDefault()

@@ -23,24 +23,26 @@
 
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <div class="row">
-      <div class="large-8 columns">
-        <div id="gameview">
-          <template is="dom-if" if="{{video}}">
-            <p2p-video input="true" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
-            <frame-score-view id="on-video-score" frame="{{frame}}" state="{{frame.state}}"></frame-score-view>
-          </template>
-          <template is="dom-if" if="{{!video}}">
-            <frame-novideo-view frame="{{frame}}"></frame-novideo-view>
-          </template>
+    <template is="dom-if" if="{{frame}}">
+      <div class="row">
+        <div class="large-8 columns">
+          <div id="gameview">
+            <template is="dom-if" if="{{video}}">
+              <p2p-video input="true" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
+              <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
+            </template>
+            <template is="dom-if" if="{{!video}}">
+              <frame-novideo-view frame="{{frame}}"></frame-novideo-view>
+            </template>
+          </div>
+          <frame-input frame="{{frame}}"></frame-input>
         </div>
-        <frame-input frame="{{frame}}"></frame-input>
+        <div class="large-4 columns">
+          <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
+        </div>
       </div>
-      <div class="large-4 columns">
-        <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
-      </div>
-    </div>
-    <button on-click="endFrame">End frame</button>
+      <button on-click="endFrame">End frame</button>
+    </template>
   </template>
 </dom-module>
 

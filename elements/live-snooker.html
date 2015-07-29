@@ -20,33 +20,35 @@
 
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <template is="dom-if" if="{{streamUrl}}">
-      <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
+    <template is="dom-if" if="{{league}}" id="content">
+      <template is="dom-if" if="{{streamUrl}}">
+        <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
+      </template>
+      <stream-channel id="stream-channel" league-id="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+      <h2>Ongoing frames</h2>
+      <ol id="framelist">
+        <template id="unfinished" is="dom-repeat" items="{{frames}}" filter="unfinishedFrame">
+          <li data-id$="{{item.id}}">
+            <span>{{item.attributes.Player1.attributes.name}}</span> - <span>{{item.attributes.Player2.attributes.name}}</span>
+            <a href$="{{computeViewLink(item)}}" on-click="showFrame">Show</a>
+            <a href$="{{computeControlLink(item)}}" on-click="controlFrame">Control</a>
+            <span class="video-status">VIDEO</span>
+          </li>
+        </template>
+      </ol>
+      <h2>Finished frames</h2>
+      <ol>
+        <template id="finished" is="dom-repeat" items="{{frames}}" filter="finishedFrame">
+          <li>
+            <span class$="{{ computeWinnerClass(item, item.attributes.Player1) }}">{{item.attributes.Player1.attributes.name}}</span> - 
+            <span class$="{{ computeWinnerClass(item, item.attributes.Player2) }}">{{item.attributes.Player2.attributes.name}}</span>
+            <a href="/" on-click="showBreaks">View breaks</a>
+          </li>
+        </template>
+      </ol>
+      Create a new frame <br>
+      <new-frame-form league="{{league}}"></new-frame-form>
     </template>
-    <stream-channel id="stream-channel" leagueId="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-    <h2>Ongoing frames</h2>
-    <ol id="framelist">
-      <template id="unfinished" is="dom-repeat" items="{{frames}}" filter="unfinishedFrame">
-        <li data-id$="{{item.id}}">
-          <span>{{item.attributes.Player1.attributes.name}}</span> - <span>{{item.attributes.Player2.attributes.name}}</span>
-          <a href$="{{computeViewLink(item)}}" on-click="showFrame">Show</a>
-          <a href$="{{computeControlLink(item)}}" on-click="controlFrame">Control</a>
-          <span class="video-status">VIDEO</span>
-        </li>
-      </template>
-    </ol>
-    <h2>Finished frames</h2>
-    <ol>
-      <template id="finished" is="dom-repeat" items="{{frames}}" filter="finishedFrame">
-        <li>
-          <span class$="{{ computeWinnerClass(item, item.attributes.Player1) }}">{{item.attributes.Player1.attributes.name}}</span> - 
-          <span class$="{{ computeWinnerClass(item, item.attributes.Player2) }}">{{item.attributes.Player2.attributes.name}}</span>
-          <a href="/" on-click="showBreaks">View breaks</a>
-        </li>
-      </template>
-    </ol>
-    Create a new frame <br>
-    <new-frame-form league="{{league}}"></new-frame-form>
   </template>
 </dom-module>
 

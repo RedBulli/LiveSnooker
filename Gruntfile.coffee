@@ -42,13 +42,13 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: ['elements/**/*.coffee', 'specs/**/*.coffee']
-        tasks: ['clean:elements_js', 'copy', 'clean:specs', 'coffee', 'karma:unit:run']
+        tasks: ['clean:elements_js', 'copy', 'clean:specs', 'coffee']
       public_html:
         files: ['public/*.html']
-        tasks: ['preprocess:html', 'karma:unit:run']
+        tasks: ['preprocess:html', ]
       elements_html:
         files: ['elements/**/*.html']
-        tasks: ['clean:elements_html', 'copy', 'karma:unit:run']
+        tasks: ['clean:elements_html', 'copy']
 
     connect:
       server:
@@ -107,5 +107,5 @@ module.exports = (grunt) ->
     grunt.task.run(['clean:elements', 'preprocess:html', 'coffee:app', 'copy:html'])
 
   grunt.registerTask 'default', [
-    'karma:unit', 'serve'
+    'serve'
   ]

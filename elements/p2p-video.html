@@ -1,5 +1,5 @@
 <script src="../vendors/rtcmulticonnection/RTCMultiConnection-stable.js"></script>
-<script src="http://localhost:5000/socket.io/socket.io.js"> </script>
+<script src="http://localhost:5555/socket.io/socket.io.js"> </script>
 
 <dom-module id="p2p-video">
   <style>
@@ -35,7 +35,7 @@
       };
 
       var onMessageCallbacks = {};
-      var socket = io.connect('http://localhost:5000/');
+      var socket = io.connect('http://localhost:5555/');
 
       socket.on('message', function(data) {
           if(data.sender == connection.userid) return;

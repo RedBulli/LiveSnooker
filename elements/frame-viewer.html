@@ -23,23 +23,25 @@
 
   <template>
     <live-snooker-api id="api"></live-snooker-api>
-    <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
-    <div class="row">
-      <div class="large-8 columns">
-        <div id="gameview">
-          <template is="dom-if" if="{{video}}">
-            <p2p-video leagueId="{{frame.attributes.League.id}}" frameId="{{frame.id}}"></p2p-video>
-            <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
-          </template>
-          <template is="dom-if" if="{{!video}}">
-            <frame-novideo-view frame="{{frame}}" state="{{frame.state}}"></frame-novideo-view>
-          </template>
+    <template is="dom-if" if="{{frame}}">
+      <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
+      <div class="row">
+        <div class="large-8 columns">
+          <div id="gameview">
+            <template is="dom-if" if="{{video}}">
+              <p2p-video league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
+              <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
+            </template>
+            <template is="dom-if" if="{{!video}}">
+              <frame-novideo-view frame="{{frame}}"></frame-novideo-view>
+            </template>
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
         </div>
       </div>
-      <div class="large-4 columns">
-        <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
-      </div>
-    </div>
+    </template>
   </template>
 </dom-module>
 

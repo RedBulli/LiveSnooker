@@ -1,7 +1,7 @@
 RTCConnection = (leagueId) ->
   connection = new RTCMultiConnection(leagueId)
   onMessageCallbacks = {}
-  socket = io.connect('http://localhost:5000/')
+  socket = io.connect('http://localhost:5555/')
 
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
@@ -48,6 +48,9 @@ clearOldSessions = (connection) ->
 
 Polymer
   is: 'stream-channel',
+  properties: {
+    leagueId: String
+  },
   ready: ->
     connection = RTCConnection(this.leagueId)
     _this = @
