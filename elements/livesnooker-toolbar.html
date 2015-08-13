@@ -4,30 +4,30 @@
 <link rel="import" href="../vendors/paper-item/paper-item.html">
 <link rel="import" href="../vendors/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../vendors/iron-icons/iron-icons.html">
-<link rel="import" href="../vendors/iron-collapse/iron-collapse.html">
 <link rel="import" href="../vendors/iron-signals/iron-signals.html">
+<link rel="import" href="../vendors/iron-dropdown/iron-dropdown.html">
 
 <dom-module name="livesnooker-toolbar">
   <template>
     <iron-signals on-iron-signal-league="leagueSignal" on-iron-signal-account="accountSignal"></iron-signals>
     <live-snooker-api user="{{user}}"></live-snooker-api>
     <paper-toolbar>
-        <paper-icon-button icon="menu" on-click="toggle"></paper-icon-button>
-        <iron-collapse id="collapse">
-          <paper-menu>
-            <paper-item horizontal center layout label="Home">
-              <a href="/#!/">Home</a>
+      <paper-icon-button icon="menu" on-click="toggle" class="dropdown-trigger"></paper-icon-button>
+      <iron-dropdown id="dropdown" horizontal-align="left" vertical-align="top">
+        <paper-menu class="dropdown-content">
+          <paper-item horizontal center layout label="Home">
+            <a href="/#!/">Home</a>
+          </paper-item>
+          <template is="dom-if" if="{{league}}">
+            <paper-item horizontal center layout label="Control league">
+              <a href="{{ computeLeagueControlUrl(league) }}">Control league</a>
             </paper-item>
-            <template is="dom-if" if="{{league}}">
-              <paper-item horizontal center layout label="Control league">
-                <a href="{{ computeLeagueControlUrl(league) }}">Control league</a>
-              </paper-item>
-            </template>
-            <paper-item horizontal center layout label="Change league">
-              <a href="/#!/leagues/">Change league</a>
-            </paper-item>
-          </paper-menu>
-        </iron-collapse>
+          </template>
+          <paper-item horizontal center layout label="Change league">
+            <a href="/#!/leagues/">Change league</a>
+          </paper-item>
+        </paper-menu>
+      </iron-dropdown>
       <template is="dom-if" if="{{user}}">
         <a href="/#!/users/me"><paper-icon-button icon="face" title="{{user.email}}"></paper-icon-button></a>
       </template>
@@ -46,8 +46,9 @@
     computeLeagueControlUrl: function(league) {
       return MoreRouting.urlFor('league', {leagueId: league.id});
     },
-    toggle: function() {
-      this.$.collapse.toggle();
+    toggle: function(event) {
+      this.$.dropdown.positionTarget = event.target;
+      this.$.dropdown.toggle();
     },
     leagueSignal: function(signal) {
       this.league = signal.detail;
