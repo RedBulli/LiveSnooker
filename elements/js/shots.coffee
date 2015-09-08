@@ -34,6 +34,8 @@ class ShotGroup extends Livesnooker.Model
 
   totals: ->
     pots: false
+    fouls: false
+    misses: true
     shots: @get('shots').length
 
 class Break extends ShotGroup
@@ -42,6 +44,19 @@ class Break extends ShotGroup
 
   totals: ->
     pots: true
+    fouls: false
+    misses: false
+    player: @lastShot().get('Player')
+    points: @get('shots').calculateTotals()[@lastShot().get('Player').id]
+
+class Fouls extends ShotGroup
+  belongsTo: (shot) ->
+    shot.isFoul() && @lastShot().get('Player').id == shot.get('Player').id
+
+  totals: ->
+    pots: false
+    fouls: true
+    misses: false
     player: @lastShot().get('Player')
     points: @get('shots').calculateTotals()[@lastShot().get('Player').id]
 
@@ -65,6 +80,8 @@ class ShotGroups extends Livesnooker.Collection
     shots = new Shots([shot])
     if shot.isPot()
       new Break(frame: @frame, shots: shots)
+    else if shot.isFoul()
+      new Fouls(frame: @frame, shots: shots)
     else
       new ShotGroup(frame: @frame, shots: shots)
 

@@ -5,7 +5,10 @@
     <template is="dom-if" if="{{shotGroupViewModel.pots}}">
       <span>{{shotGroupViewModel.player.attributes.name}}</span>: <span>{{shotGroupViewModel.points.points}}</span>
     </template>
-    <template is="dom-if" if="{{!shotGroupViewModel.pots}}">
+    <template is="dom-if" if="{{shotGroupViewModel.fouls}}">
+      <span>{{shotGroupViewModel.player.attributes.name}}</span>: FOUL <span>{{shotGroupViewModel.points.fouls}}</span>
+    </template>
+    <template is="dom-if" if="{{shotGroupViewModel.misses}}">
       No pots for <span>{{shotGroupViewModel.shots}}</span> shots
     </template>
   </template>
@@ -35,7 +38,7 @@
 <dom-module id="break-history-view">
   <template>
     <ol>
-      <template id="breaks" is="dom-repeat" items="{{breakModels}}" filter="isEngineer">
+      <template id="breaks" is="dom-repeat" items="{{breakModels}}">
         <li>
           <break-points shot-group="{{item}}"></break-points>
         </li>
@@ -53,9 +56,6 @@
         observer: '_onBreaksChange'
       },
       breakModels: Array
-    },
-    isEngineer: function(item) {
-      return true;
     },
     _onBreaksChange: function() {
       if (this.breakModels) {

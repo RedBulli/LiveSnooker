@@ -20,6 +20,9 @@ class Shot extends Livesnooker.Model
   isPot: ->
     @get('result') == 'pot'
 
+  isFoul: ->
+    @get('result') == 'foul'
+
   validate: (attrs) ->
     if attrs.result == "pot" && attrs.points == 0
       "Shot result cannot be a pot with 0 points"
