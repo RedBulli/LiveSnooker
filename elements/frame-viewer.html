@@ -5,6 +5,7 @@
 <link rel="import" href="event-stream.html">
 <link rel="import" href="p2p-video.html">
 <link rel="import" href="frame-novideo-view.html">
+<link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
 
 <dom-module id="frame-viewer">
   <style>
@@ -25,7 +26,14 @@
     <live-snooker-api id="api"></live-snooker-api>
     <template is="dom-if" if="{{frame}}">
       <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
+<!--       <stream-channel id="stream-channel" league-id="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel> -->
       <div class="row">
+        <template is="dom-if" if="{{videoAvailable}}">
+          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+        </template>
+        <template is="dom-if" if="{{!videoAvailable}}">
+          Video not available.
+        </template>
         <div class="large-8 columns">
           <div id="gameview">
             <template is="dom-if" if="{{video}}">
@@ -54,7 +62,15 @@
         type: String,
         observer: '_frameIdChanged'
       },
-      streamUrl: String
+      streamUrl: String,
+      video: {
+        type: Boolean,
+        value: false
+      },
+      videoAvailable: {
+        type: Boolean,
+        value: false
+      }
     },
     _frameIdChanged: function() {
       var frame = new Frame({id: this.frameId});
@@ -66,6 +82,19 @@
           this.frame = frame;
         }).bind(this)
       });
+    },
+    newStream: function(event) {
+      if (event.detail == this.frameId) {
+        this.videoAvailable = true;
+      }
+    },
+    streamClosed: function(event) {
+      if (event.detail == this.frameId) {
+        this.videoAvailable = false;
+      }
+    },
+    videoToggleChanged: function(event) {
+      this.video = event.srcElement.checked;
     },
     onStreamEvent: function(event) {
       this.frame.newShot(event.detail.shot);

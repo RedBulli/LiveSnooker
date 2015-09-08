@@ -24,6 +24,12 @@
       leagueId: String,
       frameId: String
     },
+    open: function() {
+      this.connection.open(this.frameId);
+    },
+    leave: function() {
+      this.connection.leave();
+    },
     ready: function() {
       var el = this.$.cam;
       var leagueId = this.leagueId;
@@ -73,6 +79,7 @@
       if (this.input) {
         connection.open(this.frameId);
       }
+      this.connection = connection;
     }
   });
 </script>

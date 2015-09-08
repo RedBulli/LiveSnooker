@@ -16,10 +16,10 @@
       <live-snooker-api id="api" host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
       <template is="dom-if" if="{{input}}">
-        <frame-controller frame-id="{{frameId}}" video="{{video}}"></frame-controller>
+        <frame-controller frame-id="{{frameId}}"></frame-controller>
       </template>
       <template is="dom-if" if="{{!input}}">
-        <frame-viewer frame-id="{{frameId}}" video="{{video}}"></frame-viewer>
+        <frame-viewer frame-id="{{frameId}}"></frame-viewer>
       </template>
     </template>
   </dom-module>
@@ -52,12 +52,10 @@
       is: 'frame-view',
       properties: {
         frameId: String,
-        input: Boolean,
-        video: Boolean
+        input: Boolean
       },
       ready: function() {
         this.frameId = QueryString.frameId;
-        this.video = JSON.parse(QueryString.video);
         this.input = JSON.parse(QueryString.input);
       }
     });

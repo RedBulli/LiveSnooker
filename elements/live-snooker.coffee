@@ -27,10 +27,10 @@ Polymer
       false
 
   computeControlLink: (frame) ->
-    "/frame.html?frameId=" + frame.id + "&input=true&video=true"
+    "/frame.html?frameId=" + frame.id + "&input=true"
 
   computeViewLink: (frame) ->
-    "/frame.html?frameId=" + frame.id + "&input=false&video=true"
+    "/frame.html?frameId=" + frame.id + "&input=false"
 
   computeWinnerClass: (frame, player) ->
     if frame.attributes.Winner == player
