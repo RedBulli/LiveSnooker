@@ -75,9 +75,9 @@
     videoToggleChanged: function(event) {
       var checked = event.srcElement.checked;
       var videoEl = Polymer.dom(this).node.querySelector("p2p-video");
-      if (checked) {
+      if (checked && videoEl) {
         videoEl.open();
-      } else {
+      } else if (!checked) {
         videoEl.leave();
       }
       this.video = event.srcElement.checked;
