@@ -7,13 +7,6 @@ class Shot extends Livesnooker.Model
       relatedModel: 'Player',
       keyDestination: 'PlayerId',
       includeInJSON: 'id'
-    },
-    {
-      type: Backbone.HasOne,
-      key: 'Frame',
-      relatedModel: 'Frame',
-      keyDestination: 'FrameId',
-      includeInJSON: 'id'
     }
   ]
 

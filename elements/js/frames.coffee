@@ -16,10 +16,14 @@ class Frame extends Livesnooker.Model
       includeInJSON: 'id'
     },
     {
-      type: Backbone.HasMany,
-      key: 'Shots',
-      relatedModel: 'Shot',
+      type: Backbone.HasMany
+      key: 'Shots'
+      relatedModel: 'Shot'
       collectionType: 'Shots'
+      reverseRelation:
+        key: 'Frame'
+        keyDestination: 'FrameId'
+        includeInJSON: 'id'
     },
     {
       type: Backbone.HasOne,
