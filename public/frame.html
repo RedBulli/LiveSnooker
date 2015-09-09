@@ -4,16 +4,15 @@
   <script src="vendors/webcomponentsjs/webcomponents-lite.min.js"></script>
   <link rel="import" href="vendors/more-routing/more-routing.html">
   <link rel="import" href="elements/management/google-auth.html">
-  <link rel="import" href="elements/live-snooker-api.html">
-  <link rel="import" href="elements/live-snooker.html">
-  <link rel="import" href="elements/js/frame.html">
+  <link rel="import" href="elements/livesnooker-api.html">
+  <link rel="import" href="elements/js/frames.html">
   <link rel="import" href="elements/frame-controller.html">
   <link rel="import" href="elements/frame-viewer.html">
 </head>
 <body>
   <dom-module id="frame-view">
     <template>
-      <live-snooker-api id="api" host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
+      <livesnooker-api id="api" host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
       <template is="dom-if" if="{{input}}">
         <frame-controller frame-id="{{frameId}}"></frame-controller>

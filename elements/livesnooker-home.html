@@ -1,14 +1,14 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="live-snooker-api.html">
-<link rel="import" href="js/frame.html">
+<link rel="import" href="livesnooker-api.html">
+<link rel="import" href="js/frames.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="new-frame-form.html">
-<link rel="import" href="js/league.html">
+<link rel="import" href="js/leagues.html">
 <link rel="import" href="stream-channel.html">
 <link rel="import" href="event-stream.html">
 <link rel="import" href="js/vendor/jquery.html">
 
-<dom-module name="live-snooker">
+<dom-module name="livesnooker-home">
   <style>
     .video-status {
       display: none;
@@ -19,7 +19,7 @@
   </style>
 
   <template>
-    <live-snooker-api id="api"></live-snooker-api>
+    <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="{{league}}" id="content">
       <template is="dom-if" if="{{streamUrl}}">
         <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
@@ -52,4 +52,4 @@
   </template>
 </dom-module>
 
-<script src="live-snooker.js"></script>
+<script src="livesnooker-home.js"></script>

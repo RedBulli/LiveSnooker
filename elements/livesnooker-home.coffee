@@ -5,7 +5,7 @@
 #     router.go('/leagues/')
 
 Polymer
-  is: 'live-snooker'
+  is: 'livesnooker-home'
 
   properties:
     leagueId:

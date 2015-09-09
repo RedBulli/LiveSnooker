@@ -4,8 +4,8 @@
   <script src="vendors/webcomponentsjs/webcomponents-lite.min.js"></script>
   <link rel="import" href="vendors/polymer/polymer.html">
   <link rel="import" href="elements/management/google-auth.html">
-  <link rel="import" href="elements/live-snooker-api.html">
-  <link rel="import" href="elements/live-snooker.html">
+  <link rel="import" href="elements/livesnooker-api.html">
+  <link rel="import" href="elements/livesnooker-home.html">
   <link rel="import" href="vendors/more-routing/more-routing.html">
   <link rel="import" href="vendors/iron-pages/iron-pages.html">
   <link rel="import" href="elements/league-controller.html">
@@ -18,7 +18,7 @@
 <body>
   <dom-module id="auto-bind-demo">
     <template>
-      <live-snooker-api host="<!-- @echo BACKEND_HOST -->"></live-snooker-api>
+      <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
       <livesnooker-toolbar></livesnooker-toolbar>
 
@@ -30,7 +30,7 @@
       <more-route name="user" path="/users/me"></more-route>
       <more-route-selector selected-params="{{params}}">
         <iron-pages>
-          <section route="livesnooker"><live-snooker league-id="{{livesnookerUrlParams.leagueId}}"></live-snooker></section>
+          <section route="livesnooker"><livesnooker-home league-id="{{livesnookerUrlParams.leagueId}}"></livesnooker-home></section>
           <section route="leagues"><leagues-list></leagues-list></section>
           <section route="league"><league-controller league-id="{{leagueUrlParams.leagueId}}"></league-controller></section>
           <section route="newLeague"><new-league-form></new-league-form></section>

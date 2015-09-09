@@ -7,7 +7,7 @@ apiIsReady = ->
   data.authentication && data.host
 
 Polymer
-  is: 'live-snooker-api'
+  is: 'livesnooker-api'
 
   properties:
     host: String

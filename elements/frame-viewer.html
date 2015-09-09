@@ -1,8 +1,9 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="frame-score-view.html">
 <link rel="import" href="break-history-view.html">
-<link rel="import" href="live-snooker-api.html">
+<link rel="import" href="livesnooker-api.html">
 <link rel="import" href="event-stream.html">
+<link rel="import" href="stream-channel.html">
 <link rel="import" href="p2p-video.html">
 <link rel="import" href="frame-novideo-view.html">
 <link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
@@ -23,10 +24,10 @@
   <link rel="stylesheet" href="css/foundation.min.css">
 
   <template>
-    <live-snooker-api id="api"></live-snooker-api>
+    <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="{{frame}}">
       <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
-<!--       <stream-channel id="stream-channel" league-id="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel> -->
+      <stream-channel id="stream-channel" league-id="{{frame.attributes.League.id}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
       <div class="row">
         <template is="dom-if" if="{{videoAvailable}}">
           Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
@@ -73,15 +74,13 @@
       }
     },
     _frameIdChanged: function() {
-      var frame = new Frame({id: this.frameId});
-      frame.setApiClient(this.$.api);
-      frame.fetch({
-        success: (function() {
+      var _this = this;
+      this.$.api.findOrFetchModel(Frame, this.frameId)
+        .then(function(frame) {
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
-          this.frame = frame;
-        }).bind(this)
-      });
+          _this.frame = frame;
+        });
     },
     newStream: function(event) {
       if (event.detail == this.frameId) {
