@@ -28,7 +28,7 @@
         <div class="large-8 columns">
           <div id="gameview">
             <template is="dom-if" if="{{video}}">
-              <p2p-video id="video" input="true" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
+              <p2p-video id="video" socket-url="{{socketUrl}}" input="true" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
               <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
             </template>
             <template is="dom-if" if="{{!video}}">
@@ -59,7 +59,8 @@
       video: {
         type: Boolean,
         value: false
-      }
+      },
+      streamUrl: String
     },
     _frameIdChanged: function() {
       var frame = new Frame({id: this.frameId});

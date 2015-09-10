@@ -27,7 +27,7 @@
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="{{frame}}">
       <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
-      <stream-channel id="stream-channel" league-id="{{frame.attributes.League.id}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+      <stream-channel id="stream-channel" socket-url="{{socketUrl}}" league-id="{{frame.attributes.League.id}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
       <div class="row">
         <template is="dom-if" if="{{videoAvailable}}">
           Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
@@ -38,7 +38,7 @@
         <div class="large-8 columns">
           <div id="gameview">
             <template is="dom-if" if="{{video}}">
-              <p2p-video league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
+              <p2p-video socket-url="{{socketUrl}}" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
               <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
             </template>
             <template is="dom-if" if="{{!video}}">
@@ -64,6 +64,7 @@
         observer: '_frameIdChanged'
       },
       streamUrl: String,
+      socketUrl: String,
       video: {
         type: Boolean,
         value: false

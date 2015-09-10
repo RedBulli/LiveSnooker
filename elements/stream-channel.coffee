@@ -1,9 +1,9 @@
 activeSessions = {}
 
-RTCConnection = (leagueId, element) ->
+RTCConnection = (socketUrl, leagueId, element) ->
   connection = new RTCMultiConnection(leagueId)
   onMessageCallbacks = {}
-  socket = io.connect('http://localhost:5555/')
+  socket = io.connect(socketUrl)
 
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
@@ -50,9 +50,11 @@ clearOldSessions = (connection) ->
 Polymer
   is: 'stream-channel',
   properties: {
-    leagueId: String
+    leagueId: String,
+    socketUrl: String
   },
   ready: ->
-    connection = RTCConnection(this.leagueId, @)
+    debugger
+    connection = RTCConnection(this.socketUrl, this.leagueId, @)
     connection.onNewSession = (e) ->
     setInterval(clearOldSessions.bind(@, connection), 10000)
