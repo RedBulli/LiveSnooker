@@ -29,12 +29,6 @@
       <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
       <stream-channel id="stream-channel" socket-url="{{socketUrl}}" league-id="{{frame.attributes.League.id}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
       <div class="row">
-        <template is="dom-if" if="{{videoAvailable}}">
-          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
-        </template>
-        <template is="dom-if" if="{{!videoAvailable}}">
-          Video not available.
-        </template>
         <div class="large-8 columns">
           <div id="gameview">
             <template is="dom-if" if="{{video}}">
@@ -47,7 +41,13 @@
           </div>
         </div>
         <div class="large-4 columns">
-          <break-history-view class="hidden-for-medium-down" breaks="{{frame.attributes.shotGroups}}"></break-history-view>
+          <template is="dom-if" if="{{videoAvailable}}">
+            Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+          </template>
+          <template is="dom-if" if="{{!videoAvailable}}">
+            Video not available.
+          </template>
+          <break-history-view breaks="{{frame.attributes.shotGroups}}"></break-history-view>
         </div>
       </div>
     </template>

@@ -34,16 +34,15 @@
   });
 </script>
 
-
 <dom-module id="break-history-view">
   <template>
-    <ol>
+    <ul>
       <template id="breaks" is="dom-repeat" items="{{breakModels}}">
         <li>
           <break-points shot-group="{{item}}"></break-points>
         </li>
       </template>
-    </ol>
+    </ul>
   </template>
 </dom-module>
 
@@ -57,17 +56,21 @@
       },
       breakModels: Array
     },
+    _renderBreaks: function() {
+      this.splice('breakModels', 0, this.breakModels.length);
+      this.breaks.each((function(breakModel) {
+        this.unshift('breakModels', breakModel);
+      }).bind(this));
+    },
     _onBreaksChange: function() {
       if (this.breakModels) {
         this.splice('breakModels', 0, this.breaks.length);
       }
       this.breakModels = _.clone(this.breaks.models);
-      this.breaks.on('add remove change update', (function(model) {
-        this.splice('breakModels', 0, this.breakModels.length);
-        this.breaks.each((function(breakModel) {
-          this.push('breakModels', breakModel);
-        }).bind(this));
+      this.breaks.on('add remove change update', (function() {
+        this._renderBreaks();
       }).bind(this));
+      this._renderBreaks();
     },
   });
 </script>
