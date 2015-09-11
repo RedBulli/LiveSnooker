@@ -73,19 +73,7 @@ class Frame extends Livesnooker.Model
     else
       1
 
-  createShot: ({attempt, result, points}) ->
-    shot = @newShot({
-      attempt: attempt,
-      result: result,
-      points: parseInt(points),
-      Player: @getCurrentPlayer(),
-      shotNumber: @get('Shots').length + 1
-    })
-    shot.setApiClient(@client)
-    shot.save(shot.attributes)
-    shot
-
-  newShot: (data) ->
+  initializeShot: (data) ->
     _.extend(data, {
       Frame: @
     })
@@ -94,6 +82,26 @@ class Frame extends Livesnooker.Model
     shot = new Shot(data)
     if shot.validate(shot.attributes)
       throw shot.validate(shot.attributes)
+    shot
+
+  createShot: ({attempt, result, points}) ->
+    shot = @initializeShot
+      attempt: attempt,
+      result: result,
+      points: parseInt(points),
+      Player: @getCurrentPlayer(),
+      shotNumber: @get('Shots').length + 1
+
+    shot.setApiClient(@client)
+    shot.save(shot.attributes, {
+      success: =>
+        @addShot(shot)
+      error: =>
+        shot.destroy()
+    })
+    shot
+
+  addShot: (shot) ->
     @get('Shots').add(shot)
     @get('shotGroups').addShot(shot)
     @trigger("update")
