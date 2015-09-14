@@ -9,7 +9,6 @@
     <iron-a11y-keys target="[[target]]" keys="ctrl+4 ctrl+5 ctrl+6 ctrl+7" on-keys-pressed="foulKey"></iron-a11y-keys>
     <points-input on-shot="onShot"></points-input>
     <button on-click="onUndo">Undo</button>
-    <button on-click="onRedo">Redo</button>
   </template>
 </dom-module>
 
@@ -61,9 +60,6 @@
     },
     onUndo: function() {
       this.frame.undoShot();
-    },
-    onRedo: function() {
-      this.frame.redoShot();
     }
   });
 </script>

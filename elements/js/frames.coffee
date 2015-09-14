@@ -36,9 +36,6 @@ class Frame extends Livesnooker.Model
 
   initialize: (options) ->
     @set('shotGroups', new ShotGroups([], frame: @))
-    @undoManager = new Backbone.UndoManager
-      register: [@get('shotGroups')],
-      track: true
 
   calculateShotGroups: ->
     shots = @get('Shots')
@@ -108,11 +105,10 @@ class Frame extends Livesnooker.Model
     shot
 
   undoShot: ->
-    @undoManager.undo()
-    @trigger("update")
-
-  redoShot: ->
-    @undoManager.redo()
+    model = @get('Shots').last()
+    model.setApiClient @client
+    model.destroy()
+    Backbone.Relational.store.unregister(model)
     @trigger("update")
 
   getState: ->
