@@ -107,9 +107,11 @@ class Frame extends Livesnooker.Model
   undoShot: ->
     model = @get('Shots').last()
     model.setApiClient @client
-    model.destroy()
-    Backbone.Relational.store.unregister(model)
-    @trigger("update")
+    model.destroy
+      wait: true
+      success: =>
+        Backbone.Relational.store.unregister(model)
+        @trigger("update")
 
   getState: ->
     scores = @getScores()
