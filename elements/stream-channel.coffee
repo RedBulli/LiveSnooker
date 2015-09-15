@@ -54,7 +54,6 @@ Polymer
     socketUrl: String
   },
   ready: ->
-    debugger
     connection = RTCConnection(this.socketUrl, this.leagueId, @)
     connection.onNewSession = (e) ->
     setInterval(clearOldSessions.bind(@, connection), 10000)

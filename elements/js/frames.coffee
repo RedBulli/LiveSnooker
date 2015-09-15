@@ -104,6 +104,14 @@ class Frame extends Livesnooker.Model
     @trigger("update")
     shot
 
+  deleteShot: (shotId) ->
+    model = @get('Shots').get shotId
+    model.stopListening()
+    model.trigger 'destroy', model, model.collection
+    Backbone.Relational.store.unregister(model)
+    @get('Shots').trigger "update"
+    @trigger("update")
+
   undoShot: ->
     model = @get('Shots').last()
     model.setApiClient @client

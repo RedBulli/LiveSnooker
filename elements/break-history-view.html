@@ -19,17 +19,18 @@
     is: "break-points",
     properties: {
       shotGroup: {
-        type: Object,
-        observer: '_onShotGroupChange'
+        type: Object
       },
-      shotGroupViewModel: Array
+      shotGroupViewModel: Object
+    },
+    ready: function() {
+      this.shotGroup.get('shots').on('add remove', this.updateView.bind(this));
+      this.updateView();
     },
     updateView: function() {
-      this.shotGroupViewModel = this.shotGroup.totals();
-    },
-    _onShotGroupChange: function() {
-      this.shotGroup.get('shots').on('add remove change update', this.updateView.bind(this));
-      this.updateView();
+      if (this.shotGroup.get('shots').length > 0) {
+        this.shotGroupViewModel = this.shotGroup.totals();
+      }
     }
   });
 </script>

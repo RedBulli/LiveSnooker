@@ -26,6 +26,13 @@ class Shots extends Livesnooker.Collection
     @each (shot) -> shot.populateAssociations()
 
 class ShotGroup extends Livesnooker.Model
+  initialize: (opts) ->
+    opts.shots.on "remove", =>
+      shots = @get('shots')
+      if shots.length == 0
+        @stopListening()
+        @trigger 'destroy', @
+
   lastShot: ->
     @get('shots').last()
 

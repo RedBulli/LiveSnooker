@@ -97,7 +97,12 @@
       this.video = event.srcElement.checked;
     },
     onStreamEvent: function(event) {
-      this.frame.addShot(this.frame.initializeShot(event.detail.shot));
+      if (event.detail.event === "newShot") {
+        this.frame.addShot(this.frame.initializeShot(event.detail.shot));
+      }
+      else if (event.detail.event === "deleteShot") {
+        this.frame.deleteShot(event.detail.shot.id);
+      }
     },
     ready: function() {
       this.streamUrl = this.$.api.host + "/framestream";
