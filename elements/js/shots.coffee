@@ -79,7 +79,6 @@ class ShotGroups extends Livesnooker.Collection
       @add @newGroup(shot)
     else
       @last().get('shots').add(shot)
-    @trigger 'update'
 
   newGroup: (shot) ->
     shots = new Shots([shot])
