@@ -81,6 +81,7 @@
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
           _this.frame = frame;
+          _this.streamUrl = _this.$.api.host + "/framestream/" + _this.frameId;
         });
     },
     newStream: function(event) {
@@ -103,9 +104,6 @@
       else if (event.detail.event === "deleteShot") {
         this.frame.deleteShot(event.detail.shot.id);
       }
-    },
-    ready: function() {
-      this.streamUrl = this.$.api.host + "/framestream";
     }
   });
 </script>

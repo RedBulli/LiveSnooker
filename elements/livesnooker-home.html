@@ -24,7 +24,7 @@
       <template is="dom-if" if="{{streamUrl}}">
         <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
       </template>
-      <stream-channel id="stream-channel" league-id="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+      <stream-channel id="stream-channel" socket-url="{{socketUrl}}" league-id="{{leagueId}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
       <h2>Ongoing frames</h2>
       <ol id="framelist">
         <template id="unfinished" is="dom-repeat" items="{{frames}}" filter="unfinishedFrame">

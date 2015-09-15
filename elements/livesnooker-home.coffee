@@ -13,6 +13,8 @@ Polymer
       observer: '_leagueIdChanged'
     league: Object
     frames: Array
+    streamUrl: String
+    socketUrl: String
 
   unfinishedFrame: (frame) ->
     if !frame.get('endedAt')
@@ -47,8 +49,8 @@ Polymer
       frame = @league.get('Frames').get(event.detail.frame.id)
       frame.set(event.detail.frame)
       frame.populateAssociations()
-      @$.unfinished.render()
-      @$.finished.render()
+      this.querySelector("#unfinished").render()
+      this.querySelector("#finished").render()
     else if event.detail.event == 'frameDelete'
       1
     else if event.detail.event == 'newPlayer'
@@ -85,7 +87,7 @@ Polymer
 
   _leagueIdChanged: ->
     if @leagueId
-      @streamUrl = @$.api.host + "/framestream"
+      @streamUrl = @$.api.host + "/framestream/" + @leagueId
       @$.api.findOrFetchModel(League, @leagueId)
         .then (league) =>
           league.setApiClient(@$.api) if not league.client

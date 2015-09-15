@@ -18,6 +18,8 @@ class League extends Livesnooker.Model
       collectionType: 'Frames',
       reverseRelation:
         key: 'League'
+        includeInJSON: 'id'
+        keyDestination: 'LeagueId'
     }
   ]
 
