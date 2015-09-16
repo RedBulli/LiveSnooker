@@ -39,11 +39,10 @@
         Player2: p2
       });
       frame.setApiClient(this.$.api);
-      var _this = this;
       frame.save(frame.attributes, {
         success: function() {
-          window.open("/frame.html?frameId=" + frame.id + "&input=true&video=true", "", "width=1050, height=600");
-          _this.fire("new-frame", frame);
+          window.open("/frame.html?frameId=" + frame.id + "&input=true", "", "width=1050, height=600");
+          frame.trigger("saved", frame);
         }
       });
     }

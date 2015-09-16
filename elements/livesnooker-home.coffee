@@ -12,7 +12,9 @@ Polymer
       type: String,
       observer: '_leagueIdChanged'
     league: Object
-    frames: Array
+    frames:
+      type: Array
+      value: -> []
     streamUrl: String
     socketUrl: String
 
@@ -44,7 +46,7 @@ Polymer
       if !frame
         frame = new Frame(event.detail.frame)
         frame.populateAssociations()
-      @league.get('Frames').add(frame)
+        @league.get('Frames').add(frame)
     else if event.detail.event == 'frameEnd'
       frame = @league.get('Frames').get(event.detail.frame.id)
       frame.set(event.detail.frame)
@@ -60,7 +62,7 @@ Polymer
   getVideoStatusElement: (frameId) ->
     $(Polymer.dom(this).node.querySelector('li[data-id="' + frameId + '"] > .video-status'))
 
-  showFrame: ->
+  showFrame: (event) ->
     event.preventDefault()
     window.open(event.currentTarget.href, "", "width=1050, height=600")
 
@@ -78,12 +80,10 @@ Polymer
     event.preventDefault()
     console.log("Not implemented yet")
 
-  setFrames: (framesCollection) ->
-    @frames = _.clone(framesCollection.models)
-    framesCollection.on 'add remove', =>
-      @splice('frames', 0, @frames.length)
-      framesCollection.each (frame) =>
-        @push('frames', frame)
+  updateFrames: ->
+    @splice('frames', 0, @frames.length)
+    @league.get('Frames').each (frame) =>
+      this.push 'frames', frame if frame.id
 
   _leagueIdChanged: ->
     if @leagueId
@@ -92,10 +92,12 @@ Polymer
         .then (league) =>
           league.setApiClient(@$.api) if not league.client
           @league = league
+          @league.get('Frames').on 'add remove change', =>
+            @updateFrames()
           league.get('Frames').leagueId = league.id
           league.get('Frames').setApiClient(league.client)
           league.get('Frames').fetch({
-            success: @setFrames.bind(@)
+            success: @updateFrames.bind(@)
           })
           @fire('iron-signal', {name: "league", data: league})
         .catch (model, response) =>
