@@ -15,11 +15,6 @@
       <paper-icon-button icon="menu" on-click="toggle" class="dropdown-trigger"></paper-icon-button>
       <iron-dropdown id="dropdown" horizontal-align="left" vertical-align="top" on-click="onDropdownClick">
         <paper-menu class="dropdown-content">
-          <a href="/#!/">
-            <paper-item horizontal center layout label="Home">
-              Home
-            </paper-item>
-          </a>
           <template is="dom-if" if="{{league}}">
             <a href="{{ computeLeagueControlUrl(league) }}">
               <paper-item horizontal center layout label="Control league">
@@ -37,7 +32,7 @@
       <template is="dom-if" if="{{user}}">
         <a href="/#!/users/me"><paper-icon-button icon="face" title="{{user.email}}"></paper-icon-button></a>
       </template>
-      <div flex>{{league.attributes.name}}</div>
+      <div flex><a href="{{ computeLeagueLiveUrl(league) }}">{{league.attributes.name}}</a></div>
     </paper-toolbar>
   </template>
 </dom-module>
@@ -51,6 +46,9 @@
     },
     computeLeagueControlUrl: function(league) {
       return MoreRouting.urlFor('league', {leagueId: league.id});
+    },
+    computeLeagueLiveUrl: function(league) {
+      return MoreRouting.urlFor('livesnooker', {leagueId: league.id});
     },
     toggle: function(event) {
       this.$.dropdown.positionTarget = event.target;
