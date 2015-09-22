@@ -4,16 +4,21 @@
 <dom-module id="leagues-list">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <a href="{{ newLeagueUrl() }}">Create new league</a>
+    <template is="dom-if" if="{{leagues.length}}">
+      Your leagues:
+      <ul>
+        <template is="dom-repeat" items="{{leagues}}">
+          <li>
+            <a href="{{ leagueUrl(item) }}">{{item.attributes.name}}</a>
+          </li>
+        </template>
+      </ul>
+    </template>
+    <template is="dom-if" if="{{!leagues.length}}">
+      You don't admin or belong to any league.
+    </template>
     <br>
-    Change the current league:
-    <ul>
-      <template is="dom-repeat" items="{{leagues}}">
-        <li>
-          <a href="{{ leagueUrl(item) }}">{{item.attributes.name}}</a>
-        </li>
-      </template>
-    </ul>
+    <a href="{{ newLeagueUrl() }}">Create new league</a>
   </template>
 </dom-module>
 
@@ -21,7 +26,10 @@
   Polymer({
     is: 'leagues-list',
     properties: {
-      leagues: Array
+      leagues: {
+        type: Array,
+        value: []
+      }
     },
     newLeagueUrl: function() {
       return MoreRouting.urlFor('newLeague');
