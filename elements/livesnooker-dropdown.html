@@ -1,0 +1,30 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="../vendors/iron-dropdown/iron-dropdown.html">
+
+<dom-module name="livesnooker-dropdown">
+  <template>
+    <div id="toggler" on-click="toggle">
+      <content select=".dropdown-trigger"></content>
+    </div>
+    <div id="content">
+    </div>
+    <iron-dropdown id="dropdown" horizontal-align="left" vertical-align="top" on-click="toggle">
+      <content select=".dropdown-content" class="dropdown-content"></content>
+    </iron-dropdown>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'livesnooker-dropdown',
+      toggle: function(event) {
+        if (this.$.dropdown.opened)
+          this.$.dropdown.close();
+        else
+          this.$.dropdown.open();
+      },
+      ready: function() {
+        this.$.dropdown.positionTarget = this.$.content;
+      }
+    });
+  </script>
+</dom-module>

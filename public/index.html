@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="vendors/jquery/dist/jquery.min.js"></script>
+  <link href="vendors/uikit/css/uikit.min.css" rel="stylesheet" type="text/css">
+  <script src="vendors/uikit/js/uikit.min.js"></script>
   <script src="vendors/webcomponentsjs/webcomponents-lite.min.js"></script>
   <link rel="import" href="vendors/polymer/polymer.html">
   <link rel="import" href="elements/management/google-auth.html">
@@ -16,11 +19,14 @@
 </head>
 
 <body>
+  <header>
+    <livesnooker-toolbar></livesnooker-toolbar>
+  </header>
+
   <dom-module id="auto-bind-demo">
     <template>
       <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
-      <livesnooker-toolbar></livesnooker-toolbar>
 
       <more-routing-config driver="hash"></more-routing-config>
       <more-route name="leagues" path="/"></more-route>

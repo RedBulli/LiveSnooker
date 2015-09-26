@@ -15,13 +15,10 @@
     "iron-signals": "PolymerElements/Iron-Signals#latest",
     "jquery": "latest",
     "more-routing": "PolymerLabs/more-routing#latest",
-    "paper-icon-button": "PolymerElements/paper-icon-button#latest",
-    "paper-item": "PolymerElements/paper-item#latest",
-    "paper-menu": "PolymerElements/paper-menu#latest",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#latest",
-    "paper-toolbar": "PolymerElements/paper-toolbar#latest",
     "polymer": "Polymer/polymer#latest",
     "rtcmulticonnection": "latest",
+    "uikit": "~2.22.0",
     "underscore": "latest"
   },
   "devDependencies": {}
