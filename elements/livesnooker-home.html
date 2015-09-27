@@ -11,6 +11,12 @@
 
 <dom-module name="livesnooker-home">
   <style>
+    h2:first-of-type {
+      margin-top: 0px;
+    }
+    #content {
+      margin-left: 1em;
+    }
     .video-status {
       display: none;
     }
@@ -27,37 +33,38 @@
 
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <template is="dom-if" if="[[league]]" id="content">
-      <template is="dom-if" if="[[streamUrl]]">
-        <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
-      </template>
-      <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-      <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
-      <ol id="framelist" class="uk-list frames">
-        <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
-          <li data-id$="[[item.id]]">
-            <span>[[item.attributes.Player1.attributes.name]]</span> - <span>[[item.attributes.Player2.attributes.name]]</span>
-            <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
-            <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
-            <span class="video-status">VIDEO</span>
-          </li>
+    <div id="content">
+      <template is="dom-if" if="[[league]]">
+        <template is="dom-if" if="[[streamUrl]]">
+          <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
         </template>
-      </ol>
-      <h2>Finished frames (<span>[[finishedFrames.length]]</span>)</h2>
-      <ul class="uk-list frames">
-        <iron-list id="finished" class="finished-frames" items="[[finishedFrames]]" as="item">
-          <template>
-            <li>
-              <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">[[item.attributes.Player1.attributes.name]]</span> - 
-              <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">[[item.attributes.Player2.attributes.name]]</span>
-              <a href="/" on-click="showBreaks">View breaks</a>
+        <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+        <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
+        <ol id="framelist" class="uk-list frames">
+          <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
+            <li data-id$="[[item.id]]">
+              <span>[[item.attributes.Player1.attributes.name]]</span> - <span>[[item.attributes.Player2.attributes.name]]</span>
+              <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
+              <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
+              <span class="video-status">VIDEO</span>
             </li>
           </template>
-        </iron-list>
-      </ul>
-      Create a new frame <br>
-      <new-frame-form league="[[league]]"></new-frame-form>
-    </template>
+        </ol>
+        <h2>Finished frames (<span>[[finishedFrames.length]]</span>)</h2>
+        <ul class="uk-list frames">
+          <iron-list id="finished" class="finished-frames" items="[[finishedFrames]]" as="item">
+            <template>
+              <li>
+                <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">[[item.attributes.Player1.attributes.name]]</span> - 
+                <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">[[item.attributes.Player2.attributes.name]]</span>
+                <a href="/" on-click="showBreaks">View breaks</a>
+              </li>
+            </template>
+          </iron-list>
+        </ul>
+        <new-frame-form league="[[league]]"></new-frame-form>
+      </template>
+    </div>
   </template>
 </dom-module>
 

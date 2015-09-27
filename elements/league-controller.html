@@ -5,95 +5,38 @@
 <link rel="import" href="validation-errors.html">
 
 <dom-module id="league-controller">
+  <style>
+    #league {
+      margin-left: 1em;
+    }
+  </style>
+
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <div id="league">
-      <h2>{{leagueAttrs.name}}</h2>
-      <ul>
-        <li>ID: <span>{{leagueAttrs.id}}</span></li>
+      <h2>[[leagueAttrs.name]]</h2>
+      <ul class="uk-list">
+        <li>ID: <span>[[leagueAttrs.id]]</span></li>
         <li>Players:
-          <ul>
-            <template is="dom-repeat" items="{{playerModels}}">
-              <li>{{ item.attributes.name }}</li>
+          <ul class="uk-list">
+            <template is="dom-repeat" items="[[playerModels]]">
+              <li><span>[[ item.attributes.name ]]</span> <a href="#" class="uk-icon-edit" data-player$="{{item.id}}" on-click="playerEditClick"></a></li>
             </template>
           </ul>
         </li>
       </ul>
-      <form>
-        <label for="name">Add a new player: </label>
-        <input type="text" id="playerName" name="name" placeholder="Name">
-        <button on-click="newPlayer">Create player</button>
+      <form class="uk-form">
+        <div class="uk-form-controls">
+          <input type="text" id="playerName" name="name" placeholder="New player name">
+          <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>
+        </div>
         <validation-errors id="errors"></validation-errors>
       </form>
-      <template if="{{ error }}">
-        {{ error }}
+      <template if="[[ error ]]">
+        [[ error ]]
       </template>
     </div>
   </template>
 </dom-module>
 
-<script>
-  Polymer({
-    is: 'league-controller',
-    properties: {
-      leagueId: {
-        type: String,
-        observer: '_leagueIdChanged'
-      },
-      leagueAttrs: Object,
-      players: {
-        type: Object,
-        observer: '_onPlayersChange'
-      },
-      playerModels: Array
-    },
-    newPlayer: function() {
-      event.preventDefault();
-      var league = this.league;
-      var errorsEl = this.$.league.querySelector("#errors");
-      var playerInput = this.$.league.querySelector('#playerName');
-      var opts = {
-        name: playerInput.value,
-        LeagueId: league.id
-      };
-      var player = new Player(opts);
-      player.setApiClient(this.$.api);
-      player.save(player.attributes, {
-        success: function(model) {
-          league.get('Players').add(model);
-          playerInput.value = "";
-          errorsEl.errors = [];
-        },
-        error: function(data, response) {
-          errorsEl.errors = [response.responseJSON.error.errors[0]];
-        }
-      });
-    },
-    _onPlayersChange: function() {
-      if (this.playerModels) {
-        this.splice('playerModels', 0, this.breaks.length);
-      }
-      this.playerModels = _.clone(this.players.models);
-      this.players.on('add remove change update', (function(model) {
-        this.splice('playerModels', 0, this.playerModels.length);
-        this.players.each((function(playerModel) {
-          this.push('playerModels', playerModel);
-        }).bind(this));
-      }).bind(this));
-    },
-    _leagueIdChanged: function() {
-      if (this.leagueId) {
-        var _this = this;
-        this.$.api.findOrFetchModel(League, this.leagueId)
-          .then(function(league) {
-            _this.league = league;
-            _this.leagueAttrs = league.attributes;
-            _this.players = league.get('Players');
-          })
-          .catch(function(model, response) {
-            _this.error = response.status;
-          });
-      }
-    }
-  });
-</script>
+<script src="league-controller.js"></script>

@@ -5,20 +5,21 @@
 <dom-module id="new-frame-form">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <form>
+    <form class="uk-form">
+      <legend>New frame</legend>
       <select id="player1" name="player1">
-        <template id="playerOptions" is="dom-repeat" items="{{league.attributes.Players.models}}">
-          <option value$="{{ item.id }}">{{item.attributes.name}}</option>
+        <template id="playerOptions" is="dom-repeat" items="[[league.attributes.Players.models]]">
+          <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
         </template>
       </select>
-
+      vs. 
       <select id="player2" name="player2">
-        <template id="playerOptions" is="dom-repeat" items="{{league.attributes.Players.models}}">
-          <option value$="{{ item.id }}">{{item.attributes.name}}</option>
+        <template id="playerOptions" is="dom-repeat" items="[[league.attributes.Players.models]]">
+          <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
         </template>
       </select>
 
-      <button on-click="createButtonClick">Create</button>
+      <button class="uk-button uk-button-primary" on-click="createButtonClick">Create</button>
     </form>
   </template>
 </dom-module>

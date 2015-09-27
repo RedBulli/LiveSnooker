@@ -8,9 +8,11 @@
 <dom-module id="new-league-form">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <form>
-      <input type="text" id="leagueName" name="name">
-      <button on-click="newLeague">Create league</button>
+    <form class="uk-form">
+      <div class="uk-form-controls">
+        <input type="text" id="leagueName" name="name" placeholder="New league name">
+        <button class="uk-button uk-button-primary" on-click="newLeague">Create league</button>
+      </div>
       <validation-errors id="errors"></validation-errors>
     </form>
   </template>

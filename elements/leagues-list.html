@@ -1,24 +1,33 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/leagues.html">
+<link rel="import" href="new-league-form.html">
 
 <dom-module id="leagues-list">
+  <style>
+    #content {
+      margin-left: 1em;
+    }
+  </style>
+
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <template is="dom-if" if="{{leagues.length}}">
-      Your leagues:
-      <ul>
-        <template is="dom-repeat" items="{{leagues}}">
-          <li>
-            <a href="{{ leagueUrl(item) }}">{{item.attributes.name}}</a>
-          </li>
-        </template>
-      </ul>
-    </template>
-    <template is="dom-if" if="{{!leagues.length}}">
-      You don't admin or belong to any league.
-    </template>
-    <br>
-    <a href="{{ newLeagueUrl() }}">Create new league</a>
+    <div id="content">
+      <template is="dom-if" if="[[leagues.length]]">
+        <h2>Your leagues:</h2>
+        <ul class="uk-list">
+          <template is="dom-repeat" items="[[leagues]]">
+            <li>
+              <a href="[[ leagueUrl(item) ]]">[[item.attributes.name]]</a>
+            </li>
+          </template>
+        </ul>
+      </template>
+      <template is="dom-if" if="[[!leagues.length]]">
+        You don't admin or belong to any league.
+      </template>
+      <br>
+      <new-league-form></new-league-form>
+    </div>
   </template>
 </dom-module>
 
@@ -30,9 +39,6 @@
         type: Array,
         value: []
       }
-    },
-    newLeagueUrl: function() {
-      return MoreRouting.urlFor('newLeague');
     },
     leagueUrl: function(league) {
       return MoreRouting.urlFor('livesnooker', {leagueId: league.id});

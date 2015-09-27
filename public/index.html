@@ -13,7 +13,6 @@
   <link rel="import" href="vendors/iron-pages/iron-pages.html">
   <link rel="import" href="elements/league-controller.html">
   <link rel="import" href="elements/livesnooker-user.html">
-  <link rel="import" href="elements/new-league-form.html">
   <link rel="import" href="elements/leagues-list.html">
   <link rel="import" href="elements/livesnooker-toolbar.html">
 </head>
@@ -23,7 +22,7 @@
     <livesnooker-toolbar></livesnooker-toolbar>
   </header>
 
-  <dom-module id="auto-bind-demo">
+  <dom-module id="livesnooker-index">
     <template>
       <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
       <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
@@ -32,14 +31,12 @@
       <more-route name="leagues" path="/"></more-route>
       <more-route name="league" path="/leagues/:leagueId" params="{{leagueUrlParams}}"></more-route>
       <more-route name="livesnooker" path="/live/:leagueId" params="{{livesnookerUrlParams}}"></more-route>
-      <more-route name="newLeague" path="/leagues/new"></more-route>
       <more-route name="user" path="/users/me"></more-route>
       <more-route-selector selected-params="{{params}}">
         <iron-pages>
           <section route="livesnooker"><livesnooker-home league-id="{{livesnookerUrlParams.leagueId}}" socket-url="<!-- @echo BACKEND_HOST -->/"></livesnooker-home></section>
           <section route="leagues"><leagues-list></leagues-list></section>
           <section route="league"><league-controller league-id="{{leagueUrlParams.leagueId}}"></league-controller></section>
-          <section route="newLeague"><new-league-form></new-league-form></section>
           <section route="user"><livesnooker-user></livesnooker-user></section>
         </iron-pages>
       </more-route-selector>
@@ -48,10 +45,10 @@
 
   <script>
     Polymer({
-      is: 'auto-bind-demo'
+      is: 'livesnooker-index'
     });
   </script>
 
-  <auto-bind-demo></auto-bind-demo>
+  <livesnooker-index></livesnooker-index>
 </body>
 </html>
