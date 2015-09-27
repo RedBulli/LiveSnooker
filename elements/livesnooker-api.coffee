@@ -33,7 +33,7 @@ Polymer
   setAuthentication: (auth) ->
     data.authentication = auth
     @maybeFetchUser()
-    @fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
+    @fire('iron-signal', {name: "api-ready"}) if data.authentication
 
   maybeFetchUser: ->
     @fetchUser() if data.host && data.authentication
@@ -44,49 +44,46 @@ Polymer
 
   setUser: (user) ->
     data.user = user
-    this.fire('iron-signal', {name: "account", data: user}) # Prev async
-    this.user = data.user
+    @fire('iron-signal', {name: "account", data: user})
+    @user = data.user
 
   ajax: (path, settings) ->
-    _this = this
     if apiIsReady()
-      this.ajaxPromise(path, settings)
+      @ajaxPromise(path, settings)
     else
-      new Promise (resolve, reject) ->
-        _this.queue = true
-        _this.addEventListener "api-ready", ->
-          _this.ajaxPromise(path, settings).then(resolve, reject)
+      new Promise (resolve, reject) =>
+        @queue = true
+        @addEventListener "api-ready", =>
+          @ajaxPromise(path, settings).then(resolve, reject)
 
   ajaxPromise: (path, settings) ->
-    Promise.resolve(this.ajaxCall(path, settings))
+    Promise.resolve(@ajaxCall(path, settings))
 
   callbackAjax: (path, settings) ->
-    _this = this
     if apiIsReady()
-      _this.ajaxCall(path, settings)
+      @ajaxCall(path, settings)
     else
-      _this.addEventListener "api-ready", ->
-        _this.ajaxCall(path, settings)
+      @addEventListener "api-ready", =>
+        @ajaxCall(path, settings)
 
   ajaxCall: (path, settings) ->
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
-    _.extend(settings.headers, {
+    _.extend settings.headers,
       "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
-    })
     $.ajax(data.host + path, settings)
 
   onAccount: ->
-    this.user = data.user
+    @user = data.user
 
   onApiReady: ->
-    this.fire('api-ready') # Prev async
-    this.fire('api')
+    @fire('api-ready')
+    @fire('api')
 
   ready: ->
-    if this.host
-      data.host = this.host
-      this.fire('iron-signal', {name: "api-ready"}) if data.authentication # Prev async
+    if @host
+      data.host = @host
+      @fire('iron-signal', {name: "api-ready"}) if data.authentication
     else if data.host
-      this.host = data.host
-    this.user = data.user
+      @host = data.host
+    @user = data.user
