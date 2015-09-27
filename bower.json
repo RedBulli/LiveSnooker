@@ -8,6 +8,7 @@
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#latest",
     "iron-dropdown": "PolymerElements/iron-dropdown#latest",
     "iron-icons": "PolymerElements/iron-icons#latest",
+    "iron-list": "PolymerElements/iron-list#~1.1.2",
     "iron-localstorage": "PolymerElements/iron-localstorage#latest",
     "iron-meta": "PolymerElements/iron-meta#latest",
     "iron-pages": "PolymerElements/iron-pages#latest",

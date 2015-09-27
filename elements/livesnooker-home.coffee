@@ -1,9 +1,3 @@
-# routeToLeague = (router) ->
-#   if localStorage.leagueId
-#     router.go('/' + localStorage.leagueId)
-#   else
-#     router.go('/leagues/')
-
 Polymer
   is: 'livesnooker-home'
 
@@ -12,23 +6,14 @@ Polymer
       type: String,
       observer: '_leagueIdChanged'
     league: Object
-    frames:
+    unfinishedFrames:
+      type: Array
+      value: -> []
+    finishedFrames:
       type: Array
       value: -> []
     streamUrl: String
     socketUrl: String
-
-  unfinishedFrame: (frame) ->
-    if !frame.get('endedAt')
-      true
-    else
-      false
-
-  finishedFrame: (frame) ->
-    if frame.get('endedAt')
-      true
-    else
-      false
 
   computeControlLink: (frame) ->
     "/frame.html?frameId=" + frame.id + "&input=true"
@@ -39,6 +24,9 @@ Polymer
   computeWinnerClass: (frame, player) ->
     if frame.attributes.Winner == player
       "winner"
+
+  computeDate: (dateTime) ->
+    new Date(dateTime).toLocaleString()
 
   onStreamEvent: (event) ->
     if event.detail.event == 'frameStart'
@@ -57,7 +45,6 @@ Polymer
       1
     else if event.detail.event == 'newPlayer'
       1
-      #Add frame
 
   getVideoStatusElement: (frameId) ->
     $(Polymer.dom(this).node.querySelector('li[data-id="' + frameId + '"] > .video-status'))
@@ -81,9 +68,18 @@ Polymer
     console.log("Not implemented yet")
 
   updateFrames: ->
-    @splice('frames', 0, @frames.length)
+    @splice('unfinishedFrames', 0, @unfinishedFrames.length)
+    @splice('finishedFrames', 0, @finishedFrames.length)
     @league.get('Frames').each (frame) =>
-      this.push 'frames', frame if frame.id
+      if frame.get('endedAt')
+        this.push 'finishedFrames', frame if frame.id
+      else
+        this.push 'unfinishedFrames', frame if frame.id
+
+  initFrames: ->
+    @league.get('Frames').on 'add remove change', =>
+      @updateFrames()
+    @updateFrames()
 
   _leagueIdChanged: ->
     if @leagueId
@@ -92,12 +88,10 @@ Polymer
         .then (league) =>
           league.setApiClient(@$.api) if not league.client
           @league = league
-          @league.get('Frames').on 'add remove change', =>
-            @updateFrames()
           league.get('Frames').leagueId = league.id
           league.get('Frames').setApiClient(league.client)
           league.get('Frames').fetch({
-            success: @updateFrames.bind(@)
+            success: @initFrames.bind(@)
           })
           @fire('iron-signal', {name: "league", data: league})
         .catch (model, response) =>
