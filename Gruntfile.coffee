@@ -53,8 +53,14 @@ module.exports = (grunt) ->
     connect:
       server:
         options:
-          port: 9000
+          port: process.env.PORT || 9000
           base: "./build"
+          middleware: (connect, options, middlewares) ->
+            middlewares.unshift (req, res, next) ->
+              res.setHeader('Access-Control-Allow-Origin', '*')
+              res.setHeader('Access-Control-Allow-Methods', '*')
+              next()
+            middlewares
 
     karma:
       unit:
