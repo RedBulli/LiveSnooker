@@ -11,12 +11,6 @@
     #gameview {
       width: 40em;
     }
-
-    #on-video-score {
-      position: relative;
-      top: -2em;
-      text-align: center;
-    }
   </style>
 
   <template>
@@ -25,8 +19,12 @@
         <div id="gameview">
           <p2p-video id="video" class="video" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
             <template is="dom-if" if="[[video]]">
-              <div id="cam" class="video-container" width="640" height="480"></div>
-              <frame-score-view id="on-video-score" frame="[[frame]]"></frame-score-view>
+              <figure class="uk-overlay">
+                  <div id="cam" class="video-container" width="640" height="480"></div>
+                  <figcaption class="uk-overlay-panel uk-overlay-bottom uk-text-center">
+                    <frame-score-view id="on-video-score" frame="[[frame]]"></frame-score-view>
+                  </figcaption>
+              </figure>
             </template>
           </p2p-video>
           <template is="dom-if" if="[[!video]]">

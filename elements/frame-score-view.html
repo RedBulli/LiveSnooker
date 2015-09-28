@@ -6,27 +6,30 @@
     :host {
       background-color: black;
       color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 0.3em 1em;
     }
     .points {
       background-color: yellow;
       color: black;
     }
-
-    div {
-      display: block;
-    }
-
     .inTurn {
       border: 1px solid black;
+    }
+    #view {
+      display: inline-block;
     }
   </style>
 
   <template>
-    <div>
-      <span id="player0" class$="{{ computeInTurnClass(state.0.currentPlayer) }}">{{state.0.player.attributes.name}}</span>
-      <span class="points">{{state.0.score}}</span> - <span class="points">{{state.1.score}}</span>
-      <span id="player1" class$="{{ computeInTurnClass(state.1.currentPlayer) }}">{{state.1.player.attributes.name}}</span>
-    </div>
+    <div id="view">
+      <i class="uk-icon-caret-right" style$="[[computeVisibility(state.0.currentPlayer)]]"></i>
+      <span id="player0">[[state.0.player.attributes.name]]</span>
+      <span class="points">[[state.0.score]]</span> - <span class="points">[[state.1.score]]</span>
+      <span id="player1">[[state.1.player.attributes.name]]</span>
+      <i class="uk-icon-caret-left" style$="[[computeVisibility(state.1.currentPlayer)]]"></i>
+    </dib>
   </template>
 </dom-module>
 
@@ -40,11 +43,11 @@
       },
       state: Array
     },
-    ready: function() {
-      //this.state = this.frame.getState();
-    },
-    computeInTurnClass: function(inTurn) {
-      if (inTurn) return "inTurn";
+    computeVisibility: function(inTurn) {
+      if (inTurn)
+        return "visibility: visible;"
+      else
+        return "visibility: hidden;"
     },
     _onFrameChange: function() {
       this.state = this.frame.getState();
