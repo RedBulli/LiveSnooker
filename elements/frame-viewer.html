@@ -1,55 +1,24 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="frame-score-view.html">
-<link rel="import" href="break-history-view.html">
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="event-stream.html">
 <link rel="import" href="stream-channel.html">
-<link rel="import" href="p2p-video.html">
-<link rel="import" href="frame-novideo-view.html">
 <link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="uikit.html">
+<link rel="import" href="x-frame-view.html">
 
 <dom-module id="frame-viewer">
-  <style>
-    #gameview {
-      width: 40em;
-    }
-
-    #on-video-score {
-      position: relative;
-      top: -2em;
-      text-align: center;
-    }
-  </style>
-
-  <link rel="stylesheet" href="css/foundation.min.css">
-
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <template is="dom-if" if="{{frame}}">
-      <event-stream stream-url="{{streamUrl}}" on-event="onStreamEvent"></event-stream>
-      <stream-channel id="stream-channel" socket-url="{{socketUrl}}" league-id="{{frame.attributes.League.id}}" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-      <div class="row">
-        <div class="large-8 columns">
-          <div id="gameview">
-            <template is="dom-if" if="{{video}}">
-              <p2p-video socket-url="{{socketUrl}}" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
-              <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
-            </template>
-            <template is="dom-if" if="{{!video}}">
-              <frame-novideo-view frame="{{frame}}"></frame-novideo-view>
-            </template>
-          </div>
-        </div>
-        <div class="large-4 columns">
-          <template is="dom-if" if="{{videoAvailable}}">
-            Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
-          </template>
-          <template is="dom-if" if="{{!videoAvailable}}">
-            Video not available.
-          </template>
-          <break-history-view breaks="{{frame.attributes.shotGroups}}"></break-history-view>
-        </div>
-      </div>
+    <template is="dom-if" if="[[frame]]">
+      <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
+      <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+      <x-frame-view socket-url="[[socketUrl]]" frame="[[frame]]" video="[[video]]"></x-frame-view>
+      <template is="dom-if" if="[[videoAvailable]]">
+        Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+      </template>
+      <template is="dom-if" if="[[!videoAvailable]]">
+        Video not available.
+      </template>
     </template>
   </template>
 </dom-module>

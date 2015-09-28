@@ -12,7 +12,7 @@
   </style>
 
   <template>
-    <div id="cam" width="640" height="480"></div>
+    <content></content>
   </template>
 </dom-module>
 
@@ -32,7 +32,6 @@
       this.connection.leave();
     },
     ready: function() {
-      var el = this.$.cam;
       var leagueId = this.leagueId;
       var connection = new RTCMultiConnection(this.leagueId);
       var session = connection.session = {
@@ -69,18 +68,14 @@
         };
       });
 
-      // connection.leaveOnPageUnload = true;
-      // connection.autoCloseEntireSession = true;
-
-      connection.onstream = function(e) {
+      connection.onstream = (function(e) {
+        var el = Polymer.dom(this).node.querySelector(".video-container");
         el.insertBefore(e.mediaElement, el.firstChild);
-      };
+      }).bind(this);
 
       var connected = connection.connect(this.frameId);
-      if (this.input) {
-        connection.open(this.frameId);
-      }
       this.connection = connection;
+      this.fire('iron-signal', {name: "video-ready"})
     }
   });
 </script>

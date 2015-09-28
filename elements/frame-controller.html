@@ -1,48 +1,17 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="frame-score-view.html">
 <link rel="import" href="input/frame-input.html">
-<link rel="import" href="p2p-video.html">
-<link rel="import" href="break-history-view.html">
 <link rel="import" href="livesnooker-api.html">
-<link rel="import" href="frame-novideo-view.html">
 <link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="uikit.html">
+<link rel="import" href="x-frame-view.html">
 
 <dom-module id="frame-controller">
-  <style>
-    #gameview {
-      width: 40em;
-    }
-
-    #on-video-score {
-      position: relative;
-      top: -2em;
-      text-align: center;
-    }
-  </style>
-
-  <link rel="stylesheet" href="css/foundation.min.css">
-
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <template is="dom-if" if="{{frame}}">
-      <div class="row">
-        <div class="large-8 columns">
-          <div id="gameview">
-            <template is="dom-if" if="{{video}}">
-              <p2p-video id="video" socket-url="{{socketUrl}}" input="true" league-id="{{frame.attributes.League.id}}" frame-id="{{frame.id}}"></p2p-video>
-              <frame-score-view id="on-video-score" frame="{{frame}}"></frame-score-view>
-            </template>
-            <template is="dom-if" if="{{!video}}">
-              <frame-novideo-view frame="{{frame}}"></frame-novideo-view>
-            </template>
-          </div>
-          <frame-input frame="{{frame}}"></frame-input>
-        </div>
-        <div class="large-4 columns">
-          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
-          <break-history-view breaks="{{frame.attributes.shotGroups}}"></break-history-view>
-        </div>
-      </div>
+    <template is="dom-if" if="[[frame]]">
+      Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+      <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
+      <frame-input frame="[[frame]]"></frame-input>
       <button on-click="endFrame">End frame</button>
     </template>
   </template>
@@ -60,7 +29,8 @@
       video: {
         type: Boolean,
         value: false
-      }
+      },
+      socketUrl: String
     },
     _frameIdChanged: function() {
       var frame = new Frame({id: this.frameId});
@@ -74,14 +44,13 @@
       });
     },
     videoToggleChanged: function(event) {
-      var checked = event.srcElement.checked;
-      var videoEl = Polymer.dom(this).node.querySelector("p2p-video");
-      if (checked && videoEl) {
-        videoEl.open();
-      } else if (!checked) {
-        videoEl.leave();
-      }
       this.video = event.srcElement.checked;
+      var frameView = Polymer.dom(this).node.querySelector("x-frame-view");
+      if (this.video) {
+        frameView.openVideo();
+      } else {
+        frameView.closeVideo();
+      }
     },
     endFrame: function(event) {
       event.preventDefault();
