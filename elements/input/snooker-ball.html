@@ -2,14 +2,14 @@
 
 <dom-module id="snooker-ball" attributes="color">
   <style>
-    object{
+    object {
       pointer-events: none;
       display: block;
     }
   </style>
   <template>
     <object id="ball" type="image/svg+xml" data="elements/input/ball.svg">
-      <param name="color" value="{{color}}" />
+      <param name="color" value="[[color]]" />
     </object>
   </template>
 </dom-module>

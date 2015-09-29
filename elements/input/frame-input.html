@@ -1,14 +1,14 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 <link rel="import" href="points-input.html">
 <link rel="import" href="../../vendors/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../uikit.html">
 
 <dom-module id="frame-input">
   <template>
     <iron-a11y-keys target="[[target]]" keys="0" on-keys-pressed="missedKey"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="1 2 3 4 5 6 7" on-keys-pressed="potKey"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="ctrl+4 ctrl+5 ctrl+6 ctrl+7" on-keys-pressed="foulKey"></iron-a11y-keys>
-    <points-input on-shot="onShot"></points-input>
-    <button on-click="onUndo">Undo</button>
+    <points-input on-shot="onShot" on-undo="onUndo"></points-input>
   </template>
 </dom-module>
 

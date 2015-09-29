@@ -1,11 +1,17 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 <link rel="import" href="snooker-ball.html">
+<link rel="import" href="../uikit.html">
 
 <dom-module id="points-input">
   <style>
-    #balls li {
+    li {
       display: inline-block;
       width: 2.5em;
+    }
+    #undo {
+      font-size: 2.5em;
+      position: relative;
+      bottom: 5px;
     }
   </style>
 
@@ -36,6 +42,9 @@
       <li>
         <snooker-ball on-click="onShot" value="7" color="black"></snooker-ball>
       </li>
+      <li>
+        <i id="undo" class="uk-icon-undo" on-click="onUndo"></i>
+      </li>
     </ul>
   </template>
 </dom-module>
@@ -45,6 +54,9 @@
     is: 'points-input',
     onShot: function(event) {
       this.fire('shot', event.target.getAttribute("value"));
+    },
+    onUndo: function(event) {
+      this.fire('undo');
     }
   });
 </script>
