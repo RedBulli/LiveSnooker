@@ -1,4 +1,5 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="uikit.html">
 
 <dom-module id="break-points">
   <template>
@@ -37,13 +38,15 @@
 
 <dom-module id="break-history-view">
   <template>
-    <ul>
-      <template id="breaks" is="dom-repeat" items="{{breakModels}}">
-        <li>
-          <break-points shot-group="{{item}}"></break-points>
-        </li>
-      </template>
-    </ul>
+    <div class="uk-scrollable-box">
+      <ul class="uk-list uk-list-striped">
+        <template id="breaks" is="dom-repeat" items="{{breakModels}}">
+          <li>
+            <break-points shot-group="{{item}}"></break-points>
+          </li>
+        </template>
+      </ul>
+    </div>
   </template>
 </dom-module>
 

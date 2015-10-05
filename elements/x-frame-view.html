@@ -8,9 +8,6 @@
 
 <dom-module id="x-frame-view">
   <style>
-    #gameview {
-      width: 40em;
-    }
   </style>
 
   <template>
@@ -32,7 +29,7 @@
           </template>
         </div>
       </div>
-      <div class="uk-width-medium-1-5">
+      <div id="breaks" class="uk-width-medium-1-5">
         <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
       </div>
     </div>

@@ -12,7 +12,7 @@
       Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
       <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
       <frame-input frame="[[frame]]"></frame-input>
-      <button on-click="endFrame">End frame</button>
+      <button class="uk-button" on-click="endFrame">End frame</button>
     </template>
   </template>
 </dom-module>
