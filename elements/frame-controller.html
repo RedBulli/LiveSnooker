@@ -9,10 +9,17 @@
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[frame]]">
-      Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
-      <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
-      <frame-input frame="[[frame]]"></frame-input>
-      <button class="uk-button" on-click="endFrame">End frame</button>
+      <div class="uk-grid">
+        <div class="uk-width-medium-4-5">
+          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+          <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
+          <frame-input frame="[[frame]]"></frame-input>
+          <button class="uk-button" on-click="endFrame">End frame</button>
+        </div>
+        <div id="breaks" class="uk-width-medium-1-5">
+          <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
+        </div>
+      </div>
     </template>
   </template>
 </dom-module>
@@ -46,9 +53,7 @@
     videoToggleChanged: function(event) {
       this.video = event.srcElement.checked;
       var frameView = Polymer.dom(this).node.querySelector("x-frame-view");
-      if (this.video) {
-        frameView.openVideo();
-      } else {
+      if (!this.video) {
         frameView.closeVideo();
       }
     },

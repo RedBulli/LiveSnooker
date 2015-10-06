@@ -10,15 +10,22 @@
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[frame]]">
-      <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
-      <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-      <x-frame-view socket-url="[[socketUrl]]" frame="[[frame]]" video="[[video]]"></x-frame-view>
-      <template is="dom-if" if="[[videoAvailable]]">
-        Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
-      </template>
-      <template is="dom-if" if="[[!videoAvailable]]">
-        Video not available.
-      </template>
+      <div class="uk-grid">
+        <div class="uk-width-medium-4-5">
+          <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
+          <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+          <x-frame-view socket-url="[[socketUrl]]" frame="[[frame]]" video="[[video]]"></x-frame-view>
+          <template is="dom-if" if="[[videoAvailable]]">
+            Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+          </template>
+          <template is="dom-if" if="[[!videoAvailable]]">
+            Video not available.
+          </template>
+        </div>
+        <div id="breaks" class="uk-width-medium-1-5">
+          <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
+        </div>
+      </div>
     </template>
   </template>
 </dom-module>

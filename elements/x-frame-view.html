@@ -7,31 +7,21 @@
 <link rel="import" href="uikit.html">
 
 <dom-module id="x-frame-view">
-  <style>
-  </style>
-
   <template>
-    <div class="uk-grid">
-      <div class="uk-width-medium-4-5">
-        <div id="gameview">
-          <p2p-video id="video" class="video" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
-            <template is="dom-if" if="[[video]]">
-              <figure class="uk-overlay">
-                  <div id="cam" class="video-container" width="640" height="480"></div>
-                  <figcaption class="uk-overlay-panel uk-overlay-bottom uk-text-center">
-                    <frame-score-view id="on-video-score" frame="[[frame]]"></frame-score-view>
-                  </figcaption>
-              </figure>
-            </template>
-          </p2p-video>
-          <template is="dom-if" if="[[!video]]">
-            <frame-novideo-view frame="[[frame]]"></frame-novideo-view>
-          </template>
-        </div>
-      </div>
-      <div id="breaks" class="uk-width-medium-1-5">
-        <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
-      </div>
+    <div id="gameview">
+      <template is="dom-if" if="[[video]]" restamp="true">
+        <p2p-video id="video" class="video" on-ready="_onVideoReady" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
+            <figure class="uk-overlay">
+              <div id="cam" class="video-container" width="640" height="480"></div>
+              <figcaption class="uk-overlay-panel uk-overlay-bottom uk-text-center">
+                <frame-score-view id="on-video-score" frame="[[frame]]"></frame-score-view>
+              </figcaption>
+            </figure>
+        </p2p-video>
+      </template>
+      <template is="dom-if" if="[[!video]]">
+        <frame-novideo-view frame="[[frame]]"></frame-novideo-view>
+      </template>
     </div>
   </template>
 </dom-module>
@@ -41,17 +31,14 @@
     is: 'x-frame-view',
     properties: {
       frame: Object,
-      video: {
-        type: Boolean,
-        value: false
-      },
+      video: Boolean,
       socketUrl: String,
       videoInput: {
         type: Boolean,
         value: false
       }
     },
-    openVideo: function() {
+    _openVideo: function() {
       var videoEl = Polymer.dom(this).node.querySelector("p2p-video");
       videoEl.open();
     },
@@ -59,9 +46,9 @@
       var videoEl = Polymer.dom(this).node.querySelector("p2p-video");
       videoEl.leave();
     },
-    ready: function() {
+    _onVideoReady: function() {
       if (this.video && this.videoInput) {
-        this.openVideo();
+        this._openVideo();
       }
     }
   });

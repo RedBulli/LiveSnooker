@@ -31,6 +31,9 @@
     leave: function() {
       this.connection.leave();
     },
+    attached: function() {
+      this.fire('ready');
+    },
     ready: function() {
       var leagueId = this.leagueId;
       var connection = new RTCMultiConnection(this.leagueId);
@@ -75,7 +78,6 @@
 
       var connected = connection.connect(this.frameId);
       this.connection = connection;
-      this.fire('iron-signal', {name: "video-ready"})
     }
   });
 </script>
