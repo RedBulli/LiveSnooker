@@ -31,9 +31,10 @@ Polymer
     @data = data
 
   onGoogleSignIn: (event, auth) ->
-    data.authentication = auth
-    @maybeFetchUser()
-    @fire('iron-signal', {name: "api-ready"}) if data.authentication
+    if data.authentication != auth
+      data.authentication = auth
+      @maybeFetchUser()
+      @fire('iron-signal', {name: "api-ready"}) if data.authentication
 
   maybeFetchUser: ->
     @fetchUser() if data.host && data.authentication
