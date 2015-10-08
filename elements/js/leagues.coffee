@@ -20,6 +20,16 @@ class League extends Livesnooker.Model
         key: 'League'
         includeInJSON: 'id'
         keyDestination: 'LeagueId'
+    },
+    {
+      type: Backbone.HasMany,
+      key: 'Admins',
+      relatedModel: 'User',
+      collectionType: 'Users',
+      reverseRelation:
+        key: 'League'
+        includeInJSON: 'id'
+        keyDestination: 'LeagueId'
     }
   ]
 
