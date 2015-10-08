@@ -4,6 +4,7 @@
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="validation-errors.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="backbone-collection-renderer.html">
 
 <dom-module id="league-controller">
   <style>
@@ -14,29 +15,44 @@
 
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <div id="league">
-      <h2>[[leagueAttrs.name]]</h2>
-      <ul class="uk-list">
-        <li>ID: <span>[[leagueAttrs.id]]</span></li>
-        <li>Players:
-          <ul class="uk-list">
-            <template is="dom-repeat" items="[[playerModels]]">
-              <li><span>[[ item.attributes.name ]]</span> <a href="#" class="uk-icon-edit" data-player$="{{item.id}}" on-click="playerEditClick"></a></li>
-            </template>
-          </ul>
-        </li>
-      </ul>
-      <form class="uk-form">
-        <div class="uk-form-controls">
-          <input type="text" id="playerName" name="name" placeholder="New player name">
-          <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>
-        </div>
-        <validation-errors id="errors"></validation-errors>
-      </form>
-      <template if="[[ error ]]">
-        [[ error ]]
-      </template>
-    </div>
+    <template id="leagueTemplate" is="dom-if" if="{{league}}">
+      <div id="league">
+        <h2>[[league.attributes.name]]</h2>
+        <ul class="uk-list">
+          <li>ID: <span>[[league.id]]</span></li>
+
+          <li>Players:
+            <ul class="uk-list">
+              <backbone-collection-renderer collection="[[league.attributes.Players]]">
+                <template class="content" is="dom-repeat">
+                  <li><span>[[ item.attributes.name ]]</span> <a href="#" class="uk-icon-edit" data-player$="{{item.id}}" on-click="playerEditClick"></a> <a href="#" class="uk-icon-remove" data-player$="{{item.id}}" on-click="playerRemoveClick"></a></li>
+                </template>
+              </backbone-collection-renderer>
+            </ul>
+          </li>
+
+          <li>Admins:
+            <ul class="uk-list">
+              <backbone-collection-renderer collection="[[league.attributes.Admins]]">
+                <template class="content" is="dom-repeat">
+                  <li>[[ item.attributes.email ]]</li>
+                </template>
+              </backbone-collection-renderer>
+            </ul>
+          </li>
+        </ul>
+        <form class="uk-form">
+          <div class="uk-form-controls">
+            <input type="text" id="playerName" name="name" placeholder="New player name">
+            <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>
+          </div>
+          <validation-errors id="errors"></validation-errors>
+        </form>
+        <template if="[[ error ]]">
+          [[ error ]]
+        </template>
+      </div>
+    </template>
   </template>
 </dom-module>
 

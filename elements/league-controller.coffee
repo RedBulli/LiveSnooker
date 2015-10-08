@@ -1,6 +1,7 @@
 Polymer
   is: 'league-controller'
   properties:
+    league: Object
     leagueId:
       type: String,
       observer: '_leagueIdChanged'
@@ -13,8 +14,8 @@ Polymer
   newPlayer: ->
     event.preventDefault()
     league = @league
-    errorsEl = @$.league.querySelector("#errors")
-    playerInput = @$.league.querySelector('#playerName')
+    errorsEl = Polymer.dom(this).node.querySelector("#errors")
+    playerInput = Polymer.dom(this).node.querySelector("#playerName")
     opts =
       name: playerInput.value
       LeagueId: league.id
@@ -32,22 +33,16 @@ Polymer
     event.preventDefault()
     console.log "TODO"
 
-  _onPlayersChange: ->
-    if @playerModels
-      @splice('playerModels', 0, @playerModels.length)
-    @playerModels = _.clone(@players.models)
-    @players.on 'add remove change update', (model) =>
-      @splice('playerModels', 0, @playerModels.length)
-      @players.each (playerModel) =>
-        @push('playerModels', playerModel)
+  playerRemoveClick: (event) ->
+    event.preventDefault()
+    playerId = event.target.getAttribute("data-player")
+    player = @league.get('Players').get(playerId)
+    player.setApiClient(@$.api)
+    player.destroy(wait: true)
 
   _leagueIdChanged: ->
     if @leagueId
       @$.api.findOrFetchModel(League, @leagueId)
         .then (league) =>
           @league = league
-          @leagueAttrs = league.attributes
-          @players = league.get('Players')
           @fire('iron-signal', {name: "league", data: league})
-        .catch (model, response) =>
-          @error = response.status
