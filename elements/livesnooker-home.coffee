@@ -39,10 +39,11 @@ Polymer
       frame = @league.get('Frames').get(event.detail.frame.id)
       frame.set(event.detail.frame)
       frame.populateAssociations()
-      this.querySelector("#unfinished").render()
-      this.querySelector("#finished").render()
     else if event.detail.event == 'frameDelete'
-      1
+      frame = @league.get('Frames').get(event.detail.frame.id)
+      frame.set(event.detail.frame)
+      frame.trigger('destroy', frame);
+      frame = null
     else if event.detail.event == 'newPlayer'
       1
 
