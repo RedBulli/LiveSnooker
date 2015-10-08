@@ -3,7 +3,6 @@
 <head>
   <link rel="import" href="elements/uikit.html">
   <link rel="import" href="vendors/polymer/polymer.html">
-  <link rel="import" href="elements/management/google-auth.html">
   <link rel="import" href="elements/livesnooker-api.html">
   <link rel="import" href="elements/livesnooker-home.html">
   <link rel="import" href="vendors/more-routing/more-routing.html">
@@ -12,17 +11,18 @@
   <link rel="import" href="elements/livesnooker-user.html">
   <link rel="import" href="elements/leagues-list.html">
   <link rel="import" href="elements/livesnooker-toolbar.html">
+  <link rel="import" href="vendors/google-signin/google-signin.html">
 </head>
 
 <body>
-  <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
-  <google-auth googleId="<!-- @echo GOOGLE_CLIENT_ID -->"></google-auth>
-  <header>
-    <livesnooker-toolbar></livesnooker-toolbar>
-  </header>
-
   <dom-module id="livesnooker-routing">
     <template>
+      <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
+      <google-signin client-id="<!-- @echo GOOGLE_CLIENT_ID -->" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
+      <header>
+        <livesnooker-toolbar></livesnooker-toolbar>
+      </header>
+
       <more-routing-config driver="hash"></more-routing-config>
       <more-route name="leagues" path="/"></more-route>
       <more-route name="league" path="/leagues/:leagueId" params="{{leagueUrlParams}}"></more-route>
@@ -41,7 +41,10 @@
 
   <script>
     Polymer({
-      is: 'livesnooker-routing'
+      is: 'livesnooker-routing',
+      properties: {
+        signedIn: Boolean
+      },
     });
   </script>
 

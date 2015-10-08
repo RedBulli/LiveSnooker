@@ -15,9 +15,6 @@ RTCConnection = (socketUrl, leagueId, element) ->
     if onMessageCallbacks[data.channel]
       onMessageCallbacks[data.channel](data.message)
 
-  socket.on 'presence', (isChannelPresent) ->
-      console.log('is channel present', isChannelPresent)
-      #if !isChannelPresent playRoleOfSessionInitiator()
   socket.emit('presence', leagueId)
 
   connection.openSignalingChannel = (config) ->

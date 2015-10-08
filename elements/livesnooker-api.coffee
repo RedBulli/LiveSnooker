@@ -30,7 +30,7 @@ Polymer
   created: ->
     @data = data
 
-  setAuthentication: (auth) ->
+  onGoogleSignIn: (event, auth) ->
     data.authentication = auth
     @maybeFetchUser()
     @fire('iron-signal', {name: "api-ready"}) if data.authentication

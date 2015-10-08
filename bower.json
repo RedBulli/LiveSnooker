@@ -20,7 +20,8 @@
     "polymer": "Polymer/polymer#latest",
     "rtcmulticonnection": "latest",
     "uikit": "~2.22.0",
-    "underscore": "latest"
+    "underscore": "latest",
+    "google-signin": "GoogleWebComponents/google-signin#~1.1.0"
   },
   "devDependencies": {}
 }
