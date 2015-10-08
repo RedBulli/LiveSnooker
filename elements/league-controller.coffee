@@ -34,7 +34,7 @@ Polymer
 
   _onPlayersChange: ->
     if @playerModels
-      @splice('playerModels', 0, @breaks.length) 
+      @splice('playerModels', 0, @playerModels.length)
     @playerModels = _.clone(@players.models)
     @players.on 'add remove change update', (model) =>
       @splice('playerModels', 0, @playerModels.length)
