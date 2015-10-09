@@ -37,8 +37,9 @@ Polymer
     event.preventDefault()
     playerId = event.target.getAttribute("data-player")
     player = @league.get('Players').get(playerId)
-    player.setApiClient(@$.api)
-    player.destroy(wait: true)
+    if window.confirm("Deleting player #{player.get('name')}. Are you sure?")
+      player.setApiClient(@$.api)
+      player.destroy(wait: true)
 
   _leagueIdChanged: ->
     if @leagueId
