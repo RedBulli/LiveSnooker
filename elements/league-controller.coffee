@@ -35,11 +35,16 @@ Polymer
 
   playerRemoveClick: (event) ->
     event.preventDefault()
-    playerId = event.target.getAttribute("data-player")
-    player = @league.get('Players').get(playerId)
+    player = event.target.player
     if window.confirm("Deleting player #{player.get('name')}. Are you sure?")
       player.setApiClient(@$.api)
       player.destroy(wait: true)
+
+  onPlayerEdit: (event) ->
+    player = event.target.object
+    player.set('name', event.detail)
+    player.setApiClient(@$.api)
+    player.save()
 
   _leagueIdChanged: ->
     if @leagueId

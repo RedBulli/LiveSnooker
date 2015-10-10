@@ -6,6 +6,62 @@
 <link rel="import" href="uikit.html">
 <link rel="import" href="backbone-collection-renderer.html">
 
+<dom-module id="editable-text">
+  <style>
+    #content {
+      display: none;
+    }
+    form {
+      display: inline-block;
+    }
+  </style>
+  <template>
+    <form id="form">
+      <span id="edit" hidden>
+        <input type="text" id="input">
+        <a href="#" class="uk-icon-save" on-click="saveClick"></a>
+      </span>
+      <span id="normal">
+        <content id="content"></content>
+        <a href="#" class="uk-icon-edit" id="editIcon" on-click="editClick"></a>
+      </span>
+    </form>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'editable-text',
+    getContent: function() {
+      return this.getContentChildNodes()[0];
+    },
+    showEditView: function() {
+      this.$.edit.hidden = false;
+      this.$.normal.hidden = true;
+    },
+    hideEditView: function() {
+      this.$.edit.hidden = true;
+      this.$.normal.hidden = false;
+    },
+    editClick: function(event) {
+      event.preventDefault();
+      var text = this.getContent().textContent;
+      this.$.input.value = text;
+      this.showEditView();
+    },
+    saveClick: function(event) {
+      event.preventDefault();
+      var newText = this.$.input.value;
+      this.getContent().textContent = newText;
+      this.hideEditView();
+      this.fire('edit', newText);
+    },
+    ready: function() {
+      this.$.form.onsubmit = this.saveClick.bind(this);
+    }
+  });
+</script>
+
 <dom-module id="league-controller">
   <style>
     #league {
@@ -25,7 +81,7 @@
             <ul class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Players]]">
                 <template class="content" is="dom-repeat">
-                  <li><span>[[ item.attributes.name ]]</span> <a href="#" class="uk-icon-edit" data-player$="{{item.id}}" on-click="playerEditClick"></a> <a href="#" class="uk-icon-remove" data-player$="{{item.id}}" on-click="playerRemoveClick"></a></li>
+                  <li><editable-text object="{{item}}" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="{{item}}" on-click="playerRemoveClick"></a></li>
                 </template>
               </backbone-collection-renderer>
             </ul>
