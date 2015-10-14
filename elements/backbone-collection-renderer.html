@@ -2,7 +2,7 @@
 
 <dom-module id="backbone-collection-renderer">
   <template>
-    <content></content>
+    <content id="content"></content>
   </template>
 </dom-module>
 
@@ -10,11 +10,23 @@
   Polymer({
     is: 'backbone-collection-renderer',
     properties: {
-      collection: Object,
+      collection: {
+        type: Object,
+        observer: '_onCollectionChange'
+      },
       models: {
         type: Array,
         value: function() {return [];}
       }
+    },
+    _onCollectionChange: function(next, prev) {
+      if (prev) {
+        prev.off(null, null, this); // Remove all callbacks with this context
+      }
+      next.on("add remove change reset", this.renderModelsToTemplate, this);
+      var el = Polymer.dom(this).node.querySelector(".content");
+      el.items = next.models;
+      this.renderModelsToTemplate();
     },
     renderModelsToTemplate: function() {
       var _this = this;
@@ -24,14 +36,6 @@
       });
     },
     ready: function() {
-      var _this = this;
-      var el = Polymer.dom(_this).node.querySelector(".content");
-      el.items = this.models;
-      this.collection.on("add remove change reset", function() {
-        _this.renderModelsToTemplate();
-        el.render();
-      });
-      this.renderModelsToTemplate();
     }
   });
 </script>
