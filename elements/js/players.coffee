@@ -6,6 +6,7 @@ Player.setup()
 class Players extends Livesnooker.Collection
   model: Player
   url: '/players'
+  comparator: 'name'
 
 ((scope) ->
   scope.Player = Player
