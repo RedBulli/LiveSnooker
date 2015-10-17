@@ -2,6 +2,7 @@
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="new-league-form.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="backbone-collection-renderer.html">
 
 <dom-module id="leagues-list">
   <style>
@@ -16,18 +17,20 @@
       <template is="dom-if" if="[[leagues.length]]">
         <h2>Your leagues:</h2>
         <ul class="uk-list">
-          <template is="dom-repeat" items="[[leagues]]">
-            <li>
-              <a href="[[ leagueUrl(item) ]]">[[item.attributes.name]]</a>
-            </li>
-          </template>
+          <backbone-collection-renderer collection="[[leagues]]">
+            <template class="content" is="dom-repeat">
+              <li>
+                <a href="[[ leagueUrl(item) ]]">[[item.attributes.name]]</a>
+              </li>
+            </template>
+          </backbone-collection-renderer>
         </ul>
       </template>
       <template is="dom-if" if="[[!leagues.length]]">
         You don't admin or belong to any league.
       </template>
       <br>
-      <new-league-form></new-league-form>
+      <new-league-form leagues="{{leagues}}"></new-league-form>
     </div>
   </template>
 </dom-module>
@@ -36,21 +39,18 @@
   Polymer({
     is: 'leagues-list',
     properties: {
-      leagues: {
-        type: Array,
-        value: []
-      }
+      leagues: Object
     },
     leagueUrl: function(league) {
       return MoreRouting.urlFor('livesnooker', {leagueId: league.id});
     },
     ready: function() {
-      this.leaguesCollection = new Leagues();
-      this.leaguesCollection.setApiClient(this.$.api);
+      var leagues = new Leagues();
+      leagues.setApiClient(this.$.api);
       var _this = this;
-      this.leaguesCollection.fetch({
+      leagues.fetch({
         success: function() {
-          _this.leagues = _this.leaguesCollection.models;
+          _this.leagues = leagues;
         }
       });
     }

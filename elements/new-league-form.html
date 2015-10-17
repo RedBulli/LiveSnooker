@@ -22,6 +22,9 @@
 <script>
   Polymer({
     is: 'new-league-form',
+    properties: {
+      leagues: Object
+    },
     newLeague: function() {
       var errorsEl = this.$.errors;
       event.preventDefault();
@@ -30,8 +33,11 @@
       };
       var league = new League(opts);
       league.setApiClient(this.$.api);
+      var _this = this;
       league.save(league.attributes, {
         success: function() {
+          _this.$.leagueName.value = "";
+          _this.leagues.add(league);
           MoreRouting.navigateTo("league", {leagueId: league.id});
         },
         error: function(data, response) {

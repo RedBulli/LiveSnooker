@@ -38,6 +38,7 @@ League.setup()
 class Leagues extends Livesnooker.Collection
   model: League
   url: '/leagues'
+  comparator: 'name'
 
 ((scope) ->
   scope.League = League
