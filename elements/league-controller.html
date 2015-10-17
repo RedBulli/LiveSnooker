@@ -81,7 +81,7 @@
             <ul class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Players]]">
                 <template class="content" is="dom-repeat">
-                  <li><editable-text object="{{item}}" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="{{item}}" on-click="playerRemoveClick"></a></li>
+                  <li><editable-text object="[[item]]" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="[[item]]" on-click="playerRemoveClick"></a></li>
                 </template>
               </backbone-collection-renderer>
             </ul>
@@ -91,7 +91,7 @@
             <ul class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Admins]]">
                 <template class="content" is="dom-repeat">
-                  <li>[[ item.attributes.email ]]</li>
+                  <li>[[ item.attributes.User.attributes.email ]]</li>
                 </template>
               </backbone-collection-renderer>
             </ul>
