@@ -29,10 +29,6 @@ Polymer
       error: (data, response) ->
         errorsEl.errors = [response.responseJSON.error.errors[0]]
 
-  playerEditClick: (event) ->
-    event.preventDefault()
-    console.log "TODO"
-
   playerRemoveClick: (event) ->
     event.preventDefault()
     player = event.target.player
@@ -40,11 +36,15 @@ Polymer
       player.setApiClient(@$.api)
       player.destroy(wait: true)
 
-  onPlayerEdit: (event) ->
-    player = event.target.object
-    player.set('name', event.detail)
+  onPlayerEdit: (editEvent) ->
+    player = editEvent.target.object
     player.setApiClient(@$.api)
-    player.save()
+    onError = ->
+      editEvent.target.setContent(player.get('name'))
+    player.save({name: editEvent.detail}, {
+      wait: true,
+      error: onError
+    })
 
   _leagueIdChanged: ->
     if @leagueId

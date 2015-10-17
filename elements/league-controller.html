@@ -35,6 +35,9 @@
     getContent: function() {
       return this.getContentChildNodes()[0];
     },
+    setContent: function(text) {
+      this.getContent().textContent = text;
+    },
     showEditView: function() {
       this.$.edit.hidden = false;
       this.$.normal.hidden = true;
