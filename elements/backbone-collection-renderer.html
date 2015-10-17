@@ -26,16 +26,23 @@
       next.on("add remove change reset", this.renderModelsToTemplate, this);
       this.renderModelsToTemplate();
     },
+    reset: function(el) {
+      var reset = el.splice.bind(el, 'items', 0, el.items.length);
+      reset.apply(el, this.collection.models);
+    },
+    resetByIteration: function(el) {
+      el.splice('items', 0, el.items.length);
+      this.collection.each(function(model) {
+        el.push('items', model);
+      });
+    },
     renderModelsToTemplate: function() {
       var el = Polymer.dom(this).node.querySelector(".content");
       if (el) {
         if (!el.items) {
           el.items = [];
         }
-        el.splice('items', 0, el.items.length);
-        this.collection.each(function(model) {
-          el.push('items', model);
-        });
+        this.reset(el);
       }
     }
   });
