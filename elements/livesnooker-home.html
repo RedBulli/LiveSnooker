@@ -9,6 +9,7 @@
 <link rel="import" href="js/vendor/jquery.html">
 <link rel="import" href="../vendors/iron-list/iron-list.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="model-attribute.html">
 
 <dom-module name="livesnooker-home">
   <style>
@@ -44,7 +45,7 @@
         <ol id="framelist" class="uk-list frames">
           <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
             <li data-id$="[[item.id]]">
-              <span>[[item.attributes.Player1.attributes.name]]</span> - <span>[[item.attributes.Player2.attributes.name]]</span>
+              <model-attribute model="[[item.attributes.Player1]]" attribute="name"></model-attribute> - <model-attribute model="[[item.attributes.Player2]]" attribute="name"></model-attribute>
               <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
               <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
               <span class="video-status">VIDEO</span>
@@ -56,8 +57,13 @@
           <iron-list id="finished" class="finished-frames" items="[[finishedFrames]]" as="item">
             <template>
               <li>
-                <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">[[item.attributes.Player1.attributes.name]]</span> - 
-                <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">[[item.attributes.Player2.attributes.name]]</span>
+                <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
+                  <model-attribute model="[[item.attributes.Player1]]" attribute="name"></model-attribute>
+                </span>
+                <span> - </span>
+                <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
+                  <model-attribute model="[[item.attributes.Player2]]" attribute="name"></model-attribute>
+                </span>
                 <a href="#" on-click="showBreaks">View breaks</a>
               </li>
             </template>
