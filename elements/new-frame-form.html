@@ -2,25 +2,28 @@
 <link rel="import" href="js/frames.html">
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="backbone-collection-renderer.html">
 
 <dom-module id="new-frame-form">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <form class="uk-form">
       <legend>New frame</legend>
-      <select id="player1" name="player1">
-        <template id="playerOptions" is="dom-repeat" items="[[league.attributes.Players.models]]">
-          <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
-        </template>
-      </select>
-      vs. 
-      <select id="player2" name="player2">
-        <template id="playerOptions" is="dom-repeat" items="[[league.attributes.Players.models]]">
-          <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
-        </template>
-      </select>
-
-      <button class="uk-button uk-button-primary" on-click="createButtonClick">Create</button>
+      <template is="dom-if" if="[[players.length]]">
+        <select id="player1" name="player1">
+          <template is="dom-repeat" items="[[players]]">
+            <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
+          </template>
+        </select>vs. <select id="player2" name="player2">
+          <template is="dom-repeat" items="[[players]]">
+            <option value$="[[ item.id ]]">[[item.attributes.name]]</option>
+          </template>
+        </select>
+        <button class="uk-button uk-button-primary" on-click="createButtonClick">Create</button>
+      </template>
+      <template is="dom-if" if="[[!players.length]]">
+        League has no players. Add them <a href="[[ leagueControlUrl() ]]">here</a>
+      </template>
     </form>
   </template>
 </dom-module>
@@ -29,7 +32,17 @@
   Polymer({
     is: 'new-frame-form',
     properties: {
-      league: Object
+      league: {
+        type: Object,
+        observer: '_onLeagueChange'
+      },
+      players: {
+        type: Array,
+        value: function() { return []; }
+      }
+    },
+    leagueControlUrl: function() {
+      return MoreRouting.urlFor('league', {leagueId: this.league.id });
     },
     createButtonClick: function(event) {
       event.preventDefault();
@@ -47,6 +60,10 @@
           frame.trigger("saved", frame);
         }
       });
+    },
+    _onLeagueChange: function(next, prev) {
+      if (prev) prev.off(null, null, this);
+      bindCollectionChangesToPolymerArray(this.league.get('Players'), 'players', this);
     }
   });
 </script>

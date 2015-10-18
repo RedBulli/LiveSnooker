@@ -7,6 +7,27 @@
 </dom-module>
 
 <script>
+  function bindCollectionChangesToPolymerArray(collection, variableName, element) {
+    function resetArray() {
+      element.splice(variableName, 0, element[variableName].length);
+      element.async(function () {
+        element.splice.bind(element, variableName, 0, 0).apply(element, collection.models);
+      }, 0);
+    }
+
+    function resetByIteration() {
+      element.splice(variableName, 0, element[variableName].length);
+      element.async(function () {
+        collection.each(function(model) {
+          element.push(variableName, model);
+        });
+      }, 0);
+    }
+
+    collection.on('add remove change reset', resetArray, element);
+    resetArray();
+  }
+
   Polymer({
     is: 'backbone-collection-renderer',
     properties: {

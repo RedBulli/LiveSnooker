@@ -4,7 +4,6 @@
   "dependencies": {
     "backbone": "latest",
     "backbone-relational": "latest",
-    "foundation": "zurb/bower-foundation#latest",
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#latest",
     "iron-dropdown": "PolymerElements/iron-dropdown#latest",
     "iron-icons": "PolymerElements/iron-icons#latest",
