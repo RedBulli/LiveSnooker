@@ -22,7 +22,7 @@
         <button class="uk-button uk-button-primary" on-click="createButtonClick">Create</button>
       </template>
       <template is="dom-if" if="[[!players.length]]">
-        League has no players. Add them <a href="[[ leagueControlUrl() ]]">here</a>
+        League has no players. Add them <a href="[[ leagueControlUrl(league) ]]">here</a>
       </template>
     </form>
   </template>
@@ -41,8 +41,8 @@
         value: function() { return []; }
       }
     },
-    leagueControlUrl: function() {
-      return MoreRouting.urlFor('league', {leagueId: this.league.id });
+    leagueControlUrl: function(league) {
+      return MoreRouting.urlFor('league', {leagueId: league.id });
     },
     createButtonClick: function(event) {
       event.preventDefault();
