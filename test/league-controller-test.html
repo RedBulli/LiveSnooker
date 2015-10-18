@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../vendors/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../vendors/web-component-tester/browser.js"></script>
+  <link rel="import" href="../vendors/polymer/polymer.html">
+  <link rel="import" href="../elements/league-controller.html">
+</head>
+<body>
+  <league-controller id="league-controller" league-id="04ecd1e3-bf93-4b0b-ba8e-073462631948"></league-controller>
+  <script id="league-response" type="application/json">
+    {  
+      "id":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+      "name":"Biklu",
+      "public":false,
+      "deleted":false,
+      "createdAt":"2015-10-17T12:54:34.530Z",
+      "updatedAt":"2015-10-17T12:54:34.530Z",
+      "Players":[  
+        {  
+          "id":"f1653cfb-4ebf-4a79-bf90-4a6a01201d09",
+          "name":"ggggg",
+          "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+          "deleted":false,
+          "createdAt":"2015-10-17T21:24:30.417Z",
+          "updatedAt":"2015-10-18T06:09:42.909Z"
+        },
+        {  
+          "id":"ee7b68ab-9002-4156-b952-d6d29319b733",
+          "name":"sssss",
+          "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+          "deleted":false,
+          "createdAt":"2015-10-17T21:24:19.638Z",
+          "updatedAt":"2015-10-18T06:12:05.783Z"
+        },
+        {  
+          "id":"ae3fbd5f-565e-4bf5-b235-3037b926291a",
+          "name":"fsdgs",
+          "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+          "deleted":false,
+          "createdAt":"2015-10-18T06:30:18.703Z",
+          "updatedAt":"2015-10-18T06:30:18.703Z"
+        }
+      ],
+      "Admins":[  
+        {  
+          "write":true,
+          "createdAt":"2015-10-17T12:54:34.544Z",
+          "updatedAt":"2015-10-17T12:54:34.544Z",
+          "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+          "UserId":"da4b7c16-1cc8-4cba-85fe-57762e8bb4d6",
+          "User":{  
+            "id":"da4b7c16-1cc8-4cba-85fe-57762e8bb4d6",
+            "email":"test@example.com",
+            "createdAt":"2015-10-17T12:51:19.331Z",
+            "updatedAt":"2015-10-17T12:51:19.331Z"
+          }
+        }
+      ],
+      "Frames":[  
+        {  
+          "id":"7f43ec89-6851-49fb-bb09-ef809f5b0406",
+          "endedAt":null,
+          "createdAt":"2015-10-18T06:22:47.740Z",
+          "updatedAt":"2015-10-18T06:22:47.740Z",
+          "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+          "Player1Id":"f1653cfb-4ebf-4a79-bf90-4a6a01201d09",
+          "Player2Id":"ee7b68ab-9002-4156-b952-d6d29319b733",
+          "WinnerId":null,
+          "Player1":{  
+            "id":"f1653cfb-4ebf-4a79-bf90-4a6a01201d09",
+            "name":"ggggg",
+            "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+            "deleted":false,
+            "createdAt":"2015-10-17T21:24:30.417Z",
+            "updatedAt":"2015-10-18T06:09:42.909Z"
+          },
+          "Player2":{  
+            "id":"ee7b68ab-9002-4156-b952-d6d29319b733",
+            "name":"sssss",
+            "LeagueId":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+            "deleted":false,
+            "createdAt":"2015-10-17T21:24:19.638Z",
+            "updatedAt":"2015-10-18T06:12:05.783Z"
+          },
+          "Winner":null,
+          "League":{  
+            "id":"04ecd1e3-bf93-4b0b-ba8e-073462631948",
+            "name":"Biklu",
+            "public":false,
+            "deleted":false,
+            "createdAt":"2015-10-17T12:54:34.530Z",
+            "updatedAt":"2015-10-17T12:54:34.530Z"
+          }
+        }
+      ]
+    }
+  </script>
+  <script>
+    describe('<league-controller>', function() {
+      var element = document.getElementById('league-controller');
+      var leagueResponse = document.getElementById('league-response').innerHTML;
+      var api = element.$$("#api");
+      var server = null;
+      
+      before(function(done) {
+        server = sinon.fakeServer.create();
+        api.setHost("http://localhost:5555");
+        api.setAuthentication({
+          id_token: "123456"
+        });
+        api.setUser({email: "test@email.com"});
+        api.onApiReady();
+        server.requests[0].respond(
+          200,
+          { "Content-Type": "application/json" },
+          leagueResponse
+        );
+        setTimeout(done, 0);
+      });
+
+      after(function() {
+        server.restore();
+      });
+
+      it('is found', function() {
+        assert.isNotNull(element);
+      });
+
+      it('lists players', function() {
+        assert.lengthOf(element.querySelectorAll("#players li"), 3);
+      });
+
+      it('updates players when adding a new player', function(done) {
+        element.$$("#playerName").value = "New player";
+        element.$$("#new-player button").click();
+        server.requests[1].respond(
+          200,
+          { "Content-Type": "application/json" },
+          '{"id": "12345", "name": "New player"}'
+        );
+        setTimeout(function() {
+          assert.lengthOf(element.querySelectorAll("#players li"), 4);
+          done()
+        }, 0);
+      });
+    });
+  </script>
+</body>
+</html>

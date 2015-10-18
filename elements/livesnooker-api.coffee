@@ -32,7 +32,7 @@ Polymer
 
   onGoogleSignIn: (event, auth) ->
     if data.authentication != auth
-      data.authentication = auth
+      @setAuthentication(auth)
       @maybeFetchUser()
       @fire('iron-signal', {name: "api-ready"}) if data.authentication
 
@@ -47,6 +47,13 @@ Polymer
     data.user = user
     @fire('iron-signal', {name: "account", data: user})
     @user = data.user
+
+  setHost: (host) ->
+    @host = host
+    data.host = host
+
+  setAuthentication: (authentication) ->
+    data.authentication = authentication
 
   ajax: (path, settings) ->
     if apiIsReady()
@@ -83,7 +90,7 @@ Polymer
 
   ready: ->
     if @host
-      data.host = @host
+      @setHost(@host)
       @fire('iron-signal', {name: "api-ready"}) if data.authentication
     else if data.host
       @host = data.host

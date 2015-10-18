@@ -81,7 +81,7 @@
           <li>ID: <span>[[league.id]]</span></li>
 
           <li>Players:
-            <ul class="uk-list">
+            <ul id="players" class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Players]]">
                 <template class="content" is="dom-repeat">
                   <li><editable-text object="[[item]]" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="[[item]]" on-click="playerRemoveClick"></a></li>
@@ -91,7 +91,7 @@
           </li>
 
           <li>Admins:
-            <ul class="uk-list">
+            <ul id="admins" class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Admins]]">
                 <template class="content" is="dom-repeat">
                   <li>[[ item.attributes.User.attributes.email ]]</li>
@@ -100,7 +100,7 @@
             </ul>
           </li>
         </ul>
-        <form class="uk-form">
+        <form class="uk-form" id="new-player">
           <div class="uk-form-controls">
             <input type="text" id="playerName" name="name" placeholder="New player name">
             <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>

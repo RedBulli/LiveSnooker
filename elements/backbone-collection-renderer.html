@@ -7,23 +7,27 @@
 </dom-module>
 
 <script>
+  function resetPolymerArray(collection, variableName, element) {
+    element.splice(variableName, 0, element[variableName].length);
+    element.async(function () {
+      element.splice(variableName, 0, element[variableName].length);
+      element.splice.bind(element, variableName, 0, 0).apply(element, collection.models);
+    }, 0);
+  }
+
+  function resetPolymerArrayByIteration(collection, variableName, element) {
+    element.splice(variableName, 0, element[variableName].length);
+    element.async(function () {
+      collection.each(function(model) {
+        element.push(variableName, model);
+      });
+    }, 0);
+  }
+
   function bindCollectionChangesToPolymerArray(collection, variableName, element) {
     function resetArray() {
-      element.splice(variableName, 0, element[variableName].length);
-      element.async(function () {
-        element.splice.bind(element, variableName, 0, 0).apply(element, collection.models);
-      }, 0);
+      resetPolymerArray(collection, variableName, element);
     }
-
-    function resetByIteration() {
-      element.splice(variableName, 0, element[variableName].length);
-      element.async(function () {
-        collection.each(function(model) {
-          element.push(variableName, model);
-        });
-      }, 0);
-    }
-
     collection.on('add remove change reset', resetArray, element);
     resetArray();
   }
@@ -47,23 +51,13 @@
       next.on("add remove change reset", this.renderModelsToTemplate, this);
       this.renderModelsToTemplate();
     },
-    reset: function(el) {
-      var reset = el.splice.bind(el, 'items', 0, el.items.length);
-      reset.apply(el, this.collection.models);
-    },
-    resetByIteration: function(el) {
-      el.splice('items', 0, el.items.length);
-      this.collection.each(function(model) {
-        el.push('items', model);
-      });
-    },
     renderModelsToTemplate: function() {
       var el = Polymer.dom(this).node.querySelector(".content");
       if (el) {
         if (!el.items) {
           el.items = [];
         }
-        this.reset(el);
+        resetPolymerArray(this.collection, 'items', el);
       }
     }
   });
