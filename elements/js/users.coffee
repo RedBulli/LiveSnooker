@@ -1,21 +1,21 @@
 class User extends Livesnooker.Model
-  urlRoot: '/users'
+  idAttribute: "email"
+
+User.setup()
 
 class Users extends Livesnooker.Collection
-  url: '/users'
+  model: User
 
 class Admin extends Livesnooker.Model
-  relations: [
-    {
-      type: Backbone.HasOne
-      key: 'User'
-      relatedModel: 'User'
-      keyDestination: 'UserId'
-      includeInJSON: 'id'
-    }
-  ]
+  urlRoot: ->
+    "/leagues/#{@get('LeagueId')}/admins"
+
+Admin.setup()
 
 class Admins extends Livesnooker.Collection
+  model: Admin
+  url: ->
+    "/leagues/#{@get('LeagueId')}/admins"
 
 ((scope) ->
   scope.User = User

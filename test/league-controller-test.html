@@ -133,7 +133,7 @@
       });
 
       it('updates players when adding a new player', function(done) {
-        element.$$("#playerName").value = "New player";
+        element.$$("#player-name").value = "New player";
         element.$$("#new-player button").click();
         server.requests[1].respond(
           200,
@@ -142,6 +142,24 @@
         );
         setTimeout(function() {
           assert.lengthOf(element.querySelectorAll("#players li"), 4);
+          done()
+        }, 0);
+      });
+
+      it('lists admins', function() {
+        assert.lengthOf(element.querySelectorAll("#admins li"), 1);
+      });
+
+      it('updates admins when adding a new admin', function(done) {
+        element.$$("#admin-email").value = "testi@example.com";
+        element.$$("#new-admin button").click();
+        server.requests[2].respond(
+          200,
+          { "Content-Type": "application/json" },
+          '{"id": "asdf", "UserEmail": "testi@example.com", "LeagueId": "04ecd1e3-bf93-4b0b-ba8e-073462631948"}'
+        );
+        setTimeout(function() {
+          assert.lengthOf(element.querySelectorAll("#admins li"), 2);
           done()
         }, 0);
       });

@@ -28,8 +28,7 @@ class League extends Livesnooker.Model
       collectionType: 'Admins',
       reverseRelation:
         key: 'League'
-        includeInJSON: 'id'
-        keyDestination: 'LeagueId'
+        includeInJSON: 'LeagueId'
     }
   ]
 

@@ -94,7 +94,7 @@
             <ul id="admins" class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Admins]]">
                 <template class="content" is="dom-repeat">
-                  <li>[[ item.attributes.User.attributes.email ]]</li>
+                  <li><span>[[ item.attributes.UserEmail ]]</span> <a href="#" class="uk-icon-remove" admin="[[item]]" on-click="adminRemoveClick"></a></li>
                 </template>
               </backbone-collection-renderer>
             </ul>
@@ -102,8 +102,15 @@
         </ul>
         <form class="uk-form" id="new-player">
           <div class="uk-form-controls">
-            <input type="text" id="playerName" name="name" placeholder="New player name">
+            <input type="text" id="player-name" name="name" placeholder="New player name">
             <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>
+          </div>
+          <validation-errors id="errors"></validation-errors>
+        </form>
+        <form class="uk-form" id="new-admin">
+          <div class="uk-form-controls">
+            <input type="text" id="admin-email" name="name" placeholder="New admin email">
+            <button class="uk-button uk-button-primary" on-click="newAdmin">Add admin</button>
           </div>
           <validation-errors id="errors"></validation-errors>
         </form>
