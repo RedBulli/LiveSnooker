@@ -5,6 +5,7 @@ class Users extends Livesnooker.Collection
   url: '/users'
 
 class Admin extends Livesnooker.Model
+  urlRoot: '/users'
   relations: [
     {
       type: Backbone.HasOne
@@ -16,6 +17,7 @@ class Admin extends Livesnooker.Model
   ]
 
 class Admins extends Livesnooker.Collection
+  url: '/users'
 
 ((scope) ->
   scope.User = User

@@ -29,6 +29,20 @@ Polymer
       error: (data, response) ->
         errorsEl.errors = [response.responseJSON.error.errors[0]]
 
+  newAdmin: ->
+    event.preventDefault()
+    league = @league
+    emailInput = Polymer.dom(this).node.querySelector("#admin-email")
+    opts =
+      email: email.value
+      LeagueId: league.id
+    admin = new Admin(opts)
+    admin.setApiClient(@$.api)
+    admin.save admin.attributes,
+      success: (model) ->
+        league.get('Admins').add(model)
+        emailInput.value = ""
+
   playerRemoveClick: (event) ->
     event.preventDefault()
     player = event.target.player
