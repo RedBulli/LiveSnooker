@@ -93,7 +93,7 @@ class Frame extends Livesnooker.Model
     shot.save(shot.attributes, {
       success: =>
         @addShot(shot)
-      error: =>
+      error: ->
         shot.destroy()
     })
     shot
