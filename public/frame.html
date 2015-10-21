@@ -15,10 +15,10 @@
       <livesnooker-api id="api" host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
       <google-signin client-id="<!-- @echo GOOGLE_CLIENT_ID -->" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
       <template is="dom-if" if="{{input}}">
-        <frame-controller frame-id="{{frameId}}" socket-url="<!-- @echo BACKEND_HOST -->"></frame-controller>
+        <frame-controller frame-id="{{frameId}}" socket-url="<!-- @echo SOCKET_URL -->"></frame-controller>
       </template>
       <template is="dom-if" if="{{!input}}">
-        <frame-viewer frame-id="{{frameId}}" socket-url="<!-- @echo BACKEND_HOST -->/"></frame-viewer>
+        <frame-viewer frame-id="{{frameId}}" socket-url="<!-- @echo SOCKET_URL -->/"></frame-viewer>
       </template>
     </template>
   </dom-module>

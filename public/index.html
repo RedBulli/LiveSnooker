@@ -30,7 +30,7 @@
       <more-route name="user" path="/users/me"></more-route>
       <more-route-selector selected-params="{{params}}">
         <iron-pages>
-          <section route="livesnooker"><livesnooker-home league-id="{{livesnookerUrlParams.leagueId}}" socket-url="<!-- @echo BACKEND_HOST -->/"></livesnooker-home></section>
+          <section route="livesnooker"><livesnooker-home league-id="{{livesnookerUrlParams.leagueId}}" socket-url="<!-- @echo SOCKET_URL -->/"></livesnooker-home></section>
           <section route="leagues"><leagues-list></leagues-list></section>
           <section route="league"><league-controller league-id="{{leagueUrlParams.leagueId}}"></league-controller></section>
           <section route="user"><livesnooker-user></livesnooker-user></section>
