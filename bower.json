@@ -20,7 +20,8 @@
     "rtcmulticonnection": "latest",
     "uikit": "~2.22.0",
     "underscore": "latest",
-    "google-signin": "GoogleWebComponents/google-signin#~1.1.0"
+    "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
+    "detectrtc": "~1.0.9"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"

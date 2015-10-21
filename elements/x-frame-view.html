@@ -5,6 +5,7 @@
 <link rel="import" href="p2p-video.html">
 <link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="uikit.html">
+<script src="../vendors/detectrtc/DetectRTC.js"></script>
 
 <dom-module id="x-frame-view">
   <template>
@@ -49,6 +50,11 @@
     _onVideoReady: function() {
       if (this.video && this.videoInput) {
         this._openVideo();
+      }
+    },
+    ready: function() {
+      if (!DetectRTC.isWebRTCSupported) {
+        this.video = false;
       }
     }
   });
