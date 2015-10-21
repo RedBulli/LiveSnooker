@@ -1,53 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="import" href="elements/uikit.html">
-  <link rel="import" href="vendors/polymer/polymer.html">
-  <link rel="import" href="elements/livesnooker-api.html">
-  <link rel="import" href="elements/livesnooker-home.html">
-  <link rel="import" href="vendors/more-routing/more-routing.html">
-  <link rel="import" href="vendors/iron-pages/iron-pages.html">
-  <link rel="import" href="elements/league-controller.html">
-  <link rel="import" href="elements/livesnooker-user.html">
-  <link rel="import" href="elements/leagues-list.html">
-  <link rel="import" href="elements/livesnooker-toolbar.html">
-  <link rel="import" href="vendors/google-signin/google-signin.html">
+  <script src="vendors/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="elements/livesnooker-router.html">
 </head>
 
 <body>
-  <dom-module id="livesnooker-routing">
-    <template>
-      <livesnooker-api host="<!-- @echo BACKEND_HOST -->"></livesnooker-api>
-      <google-signin client-id="<!-- @echo GOOGLE_CLIENT_ID -->" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
-      <header>
-        <livesnooker-toolbar></livesnooker-toolbar>
-      </header>
-
-      <more-routing-config driver="hash"></more-routing-config>
-      <more-route name="leagues" path="/"></more-route>
-      <more-route name="league" path="/leagues/:leagueId" params="{{leagueUrlParams}}"></more-route>
-      <more-route name="livesnooker" path="/live/:leagueId" params="{{livesnookerUrlParams}}"></more-route>
-      <more-route name="user" path="/users/me"></more-route>
-      <more-route-selector selected-params="{{params}}">
-        <iron-pages>
-          <section route="livesnooker"><livesnooker-home league-id="{{livesnookerUrlParams.leagueId}}" socket-url="<!-- @echo SOCKET_URL -->/"></livesnooker-home></section>
-          <section route="leagues"><leagues-list></leagues-list></section>
-          <section route="league"><league-controller league-id="{{leagueUrlParams.leagueId}}"></league-controller></section>
-          <section route="user"><livesnooker-user></livesnooker-user></section>
-        </iron-pages>
-      </more-route-selector>
-    </template>
-  </dom-module>
-
-  <script>
-    Polymer({
-      is: 'livesnooker-routing',
-      properties: {
-        signedIn: Boolean
-      },
-    });
-  </script>
-
-  <livesnooker-routing></livesnooker-routing>
+  <livesnooker-router socket-url="<!-- @echo SOCKET_URL -->" backend-host="<!-- @echo BACKEND_HOST -->" google-client-id="<!-- @echo GOOGLE_CLIENT_ID -->"></livesnooker-router>
 </body>
 </html>
