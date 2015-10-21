@@ -45,12 +45,12 @@ clearOldSessions = (connection) ->
       this.fire('stream-closed', frameId)
 
 Polymer
-  is: 'stream-channel',
-  properties: {
+  is: 'stream-channel'
+  properties:
     leagueId: String,
     socketUrl: String
-  },
   ready: ->
-    connection = RTCConnection(this.socketUrl, this.leagueId, @)
-    connection.onNewSession = (e) ->
-    setInterval(clearOldSessions.bind(@, connection), 10000)
+    if DetectRTC.isWebRTCSupported
+      connection = RTCConnection(this.socketUrl, this.leagueId, @)
+      connection.onNewSession = (e) ->
+      setInterval(clearOldSessions.bind(@, connection), 10000)
