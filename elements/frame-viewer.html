@@ -80,6 +80,9 @@
       else if (event.detail.event === "deleteShot") {
         this.frame.deleteShot(event.detail.shot.id);
       }
+      else if (event.detail.event === "changePlayer") {
+        this.frame.setPlayerInTurn(event.detail.playerId);
+      }
     }
   });
 </script>

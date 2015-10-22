@@ -2,13 +2,21 @@
 <link rel="import" href="points-input.html">
 <link rel="import" href="../../vendors/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../uikit.html">
+<link rel="import" href="../../vendors/paper-toggle-button/paper-toggle-button.html">
 
 <dom-module id="frame-input">
   <template>
-    <iron-a11y-keys target="[[target]]" keys="0" on-keys-pressed="missedKey"></iron-a11y-keys>
-    <iron-a11y-keys target="[[target]]" keys="1 2 3 4 5 6 7" on-keys-pressed="potKey"></iron-a11y-keys>
-    <iron-a11y-keys target="[[target]]" keys="ctrl+4 ctrl+5 ctrl+6 ctrl+7" on-keys-pressed="foulKey"></iron-a11y-keys>
-    <points-input on-shot="onShot" on-undo="onUndo"></points-input>
+    <iron-a11y-keys target="[[target]]" keys="f" on-keys-pressed="_onFoulToggleKey"></iron-a11y-keys>
+    <iron-a11y-keys target="[[target]]" keys="s" on-keys-pressed="_onSafetyToggleKey"></iron-a11y-keys>
+    <iron-a11y-keys target="[[target]]" keys="0" on-keys-pressed="_onMissedKey"></iron-a11y-keys>
+    <iron-a11y-keys target="[[target]]" keys="1 2 3 4 5 6 7" on-keys-pressed="_onPotKey"></iron-a11y-keys>
+    <iron-a11y-keys target="[[target]]" keys="ctrl+4 ctrl+5 ctrl+6 ctrl+7" on-keys-pressed="_onFoulKey"></iron-a11y-keys>
+    <points-input on-shot="_onShot" on-undo="_onUndo"></points-input>
+    Safety: <paper-toggle-button checked="{{safety}}"></paper-toggle-button>
+    Foul: <paper-toggle-button checked="{{foul}}"></paper-toggle-button>
+    <template is="dom-if" if="{{showChangePlayer}}">
+      <button on-click="_onChangePlayerClick">Change player</button>
+    </template>
   </template>
 </dom-module>
 
@@ -22,44 +30,72 @@
         value: function() {
           return document.body;
         }
+      },
+      showChangePlayer: Boolean,
+      foul: {
+        type: Boolean,
+        value: false
+      },
+      safety: {
+        type: Boolean,
+        value: false
       }
     },
-    missedKey: function(event) {
+    _onChangePlayerClick: function() {
+      this.frame.changePlayer();
+    },
+    _createShot: function(points, foul) {
       this.frame.createShot({
-        attempt: "pot",
-        result: "nothing",
-        points: 0
+        attempt: this.getAttempt(),
+        points: points,
+        foul: foul
       });
+      this.foul = false;
+      this.safety = false;
     },
-    potKey: function(event) {
-      var points = parseInt(String.fromCharCode(event.detail.keyboardEvent.keyCode));
-      this.frame.createShot({
-        attempt: "pot",
-        result: "pot",
-        points: points
-      });
+    getAttempt: function() {
+      if (this.safety) return "safety";
+      else return "pot";
     },
-    foulKey: function(event) {
-      var points = parseInt(String.fromCharCode(event.detail.keyboardEvent.keyCode));
-      this.frame.createShot({
-        attempt: "pot",
-        result: "foul",
-        points: points
-      });
+    getResult: function(points, foul) {
+      if (foul) return "foul";
+      else if (points == 0) return "nothing";
+      else return "pot";
     },
-    onShot: function(event) {
-      var attrs = {
-        attempt: "pot",
-        result: "pot",
-        points: event.detail
-      };
-      if (attrs.points == 0) {
-        attrs.result = "nothing";
-      }
-      this.frame.createShot(attrs);
+    _onSafetyToggleKey: function() {
+      if (this.safety) this.safety = false;
+      else this.safety = true;
     },
-    onUndo: function() {
+    _onFoulToggleKey: function() {
+      if (this.foul) this.foul = false;
+      else this.foul = true;
+    },
+    getIntFromKeyEvent: function(event) {
+      parseInt(String.fromCharCode(event.detail.keyboardEvent.keyCode))
+    },
+    _onMissedKey: function() {
+      this._createShot(0, false);
+    },
+    _onPotKey: function(event) {
+      var result = "pot"
+      if (this.foul) result = "foul"
+      this._createShot(this.getIntFromKeyEvent(event), false);
+    },
+    _onFoulKey: function(event) {
+      this._createShot(this.getIntFromKeyEvent(event), true);
+    },
+    _onShot: function(event) {
+      this._createShot(event.detail, this.foul);
+    },
+    _onUndo: function() {
       this.frame.undoShot();
+    },
+    _onFrameUpdate: function() {
+      this.showChangePlayer = this.frame.changePlayerAllowed();
+    },
+    ready: function() {
+      this.frame.on("update", this._onFrameUpdate.bind(this));
+      this._onFrameUpdate();
     }
   });
 </script>

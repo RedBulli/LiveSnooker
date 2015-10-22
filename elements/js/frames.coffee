@@ -46,14 +46,17 @@ class Frame extends Livesnooker.Model
     @get('shotGroups').last()?.lastShot()
 
   getCurrentPlayer: ->
-    lastShot = @lastShot()
-    if lastShot
-      if lastShot.isPot()
-        lastShot.get('Player')
-      else
-        @getOtherPlayer(lastShot.get('Player'))
+    if @get('currentPlayer')
+      @get('currentPlayer')
     else
-      @get('Player1')
+      lastShot = @lastShot()
+      if lastShot
+        if lastShot.isPot()
+          lastShot.get('Player')
+        else
+          @getOtherPlayer(lastShot.get('Player'))
+      else
+        @get('Player1')
 
   getNonCurrentPlayer: ->
     @getOtherPlayer(@getCurrentPlayer())
@@ -81,10 +84,18 @@ class Frame extends Livesnooker.Model
       throw shot.validate(shot.attributes)
     shot
 
-  createShot: ({attempt, result, points}) ->
+  getResultFromShot: ({points, foul}) ->
+    if foul
+      "foul"
+    else if parseInt(points) == 0
+      "nothing"
+    else
+      "pot"
+
+  createShot: ({attempt, points, foul}) ->
     shot = @initializeShot
       attempt: attempt,
-      result: result,
+      result: @getResultFromShot({foul: foul, points: points}),
       points: parseInt(points),
       Player: @getCurrentPlayer(),
       shotNumber: @get('Shots').length + 1
@@ -163,6 +174,19 @@ class Frame extends Livesnooker.Model
     @set('Player2', Player.findModel(@get('Player2Id')))
     @set('League', League.findModel(@get('LeagueId')))
     @set('Winner', Player.findModel(@get('WinnerId')))
+
+  changePlayerAllowed: ->
+    !@get('Shots').last() || @get('Shots').last().isFoul()
+
+
+  setPlayerInTurn: (playerId) ->
+    @set('currentPlayer', @getPlayer(playerId))
+    @trigger("update")
+
+  changePlayer: ->
+    if @changePlayerAllowed()
+      @save({currentPlayer: @getNonCurrentPlayer()}, {patch: true, url: @url() + "/playerchange"})
+      @trigger("update")
 
 Frame.setup()
 
