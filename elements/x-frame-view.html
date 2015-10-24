@@ -8,6 +8,13 @@
 <script src="../vendors/detectrtc/DetectRTC.js"></script>
 
 <dom-module id="x-frame-view">
+  <style>
+    figcaption {
+      z-index: 2147483647;
+      bottom: 25px;
+    }
+  </style>
+
   <template>
     <div id="gameview">
       <template is="dom-if" if="[[video]]" restamp="true">
