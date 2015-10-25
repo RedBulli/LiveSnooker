@@ -20,6 +20,7 @@
     "grunt-contrib-watch": "latest",
     "grunt-karma": "latest",
     "grunt-notify": "latest",
+    "grunt-vulcanize": "^1.0.0",
     "karma": "latest",
     "karma-chai": "latest",
     "karma-chrome-launcher": "latest",

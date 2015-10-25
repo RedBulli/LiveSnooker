@@ -101,6 +101,28 @@ module.exports = (grunt) ->
           ]
         ]
 
+    vulcanize:
+      index:
+        options:
+          abspath: 'build/'
+          inlineScripts: true
+          inlineCss: true
+          stripComments: true
+          csp: "index-csp.js"
+          targetUrl: 'index.html'
+        files:
+          "build/index.html": "build/index.html"
+      frame:
+        options:
+          abspath: 'build/'
+          inlineScripts: true
+          inlineCss: true
+          stripComments: true
+          csp: "frame-csp.js"
+          targetUrl: 'frame.html'
+        files:
+          "build/frame.html": "build/frame.html"
+
   grunt.registerTask 'serve', ['build:dev', 'connect:server', 'watch']
 
   grunt.registerTask 'build', (target) ->
@@ -111,6 +133,8 @@ module.exports = (grunt) ->
     else if target == 'test'
       grunt.task.run(['env:dev', 'clean:specs', 'coffee:specs'])
     grunt.task.run(['clean:elements', 'preprocess:html', 'coffee:app', 'copy:html'])
+    if target == 'dist'
+      grunt.task.run(['vulcanize'])
 
   grunt.registerTask 'default', [
     'serve'
