@@ -1,18 +1,26 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="uikit.html">
 
 <dom-module id="player-stats">
+  <style>
+    #content {
+      min-width: 10em;
+    }
+  </style>
   <template>
-    <template is="dom-if" if="{{stats}}">
-      <ul>
-        <li>Name: <span>[[stats.player.attributes.name]]</span></li>
-        <li>Pot: <span>[[computePct(stats.potPct)]]</span>%</li>
-        <li>Highest break: <span>[[stats.highestBreak]]</span></li>
-        <li>Safety: <span>[[computePct(stats.safeties.safetyPct)]]</span>%</li>
-      </ul>
-    </template>
-    <template is="dom-if" if="{{!stats}}">
-      <div>No stats yet</div>
-    </template>
+    <div id="content" class="uk-panel uk-panel-box">
+      <h3 class="uk-panel-title">[[player.attributes.name]]</h3>
+      <template is="dom-if" if="{{stats}}">
+        <ul class="uk-list">
+          <li>Pot: <span>[[computePct(stats.potPct)]]</span>%</li>
+          <li>Highest break: <span>[[stats.highestBreak]]</span></li>
+          <li>Safety: <span>[[computePct(stats.safeties.safetyPct)]]</span>%</li>
+        </ul>
+      </template>
+      <template is="dom-if" if="{{!stats}}">
+        <div>No stats yet</div>
+      </template>
+    </div>
   </template>
 </dom-module>
 
@@ -20,13 +28,14 @@
   Polymer({
     is: 'player-stats',
     properties: {
-      stats: Object
+      stats: Object,
+      player: Object
     },
     computePct: function(safetyPct) {
       if ((safetyPct === null) || (safetyPct === undefined))
         return "-";
       else
-        return safetyPct;
+        return Math.round(safetyPct);
     }
   });
 </script>
@@ -34,8 +43,14 @@
 
 <dom-module id="frame-stats">
   <template>
-    <player-stats stats="{{stats.0}}"></player-stats>
-    <player-stats stats="{{stats.1}}"></player-stats>
+    <div class="uk-grid">
+      <div class="uk-width-small-1-2">
+        <player-stats stats="{{stats.0}}" player="{{frame.attributes.Player1}}"></player-stats>
+      </div>
+      <div class="uk-width-small-1-2">
+        <player-stats stats="{{stats.1}}" player="{{frame.attributes.Player2}}"></player-stats>
+      </div>
+    </div>
   </template>
 </dom-module>
 
