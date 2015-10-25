@@ -11,11 +11,11 @@
     <template is="dom-if" if="[[frame]]">
       <div class="uk-grid">
         <div class="uk-width-medium-4-5">
-          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
           <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
           <frame-input frame="[[frame]]"></frame-input>
           <button class="uk-button" on-click="endFrame">End frame</button>
           <button class="uk-button" on-click="deleteFrame">Delete frame</button>
+          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
         </div>
         <div id="breaks" class="uk-width-medium-1-5">
           <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
