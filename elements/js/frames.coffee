@@ -148,6 +148,13 @@ class Frame extends Livesnooker.Model
       },
     ]
 
+  calculateStats: ->
+    stats = @get('shotGroups').calculateStats()
+    safeties = @get('Shots').calculateSafeties()
+    stats[@get('Player1').id]?['safeties'] = safeties[@get('Player1').id]
+    stats[@get('Player2').id]?['safeties'] = safeties[@get('Player2').id]
+    [stats[@get('Player1').id], stats[@get('Player2').id]]
+
   getScores: ->
     rawTotals = @get('shotGroups').calculateTotalScores()
     firstTotal = rawTotals[@get('Player1').id] || { points: 0, fouls: 0 }

@@ -1,5 +1,4 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="js/vendor/jquery.html">
 
 <dom-module id="frame-score-view">
   <style>
@@ -29,7 +28,7 @@
       <span class="points">[[state.0.score]]</span> - <span class="points">[[state.1.score]]</span>
       <span id="player1">[[state.1.player.attributes.name]]</span>
       <i class="uk-icon-caret-left" style$="[[computeVisibility(state.1.currentPlayer)]]"></i>
-    </dib>
+    </div>
   </template>
 </dom-module>
 

@@ -1,0 +1,60 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<dom-module id="player-stats">
+  <template>
+    <template is="dom-if" if="{{stats}}">
+      <ul>
+        <li>Name: <span>[[stats.player.attributes.name]]</span></li>
+        <li>Pot: <span>[[computePct(stats.potPct)]]</span>%</li>
+        <li>Highest break: <span>[[stats.highestBreak]]</span></li>
+        <li>Safety: <span>[[computePct(stats.safeties.safetyPct)]]</span>%</li>
+      </ul>
+    </template>
+    <template is="dom-if" if="{{!stats}}">
+      <div>No stats yet</div>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'player-stats',
+    properties: {
+      stats: Object
+    },
+    computePct: function(safetyPct) {
+      if ((safetyPct === null) || (safetyPct === undefined))
+        return "-";
+      else
+        return safetyPct;
+    }
+  });
+</script>
+
+
+<dom-module id="frame-stats">
+  <template>
+    <player-stats stats="{{stats.0}}"></player-stats>
+    <player-stats stats="{{stats.1}}"></player-stats>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'frame-stats',
+    properties: {
+      frame: {
+        type: Object,
+        observer: '_onFrameChange'
+      },
+      stats: Array
+    },
+    _onFrameChange: function(next, prev) {
+      if (prev) prev.off(null, null, this);
+      this.stats = this.frame.calculateStats();
+      this.frame.on("update", (function() {
+        this.stats = this.frame.calculateStats();
+      }).bind(this), this);
+    }
+  });
+</script>

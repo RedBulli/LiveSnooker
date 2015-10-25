@@ -1,11 +1,3 @@
-sendAction = (url, data) ->
-  $.ajax
-    type: "POST"
-    url: url
-    data: data
-    headers:
-      "Content-Type": "application/json"
-
 class Shots extends Livesnooker.Collection
   model: Shot
   url: '/shots'
@@ -16,10 +8,60 @@ class Shots extends Livesnooker.Collection
     @each (shot) ->
       if !totals[shot.get('Player').id]?
         totals[shot.get('Player').id] = {points: 0, fouls: 0}
-      if shot.get('result') == "pot"
+      if shot.isPot()
         totals[shot.get('Player').id].points += parseInt(shot.get('points'))
-      else if shot.get('result') == "foul"
+      else if shot.isFoul()
         totals[shot.get('Player').id].fouls += parseInt(shot.get('points'))
+    totals
+
+  calculateSafeties: ->
+    calc = (memo, shot) ->
+      safetyPlayer = memo['prevSafetyPlayer']
+      if safetyPlayer
+        if !memo[safetyPlayer.id]
+          memo[safetyPlayer.id] =
+            successes: 0
+            failures: 0
+        if shot.get('Player') != safetyPlayer
+          if shot.isPot()
+            memo[safetyPlayer.id].failures++
+          else
+            memo[safetyPlayer.id].successes++
+      if shot.isSafetyAttempt() && !shot.isPot()
+        memo['prevSafetyPlayer'] = shot.get('Player')
+      else
+        memo['prevSafetyPlayer'] = null
+      memo
+
+    totals = @reduce(calc, {})
+    delete totals['prevSafetyPlayer']
+    _.each totals, (playerStats) ->
+      playerStats.safetyPct = playerStats.successes * 100 / ((playerStats.successes + playerStats.failures) || 1)
+    totals
+
+  calculateStats: (totals) ->
+    totals = totals || {}
+    @each (shot) ->
+      if !totals[shot.get('Player').id]?
+        totals[shot.get('Player').id] =
+          player: shot.get('Player')
+          potAttempts: 0
+          pots: 0
+          safetyPots: 0
+          safetyAttempts: 0
+          foulPointsGiven: 0
+          points: 0
+      totalObj = totals[shot.get('Player').id]
+      totalObj.pots++ if shot.isPot()
+      totalObj.potAttempts++ if shot.isPotAttempt()
+      if shot.isSafetyAttempt()
+        totalObj.safetyAttempts++
+        if shot.isPot()
+          totalObj.safetyPots++
+      if shot.isFoul()
+        totalObj.foulPointsGiven += shot.get('points')
+      else
+        totalObj.points += shot.get('points')
     totals
 
   populateAssociations: ->
@@ -93,6 +135,24 @@ class ShotGroups extends Livesnooker.Collection
     calc = (memo, group) ->
       group.get('shots').calculateTotals(memo)
     @reduce(calc, {})
+
+  calculateStats: ->
+    calc = (memo, group) ->
+      stats = group.get('shots').calculateStats(memo)
+      if group instanceof Break
+        breakTotals = group.totals()
+        playerMemo = stats[breakTotals.player.id]
+        playerMemo['breaks'] = playerMemo['breaks'] || []
+        playerMemo['highestBreak'] = playerMemo['highestBreak'] || 0
+        playerMemo['breaks'].push breakTotals.points.points
+        if breakTotals.points.points > playerMemo['highestBreak']
+          playerMemo['highestBreak'] = breakTotals.points.points
+      stats
+
+    totals = @reduce(calc, {})
+    _.each totals, (playerStats) ->
+      playerStats.potPct = playerStats.pots * 100 / (playerStats.potAttempts || 1)
+    totals
 
 ((scope) ->
   scope.Shots = Shots
