@@ -71,7 +71,7 @@
       else this.foul = true;
     },
     getIntFromKeyEvent: function(event) {
-      parseInt(String.fromCharCode(event.detail.keyboardEvent.keyCode))
+      return parseInt(String.fromCodePoint(event.detail.keyboardEvent.keyCode));
     },
     _onMissedKey: function() {
       this._createShot(0, false);
