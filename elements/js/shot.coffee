@@ -1,5 +1,7 @@
 class Shot extends Livesnooker.Model
-  urlRoot: "/shots"
+  urlRoot: ->
+    @get('Frame').url() + "/shots"
+
   relations: [
     {
       type: Backbone.HasOne,

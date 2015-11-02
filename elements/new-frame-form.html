@@ -53,10 +53,11 @@
         Player1: p1,
         Player2: p2
       });
+      leagueId = this.league.id
       frame.setApiClient(this.$.api);
       frame.save(frame.attributes, {
         success: function() {
-          window.open("/frame.html?frameId=" + frame.id + "&input=true", "", "width=1050, height=600");
+          window.open("/frame.html?leagueId=" + leagueId + "&frameId=" + frame.id + "&input=true", "", "width=1050, height=600");
           frame.trigger("saved", frame);
         }
       });

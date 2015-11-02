@@ -1,11 +1,14 @@
 class Player extends Livesnooker.Model
-  urlRoot: "/players"
+  urlRoot: ->
+    leagueId = @get('League')?.id || @get('LeagueId')
+    "/leagues/" + leagueId + "/players"
 
 Player.setup()
 
 class Players extends Livesnooker.Collection
   model: Player
-  url: '/players'
+  url: ->
+    "/leagues/" + @leagueId + "/players"
   comparator: 'name'
 
 ((scope) ->

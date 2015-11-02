@@ -1,6 +1,5 @@
 class Shots extends Livesnooker.Collection
   model: Shot
-  url: '/shots'
   comparator: 'shotNumber'
 
   calculateTotals: (totals) ->
