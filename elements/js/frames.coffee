@@ -1,5 +1,8 @@
 class Frame extends Livesnooker.Model
-  urlRoot: "/frames"
+  urlRoot: ->
+    leagueId = @get('League')?.id || @get('LeagueId')
+    "/leagues/" + leagueId + "/frames"
+
   relations: [
     {
       type: Backbone.HasOne,
@@ -200,10 +203,7 @@ Frame.setup()
 class Frames extends Livesnooker.Collection
   model: Frame
   url: ->
-    if @leagueId
-      "/leagues/#{@leagueId}/frames"
-    else
-      "/frames"
+    "/leagues/#{@leagueId}/frames"
 
 ((scope) ->
   scope.Frame = Frame

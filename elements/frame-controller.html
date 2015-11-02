@@ -31,26 +31,13 @@
     is: "frame-controller",
     properties: {
       frame: Object,
-      frameId: {
-        type: String,
-        observer: '_frameIdChanged'
-      },
+      frameId: String,
+      leagueId: String,
       video: {
         type: Boolean,
         value: false
       },
       socketUrl: String
-    },
-    _frameIdChanged: function() {
-      var frame = new Frame({id: this.frameId});
-      frame.setApiClient(this.$.api);
-      frame.fetch({
-        success: (function() {
-          frame.get('Shots').populateAssociations();
-          frame.calculateShotGroups();
-          this.frame = frame;
-        }).bind(this)
-      });
     },
     videoToggleChanged: function(event) {
       this.video = event.srcElement.checked;
@@ -84,6 +71,17 @@
           }
         });
       }
+    },
+    ready: function() {
+      var frame = new Frame({id: this.frameId, LeagueId: this.leagueId});
+      frame.setApiClient(this.$.api);
+      frame.fetch({
+        success: (function() {
+          frame.get('Shots').populateAssociations();
+          frame.calculateShotGroups();
+          this.frame = frame;
+        }).bind(this)
+      });
     }
   });
 </script>

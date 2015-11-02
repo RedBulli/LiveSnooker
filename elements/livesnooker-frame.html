@@ -10,10 +10,10 @@
     <livesnooker-api id="api" host="{{backendHost}}"></livesnooker-api>
     <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
     <template is="dom-if" if="{{input}}">
-      <frame-controller frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-controller>
+      <frame-controller league-id="{{leagueId}}" frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-controller>
     </template>
     <template is="dom-if" if="{{!input}}">
-      <frame-viewer frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-viewer>
+      <frame-viewer league-id="{{leagueId}}" frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-viewer>
     </template>
   </template>
 </dom-module>
@@ -45,6 +45,7 @@
   Polymer({
     is: 'livesnooker-frame',
     properties: {
+      leagueId: String,
       frameId: String,
       input: Boolean,
       signedIn: Boolean,
@@ -53,6 +54,7 @@
       socketUrl: String
     },
     ready: function() {
+      this.leagueId = QueryString.leagueId;
       this.frameId = QueryString.frameId;
       this.input = JSON.parse(QueryString.input);
     }

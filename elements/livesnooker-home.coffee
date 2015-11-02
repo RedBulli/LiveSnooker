@@ -15,11 +15,14 @@ Polymer
     streamUrl: String
     socketUrl: String
 
+  frameUrl: (frame) ->
+    "/frame.html?leagueId=" + @leagueId + "&frameId=" + frame.id
+
   computeControlLink: (frame) ->
-    "/frame.html?frameId=" + frame.id + "&input=true"
+    @frameUrl(frame) + "&input=true"
 
   computeViewLink: (frame) ->
-    "/frame.html?frameId=" + frame.id + "&input=false"
+    @frameUrl(frame) + "&input=false"
 
   computeWinnerClass: (frame, player) ->
     if frame.attributes.Winner == player

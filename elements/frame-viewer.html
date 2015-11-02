@@ -37,10 +37,8 @@
     is: 'frame-viewer',
     properties: {
       frame: Object,
-      frameId: {
-        type: String,
-        observer: '_frameIdChanged'
-      },
+      frameId: String,
+      leagueId: String,
       streamUrl: String,
       socketUrl: String,
       video: {
@@ -85,6 +83,17 @@
       else if (event.detail.event === "changePlayer") {
         this.frame.setPlayerInTurn(event.detail.playerId);
       }
+    },
+    ready: function() {
+      var frame = new Frame({id: this.frameId, LeagueId: this.leagueId});
+      frame.setApiClient(this.$.api);
+      frame.fetch({
+        success: (function() {
+          frame.get('Shots').populateAssociations();
+          frame.calculateShotGroups();
+          this.frame = frame;
+        }).bind(this)
+      });
     }
   });
 </script>
