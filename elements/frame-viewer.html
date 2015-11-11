@@ -50,16 +50,6 @@
         value: false
       }
     },
-    _frameIdChanged: function() {
-      var _this = this;
-      this.$.api.findOrFetchModel(Frame, this.frameId)
-        .then(function(frame) {
-          frame.get('Shots').populateAssociations();
-          frame.calculateShotGroups();
-          _this.frame = frame;
-          _this.streamUrl = _this.$.api.host + "/framestream/" + _this.frameId;
-        });
-    },
     newStream: function(event) {
       if (event.detail == this.frameId) {
         this.videoAvailable = true;
@@ -92,6 +82,7 @@
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
           this.frame = frame;
+          this.streamUrl = this.$.api.host + "/framestream/" + frame.id;
         }).bind(this)
       });
     }
