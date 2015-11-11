@@ -15,22 +15,13 @@
     "load-grunt-tasks": "latest"
   },
   "devDependencies": {
-    "chai": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-karma": "latest",
     "grunt-notify": "latest",
-    "grunt-vulcanize": "^1.0.0",
-    "karma": "latest",
-    "karma-chai": "latest",
-    "karma-chrome-launcher": "latest",
-    "karma-growl-reporter": "^0.1.1",
-    "karma-mocha": "latest",
-    "karma-sinon-chai": "^0.2.0",
-    "mocha": "latest"
+    "grunt-vulcanize": "^1.0.0"
   },
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=4.2.1"
   },
   "scripts": {
     "bower": "node_modules/bower/bin/bower install",
