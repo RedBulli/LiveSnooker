@@ -82,7 +82,7 @@
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
           this.frame = frame;
-          this.streamUrl = this.$.api.host + "/framestream/" + frame.id;
+          this.streamUrl = this.$.api.host + this.frame.url() + "/stream?id_token=" + this.$.api.data.authentication.id_token;
         }).bind(this)
       });
     }

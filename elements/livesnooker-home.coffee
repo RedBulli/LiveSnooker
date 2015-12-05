@@ -87,9 +87,9 @@ Polymer
 
   _leagueIdChanged: ->
     if @leagueId
-      @streamUrl = @$.api.host + "/framestream/" + @leagueId
       @$.api.findOrFetchModel(League, @leagueId)
         .then (league) =>
+          @streamUrl = "#{@$.api.host}/leagues/#{@leagueId}/stream?id_token=#{@$.api.data.authentication.id_token}"
           league.setApiClient(@$.api) if not league.client
           @league = league
           league.get('Frames').leagueId = league.id
