@@ -1,3 +1,4 @@
+<link rel="import" href="livesnooker-api.html">
 <script src="../vendors/rtcmulticonnection/RTCMultiConnection.js"></script>
 <script src="js/vendor/socket.io.js"></script>
 
@@ -12,6 +13,7 @@
   </style>
 
   <template>
+    <livesnooker-api id="api"></livesnooker-api>
     <content></content>
   </template>
 </dom-module>
@@ -44,7 +46,9 @@
       };
 
       var onMessageCallbacks = {};
-      var socket = io.connect(this.socketUrl);
+
+      var idToken = this.$.api.data.authentication.id_token;
+      var socket = io.connect(this.socketUrl, {query: "id_token=" + idToken + "&league_id=" + leagueId});
 
       socket.on('message', function(data) {
           if(data.sender == connection.userid) return;

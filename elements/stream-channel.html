@@ -1,8 +1,13 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="livesnooker-api.html">
 <script src="../vendors/rtcmulticonnection/RTCMultiConnection.js"></script>
 <script src="js/vendor/socket.io.js"></script>
 <script src="../vendors/detectrtc/DetectRTC.js"></script>
 
-<dom-module id="stream-channel" hidden></dom-module>
+<dom-module id="stream-channel" hidden>
+  <template>
+    <livesnooker-api id="api"></livesnooker-api>
+  </template>
+</dom-module>
 
 <script src="stream-channel.js"></script>
