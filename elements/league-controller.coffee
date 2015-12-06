@@ -86,6 +86,14 @@ Polymer
     else
       updateAdminWriteAccess()
 
+  publicChange: (event) ->
+    event.preventDefault()
+    @league.save(public: event.target.checked, {
+      patch: true,
+      wait: true
+    }).always =>
+      event.target.checked = @league.get('public')
+
   onPlayerEdit: (editEvent) ->
     player = editEvent.target.object
     player.setApiClient(@$.api)
