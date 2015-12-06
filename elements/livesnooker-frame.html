@@ -8,7 +8,8 @@
 <dom-module id="livesnooker-frame">
   <template>
     <livesnooker-api id="api" host="{{backendHost}}"></livesnooker-api>
-    <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
+    <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}" on-google-signin-success="onSignedIn"></google-signin>
+    <a id="noauth" on-click="noAuthClicked">Use anonymously</a>
     <template is="dom-if" if="{{input}}">
       <frame-controller league-id="{{leagueId}}" frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-controller>
     </template>
@@ -52,6 +53,14 @@
       backendHost: String,
       googleClientId: String,
       socketUrl: String
+    },
+    onSignedIn: function() {
+      this.$.noauth.hidden = true;
+    },
+    noAuthClicked: function(event) {
+      event.preventDefault();
+      this.$.api.useAnonymously();
+      this.$.noauth.innerHTML = "Using anonymously";
     },
     ready: function() {
       this.leagueId = QueryString.leagueId;

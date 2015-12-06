@@ -1,9 +1,12 @@
 activeSessions = {}
 
-RTCConnection = (socketUrl, leagueId, element, idToken) ->
+RTCConnection = (socketUrl, leagueId, element, authentication) ->
   connection = new RTCMultiConnection(leagueId)
   onMessageCallbacks = {}
-  socket = io.connect(socketUrl, {query: "id_token=#{idToken}&league_id=#{leagueId}"})
+  query = "league_id=#{leagueId}"
+  if authentication
+    query += "&id_token=#{authentication.id_token}"
+  socket = io.connect(socketUrl, {query: query})
 
   socket.on 'message', (data) ->
     return if data.sender == connection.userid
@@ -51,6 +54,6 @@ Polymer
     socketUrl: String
   ready: ->
     if DetectRTC.isWebRTCSupported
-      connection = RTCConnection(this.socketUrl, this.leagueId, @, @$.api.data.authentication.id_token)
+      connection = RTCConnection(this.socketUrl, this.leagueId, @, @$.api.data.authentication)
       connection.onNewSession = (e) ->
       setInterval(clearOldSessions.bind(@, connection), 10000)

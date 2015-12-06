@@ -2,9 +2,13 @@ data =
   authentication: null
   user: null
   host: null
+  anonymous: false
 
 apiIsReady = ->
-  data.authentication && data.host
+  (data.authentication || data.anonymous) && data.host
+
+authIsReady = ->
+  data.host && data.authentication
 
 Polymer
   is: 'livesnooker-api'
@@ -34,10 +38,10 @@ Polymer
     if data.authentication != auth
       @setAuthentication(auth)
       @maybeFetchUser()
-      @fire('iron-signal', {name: "api-ready"}) if data.authentication
+      @fire('iron-signal', {name: "api-ready"}) if apiIsReady()
 
   maybeFetchUser: ->
-    @fetchUser() if data.host && data.authentication
+    @fetchUser() if authIsReady()
 
   fetchUser: ->
     @ajax('/account').then (response) =>
@@ -77,8 +81,9 @@ Polymer
   ajaxCall: (path, settings) ->
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
-    _.extend settings.headers,
-      "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
+    if data.authentication
+      _.extend settings.headers,
+        "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
     $.ajax(data.host + path, settings)
 
   onAccount: ->
@@ -88,10 +93,14 @@ Polymer
     @fire('api-ready')
     @fire('api')
 
+  useAnonymously: ->
+    data.anonymous = true
+    @fire('iron-signal', {name: "api-ready"}) if apiIsReady()
+
   ready: ->
     if @host
       @setHost(@host)
-      @fire('iron-signal', {name: "api-ready"}) if data.authentication
+      @fire('iron-signal', {name: "api-ready"}) if apiIsReady()
     else if data.host
       @host = data.host
     @user = data.user

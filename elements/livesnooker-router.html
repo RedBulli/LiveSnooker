@@ -12,8 +12,9 @@
 
 <dom-module id="livesnooker-router">
   <template>
-    <livesnooker-api host="{{backendHost}}"></livesnooker-api>
-    <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}"></google-signin>
+    <livesnooker-api id="api" host="{{backendHost}}"></livesnooker-api>
+    <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}" on-google-signin-success="onSignedIn"></google-signin>
+    <a id="noauth" on-click="noAuthClicked">Use anonymously</a>
     <header>
       <livesnooker-toolbar></livesnooker-toolbar>
     </header>
@@ -43,5 +44,13 @@
       googleClientId: String,
       socketUrl: String
     },
+    onSignedIn: function() {
+      this.$.noauth.hidden = true;
+      this.$.noauth.innerHTML = "Using anonymously";
+    },
+    noAuthClicked: function(event) {
+      event.preventDefault();
+      this.$.api.useAnonymously();
+    }
   });
 </script>

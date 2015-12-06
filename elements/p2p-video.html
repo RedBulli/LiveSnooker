@@ -48,7 +48,11 @@
       var onMessageCallbacks = {};
 
       var idToken = this.$.api.data.authentication.id_token;
-      var socket = io.connect(this.socketUrl, {query: "id_token=" + idToken + "&league_id=" + leagueId});
+      var query = "league_id=" + leagueId;
+      if (idToken) {
+        query = query.concat("&id_token=" + idToken);
+      }
+      var socket = io.connect(this.socketUrl, {query: query});
 
       socket.on('message', function(data) {
           if(data.sender == connection.userid) return;
