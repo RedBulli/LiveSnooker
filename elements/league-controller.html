@@ -92,7 +92,10 @@
             <ul id="admins" class="uk-list">
               <backbone-collection-renderer collection="[[league.attributes.Admins]]">
                 <template class="content" is="dom-repeat">
-                  <li><span>[[ item.attributes.UserEmail ]]</span> <a href="#" class="uk-icon-remove" admin="[[item]]" on-click="adminRemoveClick"></a></li>
+                  <li>
+                    <span>[[ item.attributes.UserEmail ]]</span> <a href="#" class="uk-icon-remove" admin="[[item]]" on-click="adminRemoveClick"></a>
+                    Write: <input type="checkbox" checked="[[item.attributes.write]]" admin="[[item]]" on-change="adminWriteChange"
+                  </li>
                 </template>
               </backbone-collection-renderer>
             </ul>

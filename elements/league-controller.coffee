@@ -69,6 +69,23 @@ Polymer
       admin.setApiClient(@$.api)
       admin.destroy wait: true
 
+  adminWriteChange: (event) ->
+    updateAdminWriteAccess = =>
+      admin.setApiClient(@$.api)
+      admin.save({write: event.target.checked}, {
+        patch: true,
+        wait: true
+      }).always ->
+        event.target.checked = admin.get('write')
+
+    event.preventDefault()
+    admin = event.target.admin
+    if !event.target.checked
+      if window.confirm("Removing write access from #{admin.get('UserEmail')}. Are you sure?")
+        updateAdminWriteAccess()
+    else
+      updateAdminWriteAccess()
+
   onPlayerEdit: (editEvent) ->
     player = editEvent.target.object
     player.setApiClient(@$.api)
