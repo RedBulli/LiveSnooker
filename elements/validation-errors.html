@@ -1,11 +1,11 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 
-<dom-module id="validation-errors" attributes="errors">
+<dom-module id="validation-errors">
   <template>
     <ul>
-      <template repeat="{{error in errors}}">
+      <template is="dom-repeat" items="{{errors}}">
         <li>
-          {{error.message}}
+          {{item.message}}
         </li>
       </template>
     </ul>
@@ -14,6 +14,9 @@
 
 <script>
   Polymer({
-    is: "validation-errors"
+    is: "validation-errors",
+    properties: {
+      errors: Array
+    }
   });
 </script>

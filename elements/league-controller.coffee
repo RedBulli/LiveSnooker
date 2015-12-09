@@ -16,7 +16,6 @@ Polymer
     leagueAttrs: Object
     players:
       type: Object
-      observer: '_onPlayersChange'
     playerModels: Array
 
   newPlayer: ->
