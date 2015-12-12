@@ -13,14 +13,14 @@
     "iron-selector": "PolymerElements/iron-selector#latest",
     "iron-signals": "PolymerElements/Iron-Signals#latest",
     "jquery": "latest",
-    "more-routing": "PolymerLabs/more-routing#latest",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#latest",
     "polymer": "Polymer/polymer#latest",
     "rtcmulticonnection": "latest",
     "uikit": "~2.22.0",
     "underscore": "latest",
     "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
-    "detectrtc": "~1.0.9"
+    "detectrtc": "~1.0.9",
+    "page": "visionmedia/page.js#~1.6.4"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"

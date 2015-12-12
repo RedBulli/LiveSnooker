@@ -5,6 +5,7 @@
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="validation-errors.html">
 <link rel="import" href="uikit.html">
+<script src="../vendors/page/page.js"></script>
 
 <dom-module id="new-league-form">
   <template>
@@ -38,7 +39,7 @@
         success: function() {
           _this.$.leagueName.value = "";
           _this.leagues.add(league);
-          MoreRouting.navigateTo("league", {leagueId: league.id});
+          page('/league/' + league.id)
         },
         error: function(data, response) {
           errorsEl.errors = response.responseJSON.error.errors;

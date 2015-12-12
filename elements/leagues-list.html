@@ -42,7 +42,7 @@
       leagues: Object
     },
     leagueUrl: function(league) {
-      return MoreRouting.urlFor('livesnooker', {leagueId: league.id});
+      return "/league/" + league.id;
     },
     ready: function() {
       var leagues = new Leagues();
