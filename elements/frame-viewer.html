@@ -86,7 +86,7 @@
           if (this.$.api.data.authentication) {
             streamUrl += "?id_token=" + this.$.api.data.authentication.id_token;
           }
-          this.streamUrl = streamUrl
+          this.streamUrl = streamUrl;
         }).bind(this)
       });
     }

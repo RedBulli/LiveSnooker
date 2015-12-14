@@ -12,11 +12,29 @@
         observer: '_onStreamUrlChange'
       }
     },
+    created: function() {
+      this.activeSessions = {}
+      this.whenReady = new Promise((resolve, reject) => {
+        this._resolveReady = resolve;
+        this._rejectReady = reject;
+      })
+    },
     _onStreamUrlChange: function() {
-      var source = new EventSource(this.streamUrl);
-      source.onmessage = (function (event) {
-        this.fire("event", JSON.parse(event.data));
-      }).bind(this);
+      this.whenReady.then((function() {
+        if (this.source) {
+          this.source.close();
+          this.source = null;
+        }
+        if (this.streamUrl) {
+          this.source = new EventSource(this.streamUrl);
+          this.source.onmessage = (function(event) {
+            this.fire("event", JSON.parse(event.data));
+          }).bind(this);
+        }
+      }).bind(this));
+    },
+    ready: function() {
+      this._resolveReady();
     }
   });
 </script>

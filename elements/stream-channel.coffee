@@ -40,20 +40,41 @@ RTCConnection = (socketUrl, leagueId, element, authentication) ->
 
   connection.connect()
 
-clearOldSessions = (connection) ->
-  for frameId, val of activeSessions
-    diff = new Date() - val
-    if diff > 10000
-      delete activeSessions[frameId]
-      this.fire('stream-closed', frameId)
-
 Polymer
   is: 'stream-channel'
   properties:
-    leagueId: String,
+    leagueId:
+      type: String,
+      observer: '_onLeagueChange'
     socketUrl: String
+
+  createConnection: ->
+    if @socketUrl && @leagueId
+      RTCConnection(@socketUrl, @leagueId, @, @$.api.data.authentication)
+
+  clearOldSessions: ->
+    for frameId, val of activeSessions
+      diff = new Date() - val
+      if diff > 10000
+        delete @activeSessions[frameId]
+        @fire('stream-closed', frameId)
+
+  created: ->
+    @activeSessions = {}
+    @whenReady = new Promise (resolve, reject) =>
+      @_resolveReady = resolve
+      @_rejectReady = reject
+
+  _onLeagueChange: ->
+    @whenReady.then =>
+      if @connection
+        @connection.leave()
+        clearInterval(@intervalId)
+        @connection = null
+      if @leagueId && DetectRTC.isWebRTCSupported
+        @connection = @createConnection()
+        if @connection
+          @intervalId = setInterval(@clearOldSessions.bind(@, @connection), 10000)
+
   ready: ->
-    if DetectRTC.isWebRTCSupported
-      connection = RTCConnection(this.socketUrl, this.leagueId, @, @$.api.data.authentication)
-      connection.onNewSession = (e) ->
-      setInterval(clearOldSessions.bind(@, connection), 10000)
+    this.isReady = @_resolveReady()
