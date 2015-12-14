@@ -10,6 +10,14 @@ apiIsReady = ->
 authIsReady = ->
   data.host && data.authentication
 
+getErrorText = (error) ->
+  if error.status == 0
+    "Server connection refused"
+  else if error.responseJSON?.error
+    error.responseJSON?.error
+  else
+    error.statusText
+
 Polymer
   is: 'livesnooker-api'
 
@@ -81,6 +89,12 @@ Polymer
   ajaxCall: (path, settings) ->
     settings = settings || {}
     settings["headers"] = settings["headers"] || {}
+    customError = settings["error"]
+    settings["error"] = (err) ->
+      if customError
+        customError(err)
+      UIkit.notify(getErrorText(err))
+
     if data.authentication
       _.extend settings.headers,
         "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]

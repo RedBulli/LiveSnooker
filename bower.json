@@ -16,7 +16,7 @@
     "paper-toggle-button": "PolymerElements/paper-toggle-button#latest",
     "polymer": "Polymer/polymer#latest",
     "rtcmulticonnection": "latest",
-    "uikit": "~2.22.0",
+    "uikit": "~2.24.2",
     "underscore": "latest",
     "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
     "detectrtc": "~1.0.9",
