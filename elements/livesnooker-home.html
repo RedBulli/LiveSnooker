@@ -45,6 +45,7 @@
         <ol id="framelist" class="uk-list frames">
           <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
             <li data-id$="[[item.id]]">
+              (<span>[[computeStartDate(item)]]</span>)
               <model-attribute model="[[item.attributes.Player1]]" attribute="name"></model-attribute> - <model-attribute model="[[item.attributes.Player2]]" attribute="name"></model-attribute>
               <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
               <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
@@ -57,6 +58,7 @@
           <iron-list id="finished" class="finished-frames" items="[[finishedFrames]]" as="item">
             <template>
               <li>
+                (<span>[[computeEndDate(item)]]</span>)
                 <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
                   <model-attribute model="[[item.attributes.Player1]]" attribute="name"></model-attribute>
                 </span>

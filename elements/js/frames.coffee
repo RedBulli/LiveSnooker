@@ -204,6 +204,11 @@ class Frames extends Livesnooker.Collection
   model: Frame
   url: ->
     "/leagues/#{@leagueId}/frames"
+  comparator: (frame) ->
+    if frame.get('endedAt')
+      1 / new Date(frame.get('endedAt')).getTime()
+    else
+      - new Date(frame.get('createdAt')).getTime()
 
 ((scope) ->
   scope.Frame = Frame

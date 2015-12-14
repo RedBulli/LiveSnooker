@@ -28,8 +28,11 @@ Polymer
     if frame.attributes.Winner == player
       "winner"
 
-  computeDate: (dateTime) ->
-    new Date(dateTime).toLocaleString()
+  computeStartDate: (frame) ->
+    new Date(frame.get('createdAt')).toLocaleString()
+
+  computeEndDate: (frame) ->
+    new Date(frame.get('endedAt')).toLocaleString()
 
   onStreamEvent: (event) ->
     if event.detail.event == 'frameStart'
