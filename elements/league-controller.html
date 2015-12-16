@@ -2,7 +2,6 @@
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="js/leagues.html">
-<link rel="import" href="validation-errors.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="backbone-collection-renderer.html">
 
@@ -108,18 +107,13 @@
             <input type="text" id="player-name" name="name" placeholder="New player name">
             <button class="uk-button uk-button-primary" on-click="newPlayer">Create player</button>
           </div>
-          <validation-errors id="errors"></validation-errors>
         </form>
         <form class="uk-form" id="new-admin">
           <div class="uk-form-controls">
             <input type="text" id="admin-email" name="name" placeholder="New admin email">
             <button class="uk-button uk-button-primary" on-click="newAdmin">Add admin</button>
           </div>
-          <validation-errors id="errors"></validation-errors>
         </form>
-        <template if="[[ error ]]">
-          [[ error ]]
-        </template>
       </div>
     </template>
   </template>

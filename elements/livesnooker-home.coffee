@@ -36,8 +36,7 @@ Polymer
 
   onStreamEvent: (event) ->
     if event.detail.event == 'frameStart'
-      frame = Frame.findModel(event.detail.frame.id)
-      if !frame
+      if !Frame.findModel(event.detail.frame.id)
         frame = new Frame(event.detail.frame)
         frame.populateAssociations()
         @league.get('Frames').add(frame)
@@ -51,7 +50,9 @@ Polymer
       frame.trigger('destroy', frame);
       frame = null
     else if event.detail.event == 'newPlayer'
-      1
+      if !Player.findModel(event.detail.player.id)
+        player = new Player(event.detail.player)
+        @league.get('Players').add(player)
 
   getVideoStatusElement: (frameId) ->
     $(Polymer.dom(this).node.querySelector('li[data-id="' + frameId + '"] > .video-status'))

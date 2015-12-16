@@ -26,15 +26,15 @@ Polymer
     opts =
       name: playerInput.value
       LeagueId: league.id
+      id: createUuid()
     player = new Player(opts)
     player.setApiClient(@$.api)
+
     player.save player.attributes,
+      type: 'POST'
+      url: '/leagues/' + league.id + '/players'
       success: (model) ->
-        league.get('Players').add(model)
         playerInput.value = ""
-        errorsEl.errors = []
-      error: (data, response) ->
-        errorsEl.errors = [response.responseJSON.error.errors[0]]
 
   newAdmin: ->
     event.preventDefault()
