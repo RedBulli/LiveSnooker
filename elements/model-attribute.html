@@ -19,8 +19,10 @@
     },
     _onModelChange: function(next, prev) {
       if (prev) prev.off(null, null, this); // Remove all callbacks with this context
-      next.on("change", this.renderAttribute, this);
-      this.renderAttribute();
+      if (next) {
+        next.on("change", this.renderAttribute, this);
+        this.renderAttribute();
+      }
     },
     renderAttribute: function() {
       this.content = this.model.get(this.attribute);

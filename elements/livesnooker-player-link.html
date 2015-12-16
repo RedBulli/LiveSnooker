@@ -1,0 +1,31 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="model-attribute.html">
+<link rel="import" href="uikit.html">
+<link rel="import" href="livesnooker-player-stats.html">
+
+<dom-module id="livesnooker-player-link">
+  <template>
+    <a href="#" on-click="_onPlayerClick">
+      <model-attribute model="[[player]]" attribute="name"></model-attribute> 
+    </a>
+    <div id="my-id" class="uk-modal">
+      <div class="uk-modal-dialog">
+        <a class="uk-modal-close uk-close"></a>
+        <!-- <livesnooker-player-stats player-id="[[player.id]]"></livesnooker-player-stats> -->
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "livesnooker-player-link",
+    properties: {
+      player: Object
+    },
+    _onPlayerClick: function(event) {
+      event.preventDefault();
+      UIkit.modal("#my-id").show();
+    }
+  });
+</script>

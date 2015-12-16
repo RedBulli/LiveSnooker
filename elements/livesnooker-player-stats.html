@@ -1,0 +1,27 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="livesnooker-api.html">
+
+<dom-module id="livesnooker-player-stats">
+  <template>
+    <livesnooker-api id="api"></livesnooker-api>
+    Shows player stats for player id: <span>[[playerId]]</span>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "livesnooker-player-stats",
+    properties: {
+      playerId: {
+        type: String,
+        observer: '_onPlayerIdChange'
+      },
+      player: Object
+    },
+    _onPlayerIdChange: function() {
+      if (this.playerId) {
+        // Fetch league and player
+      }
+    }
+  });
+</script>

@@ -4,6 +4,7 @@
 <link rel="import" href="livesnooker-home.html">
 <link rel="import" href="../vendors/iron-pages/iron-pages.html">
 <link rel="import" href="league-controller.html">
+<link rel="import" href="livesnooker-player-stats.html">
 <link rel="import" href="leagues-list.html">
 <link rel="import" href="livesnooker-toolbar.html">
 <link rel="import" href="../vendors/google-signin/google-signin.html">
@@ -19,21 +20,25 @@
     </header>
     <excess-route route="/:mainmenu/(.*)" mainmenu="{{appMenu}}"></excess-route>
     <excess-route route="/" redirect-to="/leagues/"></excess-route>
+
     <iron-pages attr-for-selected="route" selected="[[appMenu]]">
-      <section route="live">
-        <excess-route route="/live/:leagueId" league-id="{{leagueId}}"></excess-route>
-        <livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home>
-      </section>
       <section route="leagues">
-        <excess-route route="/leagues/:leagueId" league-id="{{leagueId}}" active="{{hasLeagueId}}"></excess-route>
+        <excess-route route="/leagues/:leagueId/(.*)" league-id="{{leagueId}}" active="{{hasLeagueId}}"></excess-route>
         <template is="dom-if" if="{{!hasLeagueId}}">
           <leagues-list></leagues-list>
         </template>
         <template is="dom-if" if="{{hasLeagueId}}">
-          <league-controller league-id="{{leagueId}}"></league-controller>
+          <excess-route route="/leagues/:leagueId/:leagueaction/(.*)" leagueaction="{{leagueaction}}"></excess-route>
+          <iron-pages attr-for-selected="leagueroute" selected="[[leagueaction]]">
+            <section leagueroute="control"><league-controller league-id="{{leagueId}}"></league-controller></section>
+            <section leagueroute="players">
+              <excess-route route="/leagues/:leagueId/players/:playerid" playerid="{{playerId}}"></excess-route>
+              <livesnooker-player-stats league-id="{{leagueId}}" player-id="{{playerId}}"></livesnooker-player-stats>
+            </section>
+            <section leagueroute="live"><livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home></section>
+          </iron-pages>
         </template>
       </section>
-      <section route="404">Not found</section>
     </iron-pages>
   </template>
 </dom-module>

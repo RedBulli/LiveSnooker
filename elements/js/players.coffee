@@ -3,6 +3,9 @@ class Player extends Livesnooker.Model
     leagueId = @get('League')?.id || @get('LeagueId')
     "/leagues/" + leagueId + "/players"
 
+  populateAssociations: ->
+    @set('League', League.findModel(@get('LeagueId')))
+
 Player.setup()
 
 class Players extends Livesnooker.Collection

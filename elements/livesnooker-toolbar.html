@@ -73,10 +73,10 @@
       dropdownTarget: Object
     },
     computeLeagueControlUrl: function(league) {
-      return '/#/leagues/' + league.id;
+      return '/#/leagues/' + league.id + '/control/';
     },
     computeLeagueLiveUrl: function(league) {
-      return '/#/live/' + league.id;
+      return '/#/leagues/' + league.id + '/live/';
     },
     leagueSignal: function(signal) {
       if (signal.detail.attributes.name) {
