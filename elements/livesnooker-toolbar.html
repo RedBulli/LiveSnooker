@@ -42,14 +42,13 @@
               <div class="uk-icon-bars dropdown-trigger"></div>
               <div class="dropdown-content">
                 <ul class="uk-nav">
-                  <li><a href="{{ computeLeagueLiveUrl(league) }}">Live</a></li>
-                  <li><a href="{{ computeLeagueControlUrl(league) }}">Control league</a></li>
-                  <li>
-                    <a href="/leagues">Change league</a>
-                  </li>
-                  <template is="dom-if" if="{{user}}">
-                    <li><a href="/user">Me</a></li>
+                  <template is="dom-if" if="[[league]]">
+                    <li><a href="{{ computeLeagueLiveUrl(league) }}">Live</a></li>
+                    <li><a href="{{ computeLeagueControlUrl(league) }}">Control league</a></li>
                   </template>
+                  <li>
+                    <a href="/#/leagues/">Change league</a>
+                  </li>
                 </ul>
               </div>
             </livesnooker-dropdown>
@@ -74,10 +73,10 @@
       dropdownTarget: Object
     },
     computeLeagueControlUrl: function(league) {
-      return '/league/' + league.id;
+      return '/#/leagues/' + league.id;
     },
     computeLeagueLiveUrl: function(league) {
-      return '/live/' + league.id;
+      return '/#/live/' + league.id;
     },
     leagueSignal: function(signal) {
       if (signal.detail.attributes.name) {

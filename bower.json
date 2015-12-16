@@ -20,7 +20,7 @@
     "underscore": "latest",
     "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
     "detectrtc": "~1.0.9",
-    "page": "visionmedia/page.js#~1.6.4"
+    "excess-router": "~0.9.10"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"

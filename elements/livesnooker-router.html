@@ -4,11 +4,10 @@
 <link rel="import" href="livesnooker-home.html">
 <link rel="import" href="../vendors/iron-pages/iron-pages.html">
 <link rel="import" href="league-controller.html">
-<link rel="import" href="livesnooker-user.html">
 <link rel="import" href="leagues-list.html">
 <link rel="import" href="livesnooker-toolbar.html">
 <link rel="import" href="../vendors/google-signin/google-signin.html">
-<script src="../vendors/page/page.js"></script>
+<link rel="import" href="../vendors/excess-router/excess-router.html">
 
 <dom-module id="livesnooker-router">
   <template>
@@ -18,52 +17,28 @@
     <header>
       <livesnooker-toolbar></livesnooker-toolbar>
     </header>
-    <iron-pages attr-for-selected="route" selected="[[route]]">
-        <section route="live"><livesnooker-home league-id="{{routeParams.leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home></section>
-      <section route="leagues"><leagues-list></leagues-list></section>
-      <section route="league"><league-controller league-id="{{routeParams.leagueId}}"></league-controller></section>
-      <section route="user"><livesnooker-user></livesnooker-user></section>
+    <excess-route route="/:mainmenu/(.*)" mainmenu="{{appMenu}}"></excess-route>
+    <excess-route route="/" redirect-to="/leagues/"></excess-route>
+    <iron-pages attr-for-selected="route" selected="[[appMenu]]">
+      <section route="live">
+        <excess-route route="/live/:leagueId" league-id="{{leagueId}}"></excess-route>
+        <livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home>
+      </section>
+      <section route="leagues">
+        <excess-route route="/leagues/:leagueId" league-id="{{leagueId}}" active="{{hasLeagueId}}"></excess-route>
+        <template is="dom-if" if="{{!hasLeagueId}}">
+          <leagues-list></leagues-list>
+        </template>
+        <template is="dom-if" if="{{hasLeagueId}}">
+          <league-controller league-id="{{leagueId}}"></league-controller>
+        </template>
+      </section>
       <section route="404">Not found</section>
     </iron-pages>
   </template>
 </dom-module>
 
 <script>
-  function initRoutes(callback) {
-    window.addEventListener('WebComponentsReady', function() {
-      var baseUrl = '';
-      page.base('');
-      if (window.location.port === '') {  // if production
-        page.base(baseUrl.replace(/\/$/, ''));
-      }
-      page('/', function() {
-        page.redirect('/leagues');
-      });
-      page(baseUrl, function() {
-        page.redirect('/leagues');
-      });
-      page('/live/:leagueId', function(data) {
-        callback('live', data.params);
-      });
-      page('/user', function() {
-        callback('user');
-      });
-      page('/leagues', function() {
-        callback('leagues');
-      });
-      page('/league/:leagueId', function(data) {
-        callback('league', data.params);
-      });
-      page('*', function() {
-        callback('404');
-      });
-      // add #! before urls
-      page({
-        hashbang: true
-      });
-    });
-  }
-
   Polymer({
     is: 'livesnooker-router',
     properties: {
@@ -80,13 +55,6 @@
     noAuthClicked: function(event) {
       event.preventDefault();
       this.$.api.useAnonymously();
-    },
-    setRoute: function(route, params) {
-      this.route = route;
-      this.routeParams = params;
-    },
-    ready: function() {
-      initRoutes(this.setRoute.bind(this));
     }
   });
 </script>
