@@ -7,7 +7,7 @@
     "iron-a11y-keys": "PolymerElements/iron-a11y-keys#latest",
     "iron-dropdown": "PolymerElements/iron-dropdown#latest",
     "iron-icons": "PolymerElements/iron-icons#latest",
-    "iron-list": "PolymerElements/iron-list#~1.1.2",
+    "iron-list": "PolymerElements/iron-list#latest",
     "iron-meta": "PolymerElements/iron-meta#latest",
     "iron-pages": "PolymerElements/iron-pages#latest",
     "iron-selector": "PolymerElements/iron-selector#latest",
@@ -18,8 +18,7 @@
     "rtcmulticonnection": "latest",
     "uikit": "~2.24.2",
     "underscore": "latest",
-    "google-signin": "GoogleWebComponents/google-signin#~1.1.0",
-    "detectrtc": "~1.0.9",
+    "google-signin": "GoogleWebComponents/google-signin#latest",
     "excess-router": "~0.9.10"
   },
   "devDependencies": {

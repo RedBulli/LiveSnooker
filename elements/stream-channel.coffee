@@ -2,6 +2,9 @@ activeSessions = {}
 
 RTCConnection = (socketUrl, leagueId, element, authentication) ->
   connection = new RTCMultiConnection(leagueId)
+  unless connection.DetectRTC.isWebRTCSupported
+    connection = null
+    return
   onMessageCallbacks = {}
   query = "league_id=#{leagueId}"
   if authentication
@@ -71,7 +74,7 @@ Polymer
         @connection.leave()
         clearInterval(@intervalId)
         @connection = null
-      if @leagueId && DetectRTC.isWebRTCSupported
+      if @leagueId
         @connection = @createConnection()
         if @connection
           @intervalId = setInterval(@clearOldSessions.bind(@, @connection), 10000)
