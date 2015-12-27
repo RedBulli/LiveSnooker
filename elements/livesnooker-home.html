@@ -7,7 +7,6 @@
 <link rel="import" href="stream-channel.html">
 <link rel="import" href="event-stream.html">
 <link rel="import" href="js/vendor/jquery.html">
-<link rel="import" href="../vendors/iron-list/iron-list.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="livesnooker-player-link.html">
 
@@ -55,21 +54,19 @@
         </ol>
         <h2>Finished frames (<span>[[finishedFrames.length]]</span>)</h2>
         <ul class="uk-list frames">
-          <iron-list id="finished" class="finished-frames" items="[[finishedFrames]]" as="item">
-            <template>
-              <li>
-                (<span>[[computeEndDate(item)]]</span>)
-                <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
-                  <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link>
-                </span>
-                <span> - </span>
-                <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
-                  <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
-                </span>
-                <a href="#" on-click="showBreaks">View breaks</a>
-              </li>
-            </template>
-          </iron-list>
+          <template id="finished" is="dom-repeat" items="[[finishedFrames]]">
+            <li>
+              (<span>[[computeEndDate(item)]]</span>)
+              <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
+                <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link>
+              </span>
+              <span> - </span>
+              <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
+                <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
+              </span>
+              <a href="#" on-click="showBreaks">View breaks</a>
+            </li>
+          </template>
         </ul>
         <new-frame-form league="[[league]]"></new-frame-form>
       </template>

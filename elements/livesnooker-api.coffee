@@ -26,12 +26,18 @@ Polymer
     user: Object
     onAccount: Object
 
-  findOrFetchModel: (klass, id) ->
-    model = klass.findModel({id: id})
+  findOrFetchModel: (klass, attrs) ->
+    attributes =
+      if typeof attrs == 'string' || attrs instanceof String
+        { id: attrs }
+      else
+        _.extend(attrs, {})
+
+    model = klass.findModel(attributes)
     if model
       Promise.resolve(model)
     else
-      model = new klass({id: id})
+      model = new klass(attributes)
       model.setApiClient(@)
       new Promise (resolve, reject) ->
         model.fetch

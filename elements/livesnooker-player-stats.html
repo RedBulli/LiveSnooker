@@ -1,27 +1,68 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="livesnooker-api.html">
+<link rel="import" href="js/players.html">
+<link rel="import" href="model-attribute.html">
+<link rel="import" href="uikit.html">
 
 <dom-module id="livesnooker-player-stats">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    Shows player stats for player id: <span>[[playerId]]</span>
+    <template is="dom-if" if="{{player}}" restamp>
+      Shows player stats for player id: <span>[[playerId]]</span> <model-attribute model="[[player]]" attribute="name"></model-attribute>
+    </template>
   </template>
 </dom-module>
 
 <script>
   Polymer({
-    is: "livesnooker-player-stats",
+    is: 'livesnooker-player-stats',
     properties: {
       playerId: {
         type: String,
         observer: '_onPlayerIdChange'
       },
+      leagueId: String,
       player: Object
     },
     _onPlayerIdChange: function() {
-      if (this.playerId) {
-        // Fetch league and player
+      if (this.playerId && this.leagueId) {
+        _this = this;
+        this.$.api.findOrFetchModel(Player, {id: this.playerId, LeagueId: this.leagueId}).then(function(player) {
+          _this.player = player;
+        });
       }
+    }
+  });
+</script>
+
+<dom-module id="livesnooker-player-stats-modal">
+  <template>
+    <div id="stats-modal" class="uk-modal">
+      <div class="uk-modal-dialog">
+        <a class="uk-modal-close uk-close"></a>
+        <template is="dom-if" if="opened" restamp>
+          <livesnooker-player-stats player-id="[[playerId]]" league-id="[[leagueId]]"></livesnooker-player-stats>
+        </template>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  LivesnookerPlayerStatsModal = Polymer({
+    is: 'livesnooker-player-stats-modal',
+    properties: {
+      playerId: String,
+      leagueId: String,
+      opened: Boolean
+    },
+    factoryImpl: function(playerId, leagueId) {
+      this.playerId = playerId;
+      this.leagueId = leagueId;
+    },
+    open: function() {
+      this.opened = true;
+      UIkit.modal($(this.$$('#stats-modal'))).show();
     }
   });
 </script>
