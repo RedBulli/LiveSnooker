@@ -51,8 +51,8 @@
     },
     fetchStats: function() {
       var _this = this;
-      this.$.api.ajaxPromise(this.player.url() + '/stats').then(function(response) {
-        _this.stats = response.stats;
+      this.$.api.ajaxPromise(this.player.url() + '/stats').then(function(stats) {
+        _this.stats = stats;
       });
     }
   });

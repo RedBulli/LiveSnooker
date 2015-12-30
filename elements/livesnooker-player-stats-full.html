@@ -6,10 +6,10 @@
 <dom-module id="livesnooker-player-stats-full">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
-    <template is="dom-if" if="{{player}}" restamp>
+    <template is="dom-if" if="[[player]]" restamp>
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
-      <template is="dom-if" if="{{stats}}">
-        TODO: full stats d3
+      <template is="dom-if" if="[[breaks]]">
+        <span>[[breaks]]</span>
       </template>
     </template>
   </template>
@@ -25,24 +25,21 @@
       },
       leagueId: String,
       player: Object,
-      stats: String
-    },
-    _potPct: function(stats) {
-      return Math.round(100 * stats.pots / (stats.pots + stats.misses));
+      breaks: String
     },
     _onPlayerIdChange: function() {
       if (this.playerId && this.leagueId) {
         _this = this;
         this.$.api.findOrFetchModel(Player, {id: this.playerId, LeagueId: this.leagueId}).then(function(player) {
           _this.player = player;
-          _this.fetchStats();
+          _this.fetchBreaks();
         });
       }
     },
-    fetchStats: function() {
+    fetchBreaks: function() {
       var _this = this;
-      this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(response) {
-        _this.stats = response.stats;
+      this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(breaks) {
+        _this.breaks = JSON.stringify(breaks);
       });
     }
   });
