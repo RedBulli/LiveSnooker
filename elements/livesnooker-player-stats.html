@@ -10,7 +10,7 @@
     <template is="dom-if" if="{{player}}" restamp>
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
       <template is="dom-if" if="{{stats}}">
-        <ul>
+        <ul class="uk-list">
           <li>Pot: <span>[[_potPct(stats)]]</span>%</li>
           <li>Pots: <span>[[stats.pots]]</span></li>
           <li>Misses: <span>[[stats.misses]]</span></li>
@@ -59,6 +59,11 @@
 </script>
 
 <dom-module id="livesnooker-player-stats-modal">
+  <style>
+    div {
+      font-size: 14px;
+    }
+  </style>
   <template>
     <div id="stats-modal" class="uk-modal">
       <div class="uk-modal-dialog">
