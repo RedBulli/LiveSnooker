@@ -4,7 +4,7 @@
 <link rel="import" href="livesnooker-home.html">
 <link rel="import" href="../vendors/iron-pages/iron-pages.html">
 <link rel="import" href="league-controller.html">
-<link rel="import" href="livesnooker-player-stats.html">
+<link rel="import" href="livesnooker-player-stats-full.html">
 <link rel="import" href="leagues-list.html">
 <link rel="import" href="livesnooker-toolbar.html">
 <link rel="import" href="../vendors/google-signin/google-signin.html">
@@ -33,7 +33,7 @@
             <section leagueroute="control"><league-controller league-id="{{leagueId}}"></league-controller></section>
             <section leagueroute="players">
               <excess-route route="/leagues/:leagueId/players/:playerid" playerid="{{playerId}}"></excess-route>
-              <livesnooker-player-stats league-id="{{leagueId}}" player-id="{{playerId}}"></livesnooker-player-stats>
+              <livesnooker-player-stats-full league-id="{{leagueId}}" player-id="{{playerId}}"></livesnooker-player-stats-full>
             </section>
             <section leagueroute="live"><livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home></section>
           </iron-pages>

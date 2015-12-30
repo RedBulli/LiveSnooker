@@ -2,9 +2,8 @@
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="model-attribute.html">
-<link rel="import" href="uikit.html">
 
-<dom-module id="livesnooker-player-stats">
+<dom-module id="livesnooker-player-stats-full">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="{{player}}" restamp>
@@ -16,7 +15,6 @@
           <li>Misses: <span>[[stats.misses]]</span></li>
           <li>Total points: <span>[[stats.sum_points]]</span></li>
         </ul>
-        <a href="[[_fullStatsUrl(player)]]">See full stats</a>
       </template>
     </template>
   </template>
@@ -24,7 +22,7 @@
 
 <script>
   Polymer({
-    is: 'livesnooker-player-stats',
+    is: 'livesnooker-player-stats-full',
     properties: {
       playerId: {
         type: String,
@@ -33,9 +31,6 @@
       leagueId: String,
       player: Object,
       stats: String
-    },
-    _fullStatsUrl: function(player) {
-      return "/#/leagues/" + this.leagueId + "/players/" + player.id;
     },
     _potPct: function(stats) {
       return Math.round(100 * stats.pots / (stats.pots + stats.misses));
@@ -51,41 +46,9 @@
     },
     fetchStats: function() {
       var _this = this;
-      this.$.api.ajaxPromise(this.player.url() + '/stats').then(function(response) {
+      this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(response) {
         _this.stats = response.stats;
       });
-    }
-  });
-</script>
-
-<dom-module id="livesnooker-player-stats-modal">
-  <template>
-    <div id="stats-modal" class="uk-modal">
-      <div class="uk-modal-dialog">
-        <a class="uk-modal-close uk-close"></a>
-        <template is="dom-if" if="opened" restamp>
-          <livesnooker-player-stats player-id="[[playerId]]" league-id="[[leagueId]]"></livesnooker-player-stats>
-        </template>
-      </div>
-    </div>
-  </template>
-</dom-module>
-
-<script>
-  LivesnookerPlayerStatsModal = Polymer({
-    is: 'livesnooker-player-stats-modal',
-    properties: {
-      playerId: String,
-      leagueId: String,
-      opened: Boolean
-    },
-    factoryImpl: function(playerId, leagueId) {
-      this.playerId = playerId;
-      this.leagueId = leagueId;
-    },
-    open: function() {
-      this.opened = true;
-      UIkit.modal($(this.$$('#stats-modal'))).show();
     }
   });
 </script>
