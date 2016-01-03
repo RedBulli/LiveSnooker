@@ -19,7 +19,7 @@
   </template>
 
   <script>
-    function draw(stats, el, yLabel) {
+    function draw(stats, el, yLabel, xLabel) {
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
           width = 960 - margin.left - margin.right,
           height = 500 - margin.top - margin.bottom;
@@ -60,6 +60,12 @@
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
 
+      svg.append("text")
+          .attr("text-anchor", "end")
+          .attr("x", width)
+          .attr("y", height - 6)
+          .text(xLabel);
+
       svg.append("g")
           .attr("class", "y axis")
           .style("fill", "none")
@@ -90,7 +96,7 @@
         }
       },
       _onStatsChange: function() {
-        draw(this.stats.stats, this.$.graph, this.stats.yLabel);
+        draw(this.stats.stats, this.$.graph, this.stats.yLabel, this.stats.xLabel);
       }
     });
   </script>

@@ -11,9 +11,13 @@
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
       <stats-graph stats="[[drawStats]]"></stats-graph>
       <label for="break-points">Break points</label>
-      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="changeStat" checked="checked">
+      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="drawBreakPoints" checked="checked">
       <label for="break-length">Break length</label>
-      <input id="break-length"type="radio" name="stat" value="breakLength" on-change="changeStat">
+      <input id="break-length"type="radio" name="stat" value="breakLength" on-change="drawBreakLength">
+      <label for="break-length">Pot % / frame</label>
+      <input id="break-length"type="radio" name="stat" value="potPct" on-change="drawPotPct">
+      <label for="break-length">Points / frame</label>
+      <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawFramePoints">
     </template>
   </template>
 </dom-module>
@@ -40,36 +44,37 @@
         });
       }
     },
-    changeStat: function() {
-      var path = this.$$('input[name="stat"]:checked').value;
-      if (path === "breakPoints") {
-        this.drawBreakPoints();
-      } else if (path === "breakLength") {
-        this.drawBreakLength();
-      }
-    },
     drawBreakPoints: function() {
-      var stats = _.map(this.stats.breaks, function(o, index) {
-        return {
-          x: index,
-          y: o.points
-        };
+      this.simpleDraw(this.stats.breaks, "Points", "Break", function(o) {
+        return o.points;
       });
-      this.drawStats = {
-        yLabel: "Points",
-        stats: stats
-      };
     },
     drawBreakLength: function() {
-      var stats = _.map(this.stats.breaks, function(o, index) {
+      this.simpleDraw(this.stats.breaks, "Shots", "Break", function(o) {
+        return o.shots;
+      });
+    },
+    drawPotPct: function() {
+      this.simpleDraw(this.stats.frameStats, "Pot %", "Frame", function(o) {
+        return 100 * o.potsFromPotAttempts / o.potAttempts;
+      });
+    },
+    drawFramePoints: function() {
+      this.simpleDraw(this.stats.frameStats, "Points", "Frame", function(o) {
+        return o.totalPoints;
+      });
+    },
+    simpleDraw: function(arr, yLabel, xLabel, fn) {
+      var stats = _.map(arr, function(o, index) {
         return {
-          x: index,
-          y: o.shots
+          x: index + 1,
+          y: fn(o)
         };
       });
       this.drawStats = {
-        yLabel: "Shots",
-        stats: stats
+        yLabel: yLabel,
+        stats: stats,
+        xLabel: xLabel
       };
     },
     fetchBreaks: function() {
