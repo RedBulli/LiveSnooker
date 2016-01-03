@@ -2,15 +2,18 @@
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="js/players.html">
 <link rel="import" href="model-attribute.html">
+<link rel="import" href="stats-graph.html">
 
 <dom-module id="livesnooker-player-stats-full">
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[player]]" restamp>
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
-      <template is="dom-if" if="[[breaks]]">
-        <span>[[breaks]]</span>
-      </template>
+      <stats-graph stats="[[drawStats]]"></stats-graph>
+      <label for="break-points">Break points</label>
+      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="changeStat">
+      <label for="break-length">Break length</label>
+      <input id="break-length"type="radio" name="stat" value="breakLength" on-change="changeStat">
     </template>
   </template>
 </dom-module>
@@ -25,7 +28,8 @@
       },
       leagueId: String,
       player: Object,
-      breaks: String
+      stats: Object,
+      drawStats: Object
     },
     _onPlayerIdChange: function() {
       if (this.playerId && this.leagueId) {
@@ -36,10 +40,44 @@
         });
       }
     },
+    changeStat: function() {
+      var path = this.$$('input[name="stat"]:checked').value;
+      if (path === "breakPoints") {
+        this.drawBreakPoints();
+      } else if (path === "breakLength") {
+        this.drawBreakLength();
+      }
+    },
+    drawBreakPoints: function() {
+      var stats = _.map(this.stats.breaks, function(o, index) {
+        return {
+          x: index,
+          y: o.points
+        };
+      });
+      this.drawStats = {
+        yLabel: "Points",
+        stats: stats
+      };
+    },
+    drawBreakLength: function() {
+      var stats = _.map(this.stats.breaks, function(o, index) {
+        return {
+          x: index,
+          y: o.shots
+        };
+      });
+      this.drawStats = {
+        yLabel: "Shots",
+        stats: stats
+      };
+    },
     fetchBreaks: function() {
       var _this = this;
       this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(breaks) {
-        _this.breaks = JSON.stringify(breaks);
+        _this.stats = {
+          breaks: breaks
+        };
       });
     }
   });
