@@ -1,8 +1,12 @@
+apiReady = null
+
 data =
   authentication: null
   user: null
   host: null
   anonymous: false
+  ready: new Promise (resolve, reject) ->
+    apiReady = resolve
 
 apiIsReady = ->
   (data.authentication || data.anonymous) && data.host
@@ -112,6 +116,7 @@ Polymer
   onApiReady: ->
     @fire('api-ready')
     @fire('api')
+    apiReady()
 
   useAnonymously: ->
     data.anonymous = true

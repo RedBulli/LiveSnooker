@@ -19,7 +19,7 @@
       <label for="break-length">Points / frame</label>
       <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawFramePoints">
       <label for="break-length">Biggest break / frame</label>
-      <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawFramePoints">
+      <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawBiggestBreaks">
     </template>
   </template>
 </dom-module>
@@ -64,6 +64,11 @@
     drawFramePoints: function() {
       this.simpleDraw(this.stats.frameStats, "Points", "Frame", function(o) {
         return o.totalPoints;
+      });
+    },
+    drawBiggestBreaks: function() {
+      this.simpleDraw(this.stats.frameStats, "Biggest break", "Frame", function(o) {
+        return o.biggestBreak;
       });
     },
     simpleDraw: function(arr, yLabel, xLabel, fn) {
