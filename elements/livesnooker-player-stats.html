@@ -12,9 +12,12 @@
       <template is="dom-if" if="{{stats}}">
         <ul class="uk-list">
           <li>Pot: <span>[[_potPct(stats)]]</span>%</li>
-          <li>Pots: <span>[[stats.pots]]</span></li>
-          <li>Misses: <span>[[stats.misses]]</span></li>
-          <li>Total points: <span>[[stats.sum_points]]</span></li>
+          <li>Pots from pot attempts: <span>[[stats.potsFromPotAttempts]]</span></li>
+          <li>Pots from safeties: <span>[[stats.potsFromSafeties]]</span></li>
+          <li>Misses: <span>[[_misses(stats)]]</span></li>
+          <li>Total points: <span>[[stats.totalPoints]]</span></li>
+          <li>Fails count: <span>[[stats.failCount]]</span></li>
+          <li>Fail points: <span>[[stats.failPoints]]</span></li>
         </ul>
         <a href="[[_fullStatsUrl(player)]]">See full stats</a>
       </template>
@@ -38,7 +41,10 @@
       return "/#/leagues/" + this.leagueId + "/players/" + player.id;
     },
     _potPct: function(stats) {
-      return Math.round(100 * stats.pots / (stats.pots + stats.misses));
+      return Math.round(100 * stats.potsFromPotAttempts / stats.potAttempts);
+    },
+    _misses: function(stats) {
+      return stats.potAttempts - stats.potsFromPotAttempts;
     },
     _onPlayerIdChange: function() {
       if (this.playerId && this.leagueId) {

@@ -74,10 +74,8 @@
     },
     fetchBreaks: function() {
       var _this = this;
-      this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(breaks) {
-        _this.stats = {
-          breaks: breaks
-        };
+      this.$.api.ajaxPromise(this.player.url() + '/stats/full').then(function(stats) {
+        _this.stats = stats;
         _this.drawBreakPoints();
       });
     }
