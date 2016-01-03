@@ -3,6 +3,13 @@
 <head>
   <script src="vendors/webcomponentsjs/webcomponents.min.js"></script>
   <link rel="import" href="elements/livesnooker-router.html">
+  <script>
+    function isRTCSupported() {
+      console.log("Asking", window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.RTCPeerConnection);
+      if (window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.RTCPeerConnection) return true;
+      else return false;
+    }
+  </script>
 </head>
 
 <body>

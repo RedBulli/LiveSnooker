@@ -6,9 +6,9 @@
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="stream-channel.html">
 <link rel="import" href="event-stream.html">
-<link rel="import" href="js/vendor/jquery.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="livesnooker-player-link.html">
+<script src="../vendors/jquery/dist/jquery.min.js"></script>
 
 <dom-module name="livesnooker-home">
   <style>
@@ -39,7 +39,9 @@
         <template is="dom-if" if="[[streamUrl]]">
           <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
         </template>
-        <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+        <template is="dom-if" if="[[_isRTCSupported()]]">
+          <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+        </template>
         <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
         <ol id="framelist" class="uk-list frames">
           <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">

@@ -106,7 +106,7 @@ Polymer
       UIkit.notify(getErrorText(err))
 
     if data.authentication
-      _.extend settings.headers,
+      settings.headers = _.extend settings.headers,
         "X-AUTH-GOOGLE-ID-TOKEN": data.authentication["id_token"]
     $.ajax(data.host + path, settings)
 

@@ -16,7 +16,9 @@
           <frame-input frame="[[frame]]"></frame-input>
           <button class="uk-button" on-click="endFrame">End frame</button>
           <button class="uk-button" on-click="deleteFrame">Delete frame</button>
-          Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+          <template is="dom-if" if="{{_isRTCSupported()}}">
+            Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
+          </template>
         </div>
         <div id="breaks" class="uk-width-medium-1-5">
           <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
@@ -39,6 +41,9 @@
         value: false
       },
       socketUrl: String
+    },
+    _isRTCSupported: function() {
+      return window.isRTCSupported();
     },
     videoToggleChanged: function(event) {
       this.video = event.srcElement.checked;

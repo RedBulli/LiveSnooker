@@ -18,7 +18,7 @@
     "grunt-contrib-connect": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-notify": "latest",
-    "grunt-vulcanize": "^1.0.0"
+    "grunt-vulcanize": "latest"
   },
   "engines": {
     "node": ">=4.2.1"

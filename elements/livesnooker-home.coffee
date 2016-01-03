@@ -15,6 +15,9 @@ Polymer
     streamUrl: String
     socketUrl: String
 
+  _isRTCSupported: ->
+    window.isRTCSupported()
+
   frameUrl: (frame) ->
     "/frame.html?leagueId=" + @leagueId + "&frameId=" + frame.id
 

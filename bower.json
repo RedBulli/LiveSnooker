@@ -14,10 +14,10 @@
     "paper-toggle-button": "PolymerElements/paper-toggle-button#latest",
     "polymer": "Polymer/polymer#latest",
     "rtcmulticonnection": "latest",
-    "uikit": "~2.24.2",
+    "uikit": "latest",
     "underscore": "latest",
     "google-signin": "GoogleWebComponents/google-signin#latest",
-    "excess-router": "~0.9.10"
+    "excess-router": "latest"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"

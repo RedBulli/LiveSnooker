@@ -15,7 +15,7 @@
 
   <template>
     <div id="gameview">
-      <template is="dom-if" if="[[video]]" restamp="true">
+      <template is="dom-if" if="[[_video(video)]]" restamp="true">
         <p2p-video id="video" class="video" on-ready="_onVideoReady" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
             <figure class="uk-overlay">
               <div id="cam" class="video-container" width="640" height="480"></div>
@@ -25,7 +25,7 @@
             </figure>
         </p2p-video>
       </template>
-      <template is="dom-if" if="[[!video]]">
+      <template is="dom-if" if="[[!_video(video)]]">
         <frame-novideo-view frame="[[frame]]"></frame-novideo-view>
       </template>
     </div>
@@ -43,6 +43,9 @@
         type: Boolean,
         value: false
       }
+    },
+    _video: function() {
+      return window.isRTCSupported() && this.video;
     },
     _openVideo: function() {
       var videoEl = Polymer.dom(this).node.querySelector("p2p-video");
