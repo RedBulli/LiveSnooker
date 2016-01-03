@@ -13,11 +13,12 @@
       }
     },
     created: function() {
-      this.activeSessions = {}
-      this.whenReady = new Promise((resolve, reject) => {
-        this._resolveReady = resolve;
-        this._rejectReady = reject;
-      })
+      this.activeSessions = {};
+      _this = this;
+      this.whenReady = new Promise(function(resolve, reject) {
+        _this._resolveReady = resolve;
+        _this._rejectReady = reject;
+      });
     },
     _onStreamUrlChange: function() {
       this.whenReady.then((function() {
