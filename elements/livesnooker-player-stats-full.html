@@ -11,7 +11,7 @@
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
       <stats-graph stats="[[drawStats]]"></stats-graph>
       <label for="break-points">Break points</label>
-      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="changeStat">
+      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="changeStat" checked="checked">
       <label for="break-length">Break length</label>
       <input id="break-length"type="radio" name="stat" value="breakLength" on-change="changeStat">
     </template>
@@ -78,6 +78,7 @@
         _this.stats = {
           breaks: breaks
         };
+        _this.drawBreakPoints();
       });
     }
   });
