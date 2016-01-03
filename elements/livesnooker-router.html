@@ -9,6 +9,7 @@
 <link rel="import" href="livesnooker-toolbar.html">
 <link rel="import" href="../vendors/google-signin/google-signin.html">
 <link rel="import" href="../vendors/excess-router/excess-router.html">
+<link rel="import" href="frame-breaks.html">
 
 <dom-module id="livesnooker-router">
   <template>
@@ -34,6 +35,10 @@
             <section leagueroute="players">
               <excess-route route="/leagues/:leagueId/players/:playerid" playerid="{{playerId}}"></excess-route>
               <livesnooker-player-stats-full league-id="{{leagueId}}" player-id="{{playerId}}"></livesnooker-player-stats-full>
+            </section>
+            <section leagueroute="frames">
+              <excess-route route="/leagues/:leagueId/frames/:frameid" frameid="{{frameId}}"></excess-route>
+              <frame-breaks league-id="{{leagueId}}" frame-id="{{frameId}}"></frame-breaks>
             </section>
             <section leagueroute="live"><livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home></section>
           </iron-pages>

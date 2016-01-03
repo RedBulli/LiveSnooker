@@ -1,0 +1,68 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="livesnooker-api.html">
+<link rel="import" href="break-points.html">
+<link rel="import" href="uikit.html">
+
+<dom-module id="frame-breaks">
+  <style>
+    #view {
+      display: inline-block;
+    }
+  </style>
+
+  <template>
+    <livesnooker-api id="api"></livesnooker-api>
+    <template is="dom-if" if="[[frameState]]">
+      <div id="view">
+        <h1>
+          <livesnooker-player-link player="[[frameState.0.player]]"></livesnooker-player-link>
+          <span class="points">[[frameState.0.score]]</span> - <span class="points">[[frameState.1.score]]</span>
+          <livesnooker-player-link player="[[frameState.1.player]]"></livesnooker-player-link>
+        </h1>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[shotGroups]]">
+      <ol class="uk-list uk-list-striped">
+        <template id="breaks" is="dom-repeat" items="{{shotGroups.models}}">
+          <li>
+            <break-points shot-group="{{item}}"></break-points>
+          </li>
+        </template>
+      </ol>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'frame-breaks',
+    properties: {
+      leagueId: String,
+      frameId: {
+        type: String,
+        observer: '_onFrameIdChange'
+      },
+      frame: Object,
+      shotGroups: Object,
+      frameState: Object
+    },
+    _onFrameIdChange: function() {
+      var _this = this;
+      this.shotGroups = null;
+      this.$.api.findOrFetchModel(Frame, {id: this.frameId, LeagueId: this.leagueId}).then(function(frame) {
+        frame.get('Shots').frame = frame;
+        frame.get('Shots').setApiClient(_this.$.api);
+        frame.get('Shots').fetch({
+          success: function() {
+            frame.get('Shots').populateAssociations();
+            frame.calculateShotGroups();
+            _this.frame = frame;
+            _this.shotGroups = frame.get('shotGroups');
+            _this.frameState = frame.getState();
+          }
+        });
+      });
+    }
+  });
+</script>

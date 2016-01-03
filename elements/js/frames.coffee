@@ -41,6 +41,7 @@ class Frame extends Livesnooker.Model
     @set('shotGroups', new ShotGroups([], frame: @))
 
   calculateShotGroups: ->
+    @get('shotGroups').reset()
     shots = @get('Shots')
     shots.sort()
     shots.each (shot) => @get('shotGroups').addShot(shot)

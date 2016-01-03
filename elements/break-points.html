@@ -1,0 +1,36 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+
+<dom-module id="break-points">
+  <template>
+    <template is="dom-if" if="{{shotGroupViewModel.pots}}">
+      <livesnooker-player-link player="[[shotGroupViewModel.player]]"></livesnooker-player-link>: <span>{{shotGroupViewModel.points.points}}</span>
+    </template>
+    <template is="dom-if" if="{{shotGroupViewModel.fouls}}">
+      <livesnooker-player-link player="[[shotGroupViewModel.player]]"></livesnooker-player-link>: FOUL <span>{{shotGroupViewModel.points.fouls}}</span>
+    </template>
+    <template is="dom-if" if="{{shotGroupViewModel.misses}}">
+      No pots for <span>{{shotGroupViewModel.shots}}</span> shots
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "break-points",
+    properties: {
+      shotGroup: {
+        type: Object
+      },
+      shotGroupViewModel: Object
+    },
+    ready: function() {
+      this.shotGroup.get('shots').on('add remove', this.updateView.bind(this));
+      this.updateView();
+    },
+    updateView: function() {
+      if (this.shotGroup.get('shots').length > 0) {
+        this.shotGroupViewModel = this.shotGroup.totals();
+      }
+    }
+  });
+</script>

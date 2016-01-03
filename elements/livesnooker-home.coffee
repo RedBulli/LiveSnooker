@@ -71,9 +71,8 @@ Polymer
   streamClosed: (event) ->
     @getVideoStatusElement(event.detail).hide()
 
-  showBreaks: (event) ->
-    event.preventDefault()
-    console.log("Not implemented yet")
+  computeShowBreaks: (frame) ->
+    "/#/leagues/#{frame.get('LeagueId')}/frames/#{frame.id}"
 
   updateFrames: ->
     @splice('unfinishedFrames', 0, @unfinishedFrames.length)

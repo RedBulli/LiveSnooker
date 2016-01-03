@@ -1,40 +1,6 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="break-points.html">
 <link rel="import" href="uikit.html">
-
-<dom-module id="break-points">
-  <template>
-    <template is="dom-if" if="{{shotGroupViewModel.pots}}">
-      <span>{{shotGroupViewModel.player.attributes.name}}</span>: <span>{{shotGroupViewModel.points.points}}</span>
-    </template>
-    <template is="dom-if" if="{{shotGroupViewModel.fouls}}">
-      <span>{{shotGroupViewModel.player.attributes.name}}</span>: FOUL <span>{{shotGroupViewModel.points.fouls}}</span>
-    </template>
-    <template is="dom-if" if="{{shotGroupViewModel.misses}}">
-      No pots for <span>{{shotGroupViewModel.shots}}</span> shots
-    </template>
-  </template>
-</dom-module>
-
-<script>
-  Polymer({
-    is: "break-points",
-    properties: {
-      shotGroup: {
-        type: Object
-      },
-      shotGroupViewModel: Object
-    },
-    ready: function() {
-      this.shotGroup.get('shots').on('add remove', this.updateView.bind(this));
-      this.updateView();
-    },
-    updateView: function() {
-      if (this.shotGroup.get('shots').length > 0) {
-        this.shotGroupViewModel = this.shotGroup.totals();
-      }
-    }
-  });
-</script>
 
 <dom-module id="break-history-view">
   <template>
@@ -68,13 +34,15 @@
     },
     _onBreaksChange: function() {
       if (this.breakModels) {
-        this.splice('breakModels', 0, this.breaks.length);
+        this.splice('breakModels', 0, Infinity);
       }
-      this.breakModels = _.clone(this.breaks.models);
-      this.breaks.on('add remove change update', (function() {
+      if (this.breaks) {
+        this.breakModels = _.clone(this.breaks.models);
+        this.breaks.on('add remove change update', (function() {
+          this._renderBreaks();
+        }).bind(this));
         this._renderBreaks();
-      }).bind(this));
-      this._renderBreaks();
+      }
     },
   });
 </script>
