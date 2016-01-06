@@ -21,12 +21,12 @@
           <template is="dom-if" if="{{_isRTCSupported()}}">
             Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
           </template>
-          <div><frame-stats frame="[[frame]]"></frame-stats></div>
         </div>
         <div id="breaks" class="uk-width-medium-1-5">
           <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
         </div>
       </div>
+      <div><frame-stats frame="[[frame]]"></frame-stats></div>
     </template>
   </template>
 </dom-module>
