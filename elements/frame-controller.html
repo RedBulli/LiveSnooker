@@ -16,7 +16,7 @@
           <frame-event-source stream-url="[[streamUrl]]" frame="{{frame}}"></frame-event-source>
           <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
           <frame-input frame="[[frame]]"></frame-input>
-          <button class="uk-button" on-click="endFrame">End frame</button>
+          <button class="uk-button" on-click="endFrame" disabled$="{{!_canEndFrame(leader)}}">End frame</button>
           <button class="uk-button" on-click="deleteFrame">Delete frame</button>
           <template is="dom-if" if="{{_isRTCSupported()}}">
             Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
@@ -43,10 +43,14 @@
         value: false
       },
       socketUrl: String,
-      streamUrl: String
+      streamUrl: String,
+      leader: Object
     },
     _isRTCSupported: function() {
       return window.isRTCSupported();
+    },
+    _canEndFrame: function(leader) {
+      return leader !== "tie";
     },
     videoToggleChanged: function(event) {
       this.video = event.srcElement.checked;
@@ -57,8 +61,8 @@
     },
     endFrame: function(event) {
       event.preventDefault();
-      if (winner == "tie") throw "Cannot end frame in a tie";
       var winner = this.frame.getLeader();
+      if (winner === "tie") throw "Cannot end frame in a tie";
       var confirmationResult = window.confirm(winner.get('name') + " will win the frame. This cannot be undone. Are you sure?");
       if (confirmationResult) {
         this.frame.set("WinnerId", winner.id);
@@ -81,6 +85,7 @@
         });
       }
     },
+
     ready: function() {
       var frame = new Frame({id: this.frameId, LeagueId: this.leagueId});
       frame.setApiClient(this.$.api);
@@ -94,6 +99,9 @@
             streamUrl += "?id_token=" + this.$.api.data.authentication.id_token;
           }
           this.streamUrl = streamUrl;
+          this.frame.on("update", (function() {
+            this.leader = this.frame.getLeader();
+          }).bind(this));
         }).bind(this)
       });
     }

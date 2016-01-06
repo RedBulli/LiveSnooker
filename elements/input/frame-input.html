@@ -14,9 +14,7 @@
     <points-input on-shot="_onShot" on-undo="_onUndo" only-fouls="[[foul]]"></points-input>
     Safety: <paper-toggle-button checked="{{safety}}"></paper-toggle-button>
     Foul: <paper-toggle-button checked="{{foul}}"></paper-toggle-button>
-    <template is="dom-if" if="{{showChangePlayer}}">
-      <button class="uk-button" on-click="_onChangePlayerClick">Change player</button>
-    </template>
+    <button class="uk-button" on-click="_onChangePlayerClick" disabled$="{{!showChangePlayer}}">Change player</button>
   </template>
 </dom-module>
 
