@@ -16,7 +16,8 @@
     },
     onStreamEvent: function(event) {
       if (event.detail.event === "newShot") {
-        this.frame.addShot(this.frame.initializeShot(event.detail.shot));
+        var shot = this.frame.initializeShot(event.detail.shot);
+        if (shot) this.frame.addShot(shot);
       }
       else if (event.detail.event === "deleteShot") {
         this.frame.deleteShot(event.detail.shot.id);

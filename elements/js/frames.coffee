@@ -78,6 +78,7 @@ class Frame extends Livesnooker.Model
       1
 
   initializeShot: (data) ->
+    return if @get('Shots').find((shot) -> shot.get('shotNumber') == data.shotNumber)
     _.extend(data, {
       Frame: @
     })
@@ -104,14 +105,15 @@ class Frame extends Livesnooker.Model
       Player: @getCurrentPlayer(),
       shotNumber: @get('Shots').length + 1
 
-    shot.setApiClient(@client)
-    shot.save(shot.attributes, {
-      success: =>
-        @addShot(shot)
-      error: ->
-        shot.destroy()
-    })
-    shot
+    if shot
+      shot.setApiClient(@client)
+      shot.save(shot.attributes, {
+        success: =>
+          @addShot(shot)
+        error: ->
+          shot.destroy()
+      })
+      shot
 
   addShot: (shot) ->
     @get('Shots').add(shot)
