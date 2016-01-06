@@ -6,7 +6,8 @@
       <livesnooker-player-link player="[[shotGroupViewModel.player]]"></livesnooker-player-link>: <span>{{shotGroupViewModel.points.points}}</span>
     </template>
     <template is="dom-if" if="{{shotGroupViewModel.fouls}}">
-      <livesnooker-player-link player="[[shotGroupViewModel.player]]"></livesnooker-player-link>: FOUL <span>{{shotGroupViewModel.points.fouls}}</span>
+      <livesnooker-player-link player="[[shotGroupViewModel.player]]"></livesnooker-player-link>: Foul <span>{{shotGroupViewModel.points.fouls}}</span>
+      <template is="dom-if" if="[[_greaterThanOne(shotGroupViewModel.shots)]]"> (<span>[[shotGroupViewModel.shots]]</span>)</template>
     </template>
     <template is="dom-if" if="{{shotGroupViewModel.misses}}">
       No pots for <span>{{shotGroupViewModel.shots}}</span> shots
@@ -22,6 +23,9 @@
         type: Object
       },
       shotGroupViewModel: Object
+    },
+    _greaterThanOne: function(shots) {
+      return shots > 1;
     },
     ready: function() {
       this.shotGroup.get('shots').on('add remove', this.updateView.bind(this));

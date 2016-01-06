@@ -80,7 +80,7 @@ class ShotGroup extends Livesnooker.Model
     @get('shots').last()
 
   belongsTo: (shot) ->
-    !shot.isPot()
+    !shot.isPot() && !shot.isFoul()
 
   totals: ->
     pots: false
@@ -109,6 +109,7 @@ class Fouls extends ShotGroup
     misses: false
     player: @lastShot().get('Player')
     points: @get('shots').calculateTotals()[@lastShot().get('Player').id]
+    shots: @get('shots').length
 
 class ShotGroups extends Livesnooker.Collection
   model: ShotGroup
