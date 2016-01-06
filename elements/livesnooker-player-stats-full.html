@@ -40,10 +40,11 @@
     _onPlayerIdChange: function() {
       if (this.playerId && this.leagueId) {
         _this = this;
-        this.$.api.findOrFetchModel(Player, {id: this.playerId, LeagueId: this.leagueId}).then(function(player) {
-          _this.player = player;
-          _this.fetchBreaks();
-        });
+        this.$.api.findOrFetchModel(Player, {id: this.playerId, LeagueId: this.leagueId}).then(
+          (function(player) {
+            this.player = player;
+            this.fetchBreaks();
+          }).bind(this));
       }
     },
     drawBreakPoints: function() {
@@ -58,7 +59,10 @@
     },
     drawPotPct: function() {
       this.simpleDraw(this.stats.frameStats, "Pot %", "Frame", function(o) {
-        return 100 * o.potsFromPotAttempts / o.potAttempts;
+        var pct = 100 * o.potsFromPotAttempts / o.potAttempts;
+        if (isNaN(pct)) {
+          return null;
+        } else return pct;
       });
     },
     drawFramePoints: function() {
