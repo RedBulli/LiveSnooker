@@ -12,7 +12,7 @@
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[frame]]">
       <div class="uk-grid">
-        <div class="uk-width-medium-4-5">
+        <div class="uk-width-large-4-5">
           <frame-event-source stream-url="[[streamUrl]]" frame="{{frame}}"></frame-event-source>
           <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
           <frame-input frame="[[frame]]"></frame-input>
@@ -21,11 +21,11 @@
           <template is="dom-if" if="{{_isRTCSupported()}}">
             Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
           </template>
+          <div><frame-stats frame="[[frame]]"></frame-stats></div>
         </div>
-        <div id="breaks" class="uk-width-medium-1-5">
+        <div id="breaks" class="uk-width-large-1-5">
           <break-history-view breaks="[[frame.attributes.shotGroups]]"></break-history-view>
         </div>
-        <div><frame-stats frame="[[frame]]"></frame-stats></div>
       </div>
     </template>
   </template>
@@ -85,7 +85,6 @@
         });
       }
     },
-
     ready: function() {
       var frame = new Frame({id: this.frameId, LeagueId: this.leagueId});
       frame.setApiClient(this.$.api);
