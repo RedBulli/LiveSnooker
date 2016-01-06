@@ -118,6 +118,7 @@ class Frame extends Livesnooker.Model
   addShot: (shot) ->
     @get('Shots').add(shot)
     @get('shotGroups').addShot(shot)
+    @set('currentPlayer', null)
     @trigger("update")
     shot
 
@@ -190,7 +191,6 @@ class Frame extends Livesnooker.Model
 
   changePlayerAllowed: ->
     !@get('Shots').last() || @get('Shots').last().isFoul()
-
 
   setPlayerInTurn: (playerId) ->
     @set('currentPlayer', @getPlayer(playerId))
