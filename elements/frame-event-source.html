@@ -1,0 +1,29 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="event-stream.html">
+
+<dom-module id="frame-event-source">
+  <template>
+    <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'frame-event-source',
+    properties: {
+      frame: Object,
+      streamUrl: String
+    },
+    onStreamEvent: function(event) {
+      if (event.detail.event === "newShot") {
+        this.frame.addShot(this.frame.initializeShot(event.detail.shot));
+      }
+      else if (event.detail.event === "deleteShot") {
+        this.frame.deleteShot(event.detail.shot.id);
+      }
+      else if (event.detail.event === "changePlayer") {
+        this.frame.setPlayerInTurn(event.detail.playerId);
+      }
+    }
+  });
+</script>

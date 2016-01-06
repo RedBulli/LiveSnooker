@@ -1,6 +1,6 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="livesnooker-api.html">
-<link rel="import" href="event-stream.html">
+<link rel="import" href="frame-event-source.html">
 <link rel="import" href="stream-channel.html">
 <link rel="import" href="../vendors/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="uikit.html">
@@ -14,7 +14,7 @@
     <template is="dom-if" if="[[frame]]">
       <div class="uk-grid">
         <div class="uk-width-medium-4-5">
-          <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
+          <frame-event-source stream-url="[[streamUrl]]" frame="{{frame}}"></frame-event-source>
           <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
           <x-frame-view socket-url="[[socketUrl]]" frame="[[frame]]" video="[[video]]"></x-frame-view>
           <template is="dom-if" if="[[videoAvailable]]">
@@ -63,17 +63,6 @@
     },
     videoToggleChanged: function(event) {
       this.video = event.srcElement.checked;
-    },
-    onStreamEvent: function(event) {
-      if (event.detail.event === "newShot") {
-        this.frame.addShot(this.frame.initializeShot(event.detail.shot));
-      }
-      else if (event.detail.event === "deleteShot") {
-        this.frame.deleteShot(event.detail.shot.id);
-      }
-      else if (event.detail.event === "changePlayer") {
-        this.frame.setPlayerInTurn(event.detail.playerId);
-      }
     },
     ready: function() {
       var frame = new Frame({id: this.frameId, LeagueId: this.leagueId});

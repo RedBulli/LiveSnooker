@@ -5,6 +5,7 @@
 <link rel="import" href="uikit.html">
 <link rel="import" href="x-frame-view.html">
 <link rel="import" href="break-history-view.html">
+<link rel="import" href="frame-event-source.html">
 
 <dom-module id="frame-controller">
   <template>
@@ -12,6 +13,7 @@
     <template is="dom-if" if="[[frame]]">
       <div class="uk-grid">
         <div class="uk-width-medium-4-5">
+          <frame-event-source stream-url="[[streamUrl]]" frame="{{frame}}"></frame-event-source>
           <x-frame-view id="frame-view" video-input video="[[video]]" frame="[[frame]]" socket-url="[[socketUrl]]"></x-frame-view>
           <frame-input frame="[[frame]]"></frame-input>
           <button class="uk-button" on-click="endFrame">End frame</button>
@@ -40,7 +42,8 @@
         type: Boolean,
         value: false
       },
-      socketUrl: String
+      socketUrl: String,
+      streamUrl: String
     },
     _isRTCSupported: function() {
       return window.isRTCSupported();
@@ -86,6 +89,11 @@
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
           this.frame = frame;
+          var streamUrl = this.$.api.host + this.frame.url() + "/stream"
+          if (this.$.api.data.authentication) {
+            streamUrl += "?id_token=" + this.$.api.data.authentication.id_token;
+          }
+          this.streamUrl = streamUrl;
         }).bind(this)
       });
     }
