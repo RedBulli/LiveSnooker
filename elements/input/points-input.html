@@ -18,16 +18,16 @@
   <template>
     <ul id="balls">
       <li>
-        <snooker-ball on-tap="onShot" value="0" color="white"></snooker-ball>
+        <snooker-ball on-tap="onShot" value="0" color="white" disabled="[[onlyFouls]]"></snooker-ball>
       </li>
       <li>
-        <snooker-ball on-tap="onShot" value="1" color="red"></snooker-ball>
+        <snooker-ball on-tap="onShot" value="1" color="red" disabled="[[onlyFouls]]"></snooker-ball>
       </li>
       <li>
-        <snooker-ball on-tap="onShot" value="2" color="yellow"></snooker-ball>
+        <snooker-ball on-tap="onShot" value="2" color="yellow" disabled="[[onlyFouls]]"></snooker-ball>
       </li>
       <li>
-        <snooker-ball on-tap="onShot" value="3" color="green"></snooker-ball>
+        <snooker-ball on-tap="onShot" value="3" color="green" disabled="[[onlyFouls]]"></snooker-ball>
       </li>
       <li>
         <snooker-ball on-tap="onShot" value="4" color="#f4a460"></snooker-ball>
@@ -51,8 +51,16 @@
 <script>
   Polymer({
     is: 'points-input',
+    properties: {
+      onlyFouls: {
+        type: Boolean,
+        value: false
+      }
+    },
     onShot: function(event) {
-      this.fire('shot', event.target.getAttribute("value"));
+      var points = parseInt(event.target.getAttribute("value"));
+      if (points < 4 && this.onlyFouls) return;
+      this.fire('shot', points);
     },
     onUndo: function(event) {
       this.fire('undo');

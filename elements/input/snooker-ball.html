@@ -1,14 +1,17 @@
 <link rel="import" href="../../vendors/polymer/polymer.html">
 
-<dom-module id="snooker-ball" attributes="color">
+<dom-module id="snooker-ball">
   <style>
     object {
       pointer-events: none;
       display: block;
     }
+    .disabled {
+      opacity: 0.5;
+    }
   </style>
   <template>
-    <object id="ball" type="image/svg+xml" data="elements/input/ball.svg">
+    <object id="ball" type="image/svg+xml" data="elements/input/ball.svg" class$="{{_disabled(disabled)}}">
       <param name="color" value="[[color]]" />
     </object>
   </template>
@@ -17,6 +20,19 @@
 <script>
   Polymer({
     is: 'snooker-ball',
-    color: "white"
+    properties: {
+      color: {
+        type: String,
+        value: "white"
+      },
+      disabled: {
+        type: Boolean,
+        value: false
+      }
+    },
+    _disabled: function() {
+      if (this.disabled) return "disabled";
+      else return "";
+    }
   });
 </script>

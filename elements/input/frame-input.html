@@ -11,7 +11,7 @@
     <iron-a11y-keys target="[[target]]" keys="0" on-keys-pressed="_onMissedKey"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="1 2 3 4 5 6 7" on-keys-pressed="_onPotKey"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="ctrl+4 ctrl+5 ctrl+6 ctrl+7" on-keys-pressed="_onFoulKey"></iron-a11y-keys>
-    <points-input on-shot="_onShot" on-undo="_onUndo"></points-input>
+    <points-input on-shot="_onShot" on-undo="_onUndo" only-fouls="[[foul]]"></points-input>
     Safety: <paper-toggle-button checked="{{safety}}"></paper-toggle-button>
     Foul: <paper-toggle-button checked="{{foul}}"></paper-toggle-button>
     <template is="dom-if" if="{{showChangePlayer}}">
