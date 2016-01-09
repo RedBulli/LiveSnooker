@@ -2,6 +2,10 @@ LiveSnooker
 ==================
 Front-end web components for https://github.com/RedBulli/LiveSnooker-Server
 
+Dependencies
+------------
+* Node >=4.2.2 
+
 Installation
 ------------
 ```
