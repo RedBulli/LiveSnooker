@@ -81,7 +81,6 @@
       return '/#/leagues/' + league.id + '/live/';
     },
     _hasWriteAccess: function(user, league) {
-      debugger
       return league.hasWriteAccess(user);
     },
     leagueSignal: function(signal) {

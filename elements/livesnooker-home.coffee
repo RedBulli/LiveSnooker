@@ -14,9 +14,16 @@ Polymer
       value: -> []
     streamUrl: String
     socketUrl: String
+    user: Object
 
   _isRTCSupported: ->
     window.isRTCSupported()
+
+  _hasWriteAccess: (user, league) ->
+    league.hasWriteAccess(user)
+
+  accountSignal: (signal) ->
+    this.user = signal.detail
 
   frameUrl: (frame) ->
     "/frame.html?leagueId=" + @leagueId + "&frameId=" + frame.id

@@ -60,11 +60,11 @@
     },
     onSignedIn: function() {
       this.$.noauth.hidden = true;
-      this.$.noauth.innerHTML = "Using anonymously";
     },
     noAuthClicked: function(event) {
       event.preventDefault();
       this.$.api.useAnonymously();
+      this.$.noauth.innerHTML = "Using anonymously";
     }
   });
 </script>
