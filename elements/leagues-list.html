@@ -3,6 +3,7 @@
 <link rel="import" href="new-league-form.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="backbone-collection-renderer.html">
+<link rel="import" href="../vendors/iron-signals/iron-signals.html">
 
 <dom-module id="leagues-list">
   <style>
@@ -12,6 +13,7 @@
   </style>
 
   <template>
+    <iron-signals on-iron-signal-account="accountSignal"></iron-signals>
     <livesnooker-api id="api"></livesnooker-api>
     <div id="content">
       <template is="dom-if" if="[[leagues.length]]">
@@ -30,7 +32,9 @@
         You don't admin or belong to any league.
       </template>
       <br>
-      <new-league-form leagues="{{leagues}}"></new-league-form>
+      <template is="dom-if" if="[[user]]">
+        <new-league-form leagues="{{leagues}}"></new-league-form>
+      </template>
     </div>
   </template>
 </dom-module>
@@ -39,10 +43,14 @@
   Polymer({
     is: 'leagues-list',
     properties: {
-      leagues: Object
+      leagues: Object,
+      user: Object
     },
     leagueUrl: function(league) {
       return "/#/leagues/" + league.id + "/live/";
+    },
+    accountSignal: function(signal) {
+      this.user = signal.detail;
     },
     ready: function() {
       var leagues = new Leagues();
