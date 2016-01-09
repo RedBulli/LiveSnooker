@@ -1,10 +1,6 @@
 activeSessions = {}
 
-RTCConnection = (socketUrl, leagueId, element, authentication) ->
-  connection = new RTCMultiConnection(leagueId)
-  unless connection.DetectRTC.isWebRTCSupported
-    connection = null
-    return
+SocketConnection = (socketUrl, leagueId, element, authentication) ->
   onMessageCallbacks = {}
   query = "league_id=#{leagueId}"
   if authentication
@@ -12,7 +8,6 @@ RTCConnection = (socketUrl, leagueId, element, authentication) ->
   socket = io.connect(socketUrl, {query: query})
 
   socket.on 'message', (data) ->
-    return if data.sender == connection.userid
     frameId = data.message?.sessionid
     if frameId
       element.fire("new-stream", frameId) unless activeSessions[frameId]
@@ -22,26 +17,6 @@ RTCConnection = (socketUrl, leagueId, element, authentication) ->
       onMessageCallbacks[data.channel](data.message)
 
   socket.emit('presence', leagueId)
-
-  connection.openSignalingChannel = (config) ->
-    channel = config.channel || leagueId
-    onMessageCallbacks[channel] = config.onmessage
-
-    setTimeout(config.onopen, 1000) if config.onopen
-    {
-      send: (message) ->
-        socket.emit('message', {
-          sender: connection.userid
-          channel: channel
-          message: message
-        });
-      channel: channel
-    }
-
-  connection.ondisconnected = (e) ->
-    console.error("Someone disconnected the whole channel. This shouldn't happen.")
-
-  connection.connect()
 
 Polymer
   is: 'stream-channel'
@@ -53,7 +28,7 @@ Polymer
 
   createConnection: ->
     if @socketUrl && @leagueId
-      RTCConnection(@socketUrl, @leagueId, @, @$.api.data.authentication)
+      SocketConnection(@socketUrl, @leagueId, @, @$.api.data.authentication)
 
   clearOldSessions: ->
     for frameId, val of activeSessions
