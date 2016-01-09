@@ -1,5 +1,6 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="livesnooker-player-link.html">
 
 <dom-module id="player-stats">
   <style>
@@ -9,7 +10,7 @@
   </style>
   <template>
     <div id="content" class="uk-panel uk-panel-box">
-      <h3 class="uk-panel-title">[[player.attributes.name]]</h3>
+      <h3 class="uk-panel-title"><livesnooker-player-link player="[[player]]"></livesnooker-player-link></h3>
       <template is="dom-if" if="{{stats}}">
         <ul class="uk-list">
           <li>Pot: <span>[[computePct(stats.potPct)]]</span>%</li>

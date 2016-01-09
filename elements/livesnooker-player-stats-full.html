@@ -5,21 +5,36 @@
 <link rel="import" href="stats-graph.html">
 
 <dom-module id="livesnooker-player-stats-full">
+  <style>
+    .graph-selector {
+      margin-right: 1em;
+    }
+  </style>
   <template>
     <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[player]]" restamp>
       <h1>Stats for <model-attribute model="[[player]]" attribute="name"></model-attribute></h1>
       <stats-graph stats="[[drawStats]]"></stats-graph>
-      <label for="break-points">Break points</label>
-      <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="drawBreakPoints" checked="checked">
-      <label for="break-length">Break length</label>
-      <input id="break-length"type="radio" name="stat" value="breakLength" on-change="drawBreakLength">
-      <label for="break-length">Pot % / frame</label>
-      <input id="break-length"type="radio" name="stat" value="potPct" on-change="drawPotPct">
-      <label for="break-length">Points / frame</label>
-      <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawFramePoints">
-      <label for="break-length">Biggest break / frame</label>
-      <input id="break-length"type="radio" name="stat" value="framePoints" on-change="drawBiggestBreaks">
+      <span class="graph-selector">
+        <label for="break-points">Break points</label>
+        <input id="break-points" type="radio" name="stat" value="breakPoints" on-change="drawBreakPoints" checked="checked">
+      </span>
+      <span class="graph-selector">
+        <label for="break-length">Break length</label>
+        <input id="break-length" type="radio" name="stat" value="breakLength" on-change="drawBreakLength">
+      </span>
+      <span class="graph-selector">
+        <label for="pot-pct">Pot % / frame</label>
+        <input id="pot-pct"type="radio" name="stat" value="potPct" on-change="drawPotPct">
+      </span>
+      <span class="graph-selector">
+        <label for="points-per-frame">Points / frame</label>
+        <input id="points-per-frame" type="radio" name="stat" value="framePoints" on-change="drawFramePoints">
+      </span>
+      <span class="graph-selector">
+        <label for="biggest-break">Biggest break / frame</label>
+        <input id="biggest-break" type="radio" name="stat" value="framePoints" on-change="drawBiggestBreaks">
+      </span>
     </template>
   </template>
 </dom-module>
