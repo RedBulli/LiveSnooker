@@ -44,7 +44,9 @@
                 <ul class="uk-nav">
                   <template is="dom-if" if="[[league]]">
                     <li><a href="{{ computeLeagueLiveUrl(league) }}">Live</a></li>
-                    <li><a href="{{ computeLeagueControlUrl(league) }}">Control league</a></li>
+                    <template is="dom-if" if="[[_hasWriteAccess(user, league)]]">
+                      <li><a href="{{ computeLeagueControlUrl(league) }}">Control league</a></li>
+                    </template>
                   </template>
                   <li>
                     <a href="/#/leagues/">Change league</a>
@@ -77,6 +79,10 @@
     },
     computeLeagueLiveUrl: function(league) {
       return '/#/leagues/' + league.id + '/live/';
+    },
+    _hasWriteAccess: function(user, league) {
+      debugger
+      return league.hasWriteAccess(user);
     },
     leagueSignal: function(signal) {
       if (signal.detail.attributes.name) {

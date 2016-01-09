@@ -32,6 +32,10 @@ class League extends Livesnooker.Model
     }
   ]
 
+  hasWriteAccess: (user) ->
+    @get('Admins').find (admin) ->
+      admin.get('UserEmail') == user.email && admin.get('write')
+
 League.setup()
 
 class Leagues extends Livesnooker.Collection
