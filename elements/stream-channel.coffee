@@ -80,4 +80,5 @@ Polymer
           @intervalId = setInterval(@clearOldSessions.bind(@, @connection), 10000)
 
   ready: ->
-    this.isReady = @_resolveReady()
+    @$.api.data.ready.then =>
+      @_resolveReady()
