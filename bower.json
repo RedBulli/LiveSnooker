@@ -1,23 +1,21 @@
 {
   "name": "LiveSnooker",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "dependencies": {
-    "backbone": "latest",
-    "backbone-relational": "latest",
-    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#latest",
-    "iron-dropdown": "PolymerElements/iron-dropdown#latest",
-    "iron-icons": "PolymerElements/iron-icons#latest",
-    "iron-meta": "PolymerElements/iron-meta#latest",
-    "iron-pages": "PolymerElements/iron-pages#latest",
-    "iron-signals": "PolymerElements/Iron-Signals#latest",
-    "jquery": "latest",
-    "paper-toggle-button": "PolymerElements/paper-toggle-button#latest",
-    "polymer": "Polymer/polymer#latest",
-    "rtcmulticonnection": "latest",
-    "uikit": "latest",
-    "underscore": "latest",
-    "google-signin": "GoogleWebComponents/google-signin#latest",
-    "excess-router": "latest"
+    "backbone": "1.2.3",
+    "backbone-relational": "0.10.0",
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#1.0.4",
+    "iron-dropdown": "PolymerElements/iron-dropdown#1.1.0",
+    "iron-icons": "PolymerElements/iron-icons#1.1.1",
+    "iron-pages": "PolymerElements/iron-pages#1.0.5",
+    "iron-signals": "PolymerElements/Iron-Signals#1.0.3",
+    "jquery": "2.2.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#1.0.13",
+    "polymer": "Polymer/polymer#1.2.3",
+    "uikit": "2.24.3",
+    "underscore": "1.8.3",
+    "google-signin": "GoogleWebComponents/google-signin#1.2.0",
+    "excess-router": "0.9.11"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"
