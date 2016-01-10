@@ -5,7 +5,7 @@ Polymer
     league: Object,
     unfinishedFrames: Array
     finishedFrames: Array
-    isAdmin: Boolean
+    writeAdmin: Boolean
 
   frameUrl: (frame) ->
     "/frame.html?leagueId=#{frame.get('LeagueId')}&frameId=#{frame.id}"

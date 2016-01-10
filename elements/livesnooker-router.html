@@ -10,6 +10,7 @@
 <link rel="import" href="../vendors/google-signin/google-signin.html">
 <link rel="import" href="../vendors/excess-router/excess-router.html">
 <link rel="import" href="frame-breaks.html">
+<link rel="import" href="livesnooker-league.html">
 
 <dom-module id="livesnooker-router">
   <template>
@@ -29,18 +30,47 @@
           <leagues-list></leagues-list>
         </template>
         <template is="dom-if" if="{{hasLeagueId}}">
+          <livesnooker-league
+            league-id="[[leagueId]]"
+            league="{{league}}"
+            socket-url="[[socketUrl]]"
+            write-admin="{{writeAdmin}}"
+            unfinished-frames="{{unfinishedFrames}}"
+            finished-frames="{{finishedFrames}}"
+            active-players="{{activePlayers}}"
+            admins="{{admins}}"
+          ></livesnooker-league>
           <excess-route route="/leagues/:leagueId/:leagueaction/(.*)" leagueaction="{{leagueaction}}"></excess-route>
           <iron-pages attr-for-selected="leagueroute" selected="[[leagueaction]]">
-            <section leagueroute="control"><league-controller league-id="{{leagueId}}"></league-controller></section>
+
+            <section leagueroute="control">
+              <league-controller
+                league="[[league]]"
+                players="[[activePlayers]]"
+                admins="[[admins]]"
+              ></league-controller>
+            </section>
+
             <section leagueroute="players">
               <excess-route route="/leagues/:leagueId/players/:playerid" playerid="{{playerId}}"></excess-route>
               <livesnooker-player-stats-full league-id="{{leagueId}}" player-id="{{playerId}}"></livesnooker-player-stats-full>
             </section>
+
             <section leagueroute="frames">
               <excess-route route="/leagues/:leagueId/frames/:frameid" frameid="{{frameId}}"></excess-route>
               <frame-breaks league-id="{{leagueId}}" frame-id="{{frameId}}"></frame-breaks>
             </section>
-            <section leagueroute="live"><livesnooker-home league-id="{{leagueId}}" socket-url="[[socketUrl]]"></livesnooker-home></section>
+
+            <section leagueroute="live">
+              <livesnooker-home
+                league="[[league]]"
+                write-admin="[[writeAdmin]]"
+                unfinished-frames="[[unfinishedFrames]]"
+                finished-frames="[[finishedFrames]]"
+                active-players="[[activePlayers]]"
+              ></livesnooker-home>
+            </section>
+
           </iron-pages>
         </template>
       </section>

@@ -1,9 +1,7 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="js/players.html">
-<link rel="import" href="js/leagues.html">
 <link rel="import" href="uikit.html">
-<link rel="import" href="backbone-collection-renderer.html">
 
 <dom-module id="editable-text">
   <style>
@@ -79,24 +77,20 @@
         <ul class="uk-list">
           <li>Players:
             <ul id="players" class="uk-list">
-              <backbone-collection-renderer collection="[[league.attributes.Players]]">
-                <template class="content" is="dom-repeat">
-                  <li><editable-text object="[[item]]" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="[[item]]" on-click="playerRemoveClick"></a></li>
-                </template>
-              </backbone-collection-renderer>
+              <template is="dom-repeat" items="[[players]]">
+                <li><editable-text object="[[item]]" on-edit="onPlayerEdit">[[ item.attributes.name ]]</editable-text> <a href="#" class="uk-icon-remove" player="[[item]]" on-click="playerRemoveClick"></a></li>
+              </template>
             </ul>
           </li>
 
           <li>Admins:
             <ul id="admins" class="uk-list">
-              <backbone-collection-renderer collection="[[league.attributes.Admins]]">
-                <template class="content" is="dom-repeat">
-                  <li>
-                    <span>[[ item.attributes.UserEmail ]]</span> <a href="#" class="uk-icon-remove" admin="[[item]]" on-click="adminRemoveClick"></a>
-                    Write: <input type="checkbox" checked="[[item.attributes.write]]" admin="[[item]]" on-change="adminWriteChange"
-                  </li>
-                </template>
-              </backbone-collection-renderer>
+              <template is="dom-repeat" items="[[admins]]">
+                <li>
+                  <span>[[ item.attributes.UserEmail ]]</span> <a href="#" class="uk-icon-remove" admin="[[item]]" on-click="adminRemoveClick"></a>
+                  Write: <input type="checkbox" checked="[[item.attributes.write]]" admin="[[item]]" on-change="adminWriteChange">
+                </li>
+              </template>
             </ul>
           </li>
           <li>Public: <input type="checkbox" checked="[[league.attributes.public]]" on-change="publicChange"

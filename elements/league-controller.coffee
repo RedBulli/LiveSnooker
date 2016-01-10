@@ -10,11 +10,8 @@ Polymer
   is: 'league-controller'
   properties:
     league: Object
-    leagueId:
-      type: String,
-      observer: '_leagueIdChanged'
-    leagueAttrs: Object
     players: Array
+    admins: Array
 
   newPlayer: ->
     event.preventDefault()
@@ -100,10 +97,3 @@ Polymer
       wait: true,
       error: onError
     })
-
-  _leagueIdChanged: ->
-    if @leagueId
-      @$.api.findOrFetchModel(League, @leagueId)
-        .then (league) =>
-          @league = league
-          @fire('iron-signal', {name: "league", data: league})

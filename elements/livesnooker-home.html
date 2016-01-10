@@ -2,7 +2,6 @@
 <link rel="import" href="new-frame-form.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="livesnooker-player-link.html">
-<link rel="import" href="livesnooker-league.html">
 
 <dom-module name="livesnooker-home">
   <style>
@@ -24,14 +23,6 @@
   </style>
 
   <template>
-    <livesnooker-league
-      league="{{league}}"
-      socket-url="[[socketUrl]]"
-      write-admin="{{isAdmin}}"
-      unfinished-frames="{{unfinishedFrames}}"
-      finished-frames="{{finishedFrames}}"
-      active-players="{{activePlayers}}"
-    ></livesnooker-league>
     <div id="content">
       <template is="dom-if" if="[[league]]">
         <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
@@ -41,7 +32,7 @@
               (<span>[[computeStartDate(item)]]</span>)
               <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link> - <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
               <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
-              <template is="dom-if" if="[[isAdmin]]">
+              <template is="dom-if" if="[[writeAdmin]]">
                 <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
               </template>
               <template is="dom-if" if="[[item.video]]">
@@ -66,7 +57,7 @@
             </li>
           </template>
         </ul>
-        <template is="dom-if" if="[[isAdmin]]">
+        <template is="dom-if" if="[[writeAdmin]]">
           <new-frame-form league="[[league]]" players="[[activePlayers]]"></new-frame-form>
         </template>
       </template>
