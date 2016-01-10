@@ -20,9 +20,6 @@
     #content {
       margin-left: 1em;
     }
-    .video-status {
-      display: none;
-    }
     .winner {
       font-weight: bold;
     }
@@ -55,7 +52,9 @@
               <template is="dom-if" if="[[_hasWriteAccess(user, league)]]">
                 <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
               </template>
-              <span class="video-status">VIDEO</span>
+              <template is="dom-if" if="[[item.video]]">
+                VIDEO
+              </template>
             </li>
           </template>
         </ol>

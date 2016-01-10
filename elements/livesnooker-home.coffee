@@ -64,9 +64,6 @@ Polymer
         player = new Player(event.detail.player)
         @league.get('Players').add(player)
 
-  getVideoStatusElement: (frameId) ->
-    $(Polymer.dom(this).node.querySelector('li[data-id="' + frameId + '"] > .video-status'))
-
   showFrame: (event) ->
     event.preventDefault()
     window.open(event.currentTarget.href, "", "width=1050, height=600")
@@ -76,10 +73,14 @@ Polymer
     window.open(event.currentTarget.href, "", "width=1050, height=600")
 
   newStream: (event) ->
-    @getVideoStatusElement(event.detail).show()
+    index = _.indexOf(@unfinishedFrames, @league.get('Frames').get(event.detail))
+    if index >= 0
+      @set("unfinishedFrames.#{index}.video", true)
 
   streamClosed: (event) ->
-    @getVideoStatusElement(event.detail).hide()
+    index = _.indexOf(@unfinishedFrames, @league.get('Frames').get(event.detail))
+    if index >= 0
+      @set("unfinishedFrames.#{index}.video", false)
 
   computeShowBreaks: (frame) ->
     "/#/leagues/#{frame.get('LeagueId')}/frames/#{frame.id}"
@@ -97,6 +98,9 @@ Polymer
     @league.get('Frames').on 'add remove change', =>
       @updateFrames()
     @updateFrames()
+
+  _hasVideo: (frame) ->
+    frame.video
 
   _leagueIdChanged: ->
     if @leagueId
