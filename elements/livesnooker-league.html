@@ -1,6 +1,5 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="js/detect-rtc.html">
-<link rel="import" href="../vendors/iron-signals/iron-signals.html">
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="js/frames.html">
 <link rel="import" href="js/players.html">
@@ -10,7 +9,6 @@
 
 <dom-module id="livesnooker-league" hidden>
   <template>
-    <iron-signals on-iron-signal-account="accountSignal"></iron-signals>
     <livesnooker-api id="api" user="{{user}}"></livesnooker-api>
     <template is="dom-if" if="[[league]]">
       <template is="dom-if" if="[[streamUrl]]">

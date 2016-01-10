@@ -6,10 +6,7 @@ Polymer
     league: Object,
     unfinishedFrames: Array
     finishedFrames: Array
-    user: Object
-
-  accountSignal: (signal) ->
-    this.user = signal.detail
+    isAdmin: Boolean
 
   frameUrl: (frame) ->
     "/frame.html?leagueId=" + @leagueId + "&frameId=" + frame.id

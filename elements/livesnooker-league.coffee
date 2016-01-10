@@ -18,9 +18,6 @@ Polymer
       notify: true
     streamUrl: String
     socketUrl: String
-    user:
-      type: Object
-      notify: true
     writeAdmin:
       type: Boolean
       notify: true
@@ -36,10 +33,6 @@ Polymer
 
   attached: ->
     @_resolveAttached()
-
-  accountSignal: (signal) ->
-    @set('user', signal.detail)
-    @leagueResolved.then => @updateWriteAdmin()
 
   onStreamEvent: (event) ->
     if event.detail.event == 'frameStart'
@@ -92,7 +85,8 @@ Polymer
     @set('finishedFrames', @league.get('Frames').filter((frame) -> !!frame.get('endedAt')))
 
   updateWriteAdmin: ->
-    @set('writeAdmin', @league.hasWriteAccess(@user))
+    @$.api.data.userPromise.then =>
+      @set('writeAdmin', @league.hasWriteAccess(@$.api.data.user))
 
   _leagueIdChanged: ->
     @whenAttached.then =>

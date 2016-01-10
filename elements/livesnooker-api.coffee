@@ -1,4 +1,5 @@
-apiReady = null
+resolveApiReadyPromise = null
+resolveUserPromise = null
 
 data =
   authentication: null
@@ -8,7 +9,10 @@ data =
   streamUrl: null
   anonymous: false
   ready: new Promise (resolve, reject) ->
-    apiReady = resolve
+    resolveApiReadyPromise = resolve
+
+  userPromise: new Promise (resolve, reject) ->
+    resolveUserPromise = resolve
 
 apiIsReady = ->
   (data.authentication || data.anonymous) && data.host
@@ -70,7 +74,8 @@ Polymer
   setUser: (user) ->
     data.user = user
     @fire('iron-signal', {name: "account", data: user})
-    @user = data.user
+    @set('user', data.user)
+    resolveUserPromise(user)
 
   setHost: (host) ->
     @host = host
@@ -124,7 +129,7 @@ Polymer
   onApiReady: ->
     @fire('api-ready')
     @fire('api')
-    apiReady()
+    resolveApiReadyPromise()
 
   useAnonymously: ->
     data.anonymous = true
