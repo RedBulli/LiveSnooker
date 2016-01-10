@@ -1,3 +1,10 @@
+promisify = (fn) ->
+  new Promise (resolve, reject) ->
+    fn({
+      success: resolve,
+      error: reject
+    })
+
 Polymer
   is: 'livesnooker-home'
 
@@ -111,9 +118,14 @@ Polymer
           @league = league
           league.get('Frames').leagueId = league.id
           league.get('Frames').setApiClient(league.client)
-          league.get('Frames').fetch({
-            success: @initFrames.bind(@)
-          })
+          league.get('Players').leagueId = league.id
+          league.get('Players').setApiClient(league.client)
+          _this = @
+          Promise.all([
+            promisify(league.get('Frames').fetch.bind(league.get('Frames'))),
+            promisify(league.get('Players').fetch.bind(league.get('Players')))
+          ]).then ->
+            _this.initFrames.call(_this)
           @fire('iron-signal', {name: "league", data: league})
         .catch (model, response) =>
           @noleague = response.responseJSON.error.message
