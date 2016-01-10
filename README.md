@@ -18,6 +18,7 @@ Copy environments/sample.env to environments/development.env and modify values (
 ```
 ./grunt.sh
 ```
+Browse to localhost:9000
 
 Building to production
 ------------
