@@ -44,7 +44,9 @@
       var frame = new Frame({
         League: this.league,
         Player1: p1,
-        Player2: p2
+        Player2: p2,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
       leagueId = this.league.id
       frame.setApiClient(this.$.api);
