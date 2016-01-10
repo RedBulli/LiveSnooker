@@ -1,10 +1,3 @@
-promisify = (fn) ->
-  new Promise (resolve, reject) ->
-    fn({
-      success: resolve,
-      error: reject
-    })
-
 Polymer
   is: 'livesnooker-home'
 
@@ -107,25 +100,15 @@ Polymer
 
   _leagueIdChanged: ->
     if @leagueId
-      @$.api.findOrFetchModel(League, @leagueId)
+      League.fetchWithRelations(@$.api, @leagueId)
         .then (league) =>
           @$.api.data.ready.then =>
             streamUrl = "#{@$.api.host}/leagues/#{@leagueId}/stream"
             if @$.api.data.authentication
               streamUrl += "?id_token=#{@$.api.data.authentication.id_token}"
             @streamUrl = streamUrl
-          league.setApiClient(@$.api) if not league.client
-          @league = league
-          league.get('Frames').leagueId = league.id
-          league.get('Frames').setApiClient(league.client)
-          league.get('Players').leagueId = league.id
-          league.get('Players').setApiClient(league.client)
-          _this = @
-          Promise.all([
-            promisify(league.get('Frames').fetch.bind(league.get('Frames'))),
-            promisify(league.get('Players').fetch.bind(league.get('Players')))
-          ]).then ->
-            _this.initFrames.call(_this)
-          @fire('iron-signal', {name: "league", data: league})
+            @league = league
+            @initFrames()
+            @fire('iron-signal', {name: "league", data: league})
         .catch (model, response) =>
           @noleague = response.responseJSON.error.message

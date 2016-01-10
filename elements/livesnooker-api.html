@@ -5,7 +5,7 @@
 <link rel="import" href="uikit.html">
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
-<dom-module id="livesnooker-api" attributes="user onAccount" hidden>
+<dom-module id="livesnooker-api" hidden>
   <template>
     <google-signin-aware scopes="https://www.googleapis.com/auth/plus.login" on-google-signin-aware-success="onGoogleSignIn"></google-signin-aware>
     <iron-signals on-iron-signal-account="onAccount"></iron-signals>

@@ -15,7 +15,7 @@ Admin.setup()
 class Admins extends Livesnooker.Collection
   model: Admin
   url: ->
-    "/leagues/#{@get('LeagueId')}/admins"
+    "/leagues/#{@leagueId}/admins"
 
 ((scope) ->
   scope.User = User
