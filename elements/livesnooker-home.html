@@ -40,6 +40,7 @@
       write-admin="{{isAdmin}}"
       unfinished-frames="{{unfinishedFrames}}"
       finished-frames="{{finishedFrames}}"
+      active-players="{{activePlayers}}"
     ></livesnooker-league>
     <div id="content">
       <template is="dom-if" if="[[league]]">
@@ -76,7 +77,7 @@
           </template>
         </ul>
         <template is="dom-if" if="[[isAdmin]]">
-          <new-frame-form league="[[league]]"></new-frame-form>
+          <new-frame-form league="[[league]]" players="[[activePlayers]]"></new-frame-form>
         </template>
       </template>
     </div>

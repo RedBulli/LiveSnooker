@@ -16,6 +16,15 @@ Polymer
       type: Array
       value: -> []
       notify: true
+    admins:
+      type: Array
+      notify: true
+    players:
+      type: Array
+      notify: true
+    activePlayers:
+      type: Array
+      notify: true
     streamUrl: String
     socketUrl: String
     writeAdmin:
@@ -72,6 +81,14 @@ Polymer
     @set('streamUrl', @$.api.getStreamUrl(@league))
     @league.get('Frames').on 'add remove change', =>
       @updateFrames()
+    @set('admins', @league.get('Admins').map (admin) -> admin)
+    @league.get('Admins').on 'add remove change', =>
+      @set('admins', @league.get('Admins').map (admin) -> admin)
+    @set('players', @league.get('Players').map (player) -> player)
+    @set('activePlayers', @league.get('Players').filter (player) -> !player.get('deleted'))
+    @league.get('Players').on 'add remove change', =>
+      @set('players', @league.get('Players').map (player) -> player)
+      @set('activePlayers', @league.get('Players').filter (player) -> !player.get('deleted'))
     @fire('iron-signal', {name: "league", data: league})
     @_resolveLeague()
     @updateFrames()

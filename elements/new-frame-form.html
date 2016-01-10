@@ -31,14 +31,8 @@
   Polymer({
     is: 'new-frame-form',
     properties: {
-      league: {
-        type: Object,
-        observer: '_onLeagueChange'
-      },
-      players: {
-        type: Array,
-        value: function() { return []; }
-      }
+      league: Object,
+      players: Array
     },
     leagueControlUrl: function(league) {
       return '/#/leagues/' + league.id
@@ -60,10 +54,6 @@
           frame.trigger("saved", frame);
         }
       });
-    },
-    _onLeagueChange: function(next, prev) {
-      if (prev) prev.off(null, null, this);
-      bindCollectionChangesToPolymerArray(this.league.get('Players'), 'players', this);
     }
   });
 </script>

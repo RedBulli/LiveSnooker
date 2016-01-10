@@ -24,14 +24,6 @@
     }, 0);
   }
 
-  function bindCollectionChangesToPolymerArray(collection, variableName, element) {
-    function resetArray() {
-      resetPolymerArray(collection, variableName, element);
-    }
-    collection.on('add remove change reset', resetArray, element);
-    resetArray();
-  }
-
   Polymer({
     is: 'backbone-collection-renderer',
     properties: {
