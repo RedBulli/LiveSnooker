@@ -94,11 +94,7 @@
           frame.get('Shots').populateAssociations();
           frame.calculateShotGroups();
           this.frame = frame;
-          var streamUrl = this.$.api.host + this.frame.url() + "/stream"
-          if (this.$.api.data.authentication) {
-            streamUrl += "?id_token=" + this.$.api.data.authentication.id_token;
-          }
-          this.streamUrl = streamUrl;
+          this.set('streamUrl', this.$.api.getStreamUrl(this.frame));
           this.frame.on("update", (function() {
             this.leader = this.frame.getLeader();
           }).bind(this));

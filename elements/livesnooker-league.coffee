@@ -76,6 +76,7 @@ Polymer
 
   setLeague: (league) ->
     @set('league', league)
+    @set('streamUrl', @$.api.getStreamUrl(@league))
     @league.get('Frames').on 'add remove change', =>
       @updateFrames()
     @fire('iron-signal', {name: "league", data: league})
@@ -99,10 +100,6 @@ Polymer
         League.fetchWithRelations(@$.api, @leagueId)
           .then (league) =>
             @$.api.data.ready.then =>
-              streamUrl = "#{@$.api.host}/leagues/#{@leagueId}/stream"
-              if @$.api.data.authentication
-                streamUrl += "?id_token=#{@$.api.data.authentication.id_token}"
-              @streamUrl = streamUrl
               @setLeague(league)
       else
         @set('league', null)

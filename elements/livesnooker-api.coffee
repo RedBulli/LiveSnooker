@@ -4,6 +4,8 @@ data =
   authentication: null
   user: null
   host: null
+  socketUrl: null
+  streamUrl: null
   anonymous: false
   ready: new Promise (resolve, reject) ->
     apiReady = resolve
@@ -76,6 +78,12 @@ Polymer
 
   setAuthentication: (authentication) ->
     data.authentication = authentication
+
+  getStreamUrl: (model) ->
+    streamUrl = data.host + model.url() + '/stream'
+    if data.authentication
+      streamUrl += "?id_token=" + data.authentication.id_token
+    streamUrl
 
   ajax: (path, settings) ->
     if apiIsReady()
