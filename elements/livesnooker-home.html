@@ -10,6 +10,7 @@
 <link rel="import" href="livesnooker-player-link.html">
 <link rel="import" href="../vendors/iron-signals/iron-signals.html">
 <link rel="import" href="js/detect-rtc.html">
+<link rel="import" href="livesnooker-league.html">
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
 <dom-module name="livesnooker-home">
@@ -32,16 +33,16 @@
   </style>
 
   <template>
-    <iron-signals on-iron-signal-account="accountSignal"></iron-signals>
-    <livesnooker-api id="api" user="{{user}}"></livesnooker-api>
+    <livesnooker-league
+      league-id="[[leagueId]]"
+      league="{{league}}"
+      socket-url="[[socketUrl]]"
+      write-admin="{{isAdmin}}"
+      unfinished-frames="{{unfinishedFrames}}"
+      finished-frames="{{finishedFrames}}"
+    ></livesnooker-league>
     <div id="content">
       <template is="dom-if" if="[[league]]">
-        <template is="dom-if" if="[[streamUrl]]">
-          <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
-        </template>
-        <template is="dom-if" if="[[_isRTCSupported()]]">
-          <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-        </template>
         <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
         <ol id="framelist" class="uk-list frames">
           <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
@@ -49,7 +50,7 @@
               (<span>[[computeStartDate(item)]]</span>)
               <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link> - <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
               <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
-              <template is="dom-if" if="[[_hasWriteAccess(user, league)]]">
+              <template is="dom-if" if="[[isAdmin]]">
                 <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
               </template>
               <template is="dom-if" if="[[item.video]]">
@@ -74,7 +75,7 @@
             </li>
           </template>
         </ul>
-        <template is="dom-if" if="[[_hasWriteAccess(user, league)]]">
+        <template is="dom-if" if="[[isAdmin]]">
           <new-frame-form league="[[league]]"></new-frame-form>
         </template>
       </template>

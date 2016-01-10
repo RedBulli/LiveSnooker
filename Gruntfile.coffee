@@ -128,12 +128,12 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', (target) ->
     if target == 'dist'
       grunt.task.run(['env:dist'])
-    else if target == 'dev'
+    else if target == 'dev' || target == 'dev-vulcanize'
       grunt.task.run(['env:dev'])
     else if target == 'test'
       grunt.task.run(['env:dev', 'clean:specs', 'coffee:specs'])
     grunt.task.run(['clean:elements', 'preprocess:html', 'coffee:app', 'copy:html'])
-    if target == 'dist'
+    if target == 'dist' || target == 'dev-vulcanize'
       grunt.task.run(['vulcanize'])
 
   grunt.registerTask 'default', [
