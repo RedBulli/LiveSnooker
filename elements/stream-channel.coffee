@@ -17,6 +17,7 @@ SocketConnection = (socketUrl, leagueId, element, authentication) ->
       onMessageCallbacks[data.channel](data.message)
 
   socket.emit('presence', leagueId)
+  socket
 
 Polymer
   is: 'stream-channel'
@@ -46,7 +47,7 @@ Polymer
   _onLeagueChange: ->
     @whenReady.then =>
       if @connection
-        @connection.leave()
+        @connection.close()
         clearInterval(@intervalId)
         @connection = null
       if @leagueId
