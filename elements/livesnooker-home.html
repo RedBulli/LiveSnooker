@@ -1,17 +1,8 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
-<link rel="import" href="livesnooker-api.html">
-<link rel="import" href="js/frames.html">
-<link rel="import" href="js/players.html">
 <link rel="import" href="new-frame-form.html">
-<link rel="import" href="js/leagues.html">
-<link rel="import" href="stream-channel.html">
-<link rel="import" href="event-stream.html">
 <link rel="import" href="uikit.html">
 <link rel="import" href="livesnooker-player-link.html">
-<link rel="import" href="../vendors/iron-signals/iron-signals.html">
-<link rel="import" href="js/detect-rtc.html">
 <link rel="import" href="livesnooker-league.html">
-<script src="../vendors/jquery/dist/jquery.min.js"></script>
 
 <dom-module name="livesnooker-home">
   <style>
@@ -34,7 +25,6 @@
 
   <template>
     <livesnooker-league
-      league-id="[[leagueId]]"
       league="{{league}}"
       socket-url="[[socketUrl]]"
       write-admin="{{isAdmin}}"

@@ -2,14 +2,13 @@ Polymer
   is: 'livesnooker-home'
 
   properties:
-    leagueId: String
     league: Object,
     unfinishedFrames: Array
     finishedFrames: Array
     isAdmin: Boolean
 
   frameUrl: (frame) ->
-    "/frame.html?leagueId=" + @leagueId + "&frameId=" + frame.id
+    "/frame.html?leagueId=#{frame.get('LeagueId')}&frameId=#{frame.id}"
 
   computeControlLink: (frame) ->
     @frameUrl(frame) + "&input=true"
