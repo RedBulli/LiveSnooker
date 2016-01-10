@@ -2,6 +2,7 @@
 <link rel="import" href="js/frames.html">
 <link rel="import" href="livesnooker-api.html">
 <link rel="import" href="uikit.html">
+<link rel="import" href="js/uuid.html">
 
 <dom-module id="new-frame-form">
   <template>
@@ -42,6 +43,7 @@
       var p1 = this.league.get('Players').get(this.$$("#player1").value);
       var p2 = this.league.get('Players').get(this.$$("#player2").value);
       var frame = new Frame({
+        id: createUuid(),
         League: this.league,
         Player1: p1,
         Player2: p2,
@@ -51,9 +53,14 @@
       leagueId = this.league.id
       frame.setApiClient(this.$.api);
       frame.save(frame.attributes, {
+        type: 'POST',
+        url: '/leagues/' + this.league.id + '/frames',
         success: function() {
           window.open("/frame.html?leagueId=" + leagueId + "&frameId=" + frame.id + "&input=true", "", "width=1050, height=600");
           frame.trigger("saved", frame);
+        },
+        error: function() {
+          frame.destroy();
         }
       });
     }

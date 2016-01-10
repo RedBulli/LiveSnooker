@@ -14,9 +14,7 @@ Polymer
       type: String,
       observer: '_leagueIdChanged'
     leagueAttrs: Object
-    players:
-      type: Object
-    playerModels: Array
+    players: Array
 
   newPlayer: ->
     event.preventDefault()
