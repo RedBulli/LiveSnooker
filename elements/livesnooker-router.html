@@ -40,7 +40,11 @@
             active-players="{{activePlayers}}"
             admins="{{admins}}"
           ></livesnooker-league>
-          <excess-route route="/leagues/:leagueId/:leagueaction/(.*)" leagueaction="{{leagueaction}}"></excess-route>
+          <excess-route
+            route="/leagues/:leagueId/:leagueaction/(.*)"
+            leagueaction="{{leagueaction}}"
+            route-alias="league"
+          ></excess-route>
           <iron-pages attr-for-selected="leagueroute" selected="[[leagueaction]]">
 
             <section leagueroute="control">

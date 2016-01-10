@@ -2,7 +2,6 @@
 <link rel="import" href="js/leagues.html">
 <link rel="import" href="new-league-form.html">
 <link rel="import" href="uikit.html">
-<link rel="import" href="backbone-collection-renderer.html">
 <link rel="import" href="../vendors/iron-signals/iron-signals.html">
 
 <dom-module id="leagues-list">
@@ -16,24 +15,22 @@
     <iron-signals on-iron-signal-account="accountSignal"></iron-signals>
     <livesnooker-api id="api"></livesnooker-api>
     <div id="content">
-      <template is="dom-if" if="[[leagues.length]]">
+      <template is="dom-if" if="[[!_isEmpty(leagueModels)]]">
         <h2>Your leagues:</h2>
         <ul class="uk-list">
-          <backbone-collection-renderer collection="[[leagues]]">
-            <template class="content" is="dom-repeat">
-              <li>
-                <a href="[[ leagueUrl(item) ]]">[[item.attributes.name]]</a>
-              </li>
-            </template>
-          </backbone-collection-renderer>
+          <template is="dom-repeat" items="[[leagueModels]]">
+            <li>
+              <a href="[[ leagueUrl(item) ]]">[[item.attributes.name]]</a>
+            </li>
+          </template>
         </ul>
       </template>
-      <template is="dom-if" if="[[!leagues.length]]">
+      <template is="dom-if" if="[[_isEmpty(leagueModels)]]">
         You don't admin or belong to any league.
       </template>
       <br>
       <template is="dom-if" if="[[user]]">
-        <new-league-form leagues="{{leagues}}"></new-league-form>
+        <new-league-form on-newleague="_onNewLeague"></new-league-form>
       </template>
     </div>
   </template>
@@ -43,7 +40,7 @@
   Polymer({
     is: 'leagues-list',
     properties: {
-      leagues: Object,
+      leagueModels: Array,
       user: Object
     },
     leagueUrl: function(league) {
@@ -52,13 +49,22 @@
     accountSignal: function(signal) {
       this.user = signal.detail;
     },
+    _onNewLeague: function(event) {
+      this.leagues.add(event.detail);
+    },
+    _isEmpty: function(arr) {
+      return arr.length === 0;
+    },
     ready: function() {
-      var leagues = new Leagues();
-      leagues.setApiClient(this.$.api);
+      this.leagues = new Leagues();
+      this.leagues.setApiClient(this.$.api);
       var _this = this;
-      leagues.fetch({
+      this.leagues.fetch({
         success: function() {
-          _this.leagues = leagues;
+          _this.set('leagueModels', _this.leagues.map(function(league) { return league; }));
+          _this.leagues.on('add remove change', function() {
+            _this.set('leagueModels', _this.leagues.map(function(league) { return league; }));
+          });
         }
       });
     }
