@@ -26,10 +26,10 @@
     <iron-pages attr-for-selected="route" selected="[[appMenu]]">
       <section route="leagues">
         <excess-route route="/leagues/:leagueId/(.*)" league-id="{{leagueId}}" active="{{hasLeagueId}}"></excess-route>
-        <template is="dom-if" if="{{!hasLeagueId}}">
+        <template is="dom-if" if="[[!hasLeagueId]]">
           <leagues-list></leagues-list>
         </template>
-        <template is="dom-if" if="{{hasLeagueId}}">
+        <template is="dom-if" if="[[hasLeagueId]]">
           <livesnooker-league
             league-id="[[leagueId]]"
             league="{{league}}"
@@ -89,7 +89,9 @@
       backendHost: String,
       googleClientId: String,
       socketUrl: String,
-      route: Object
+      route: Object,
+      leagueId: String,
+      hasLeagueId: Boolean
     },
     onSignedIn: function() {
       this.$.noauth.hidden = true;

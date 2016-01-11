@@ -9,7 +9,7 @@
 
 <dom-module id="livesnooker-league" hidden>
   <template>
-    <livesnooker-api id="api" user="{{user}}"></livesnooker-api>
+    <livesnooker-api id="api"></livesnooker-api>
     <template is="dom-if" if="[[league]]">
       <template is="dom-if" if="[[streamUrl]]">
         <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
