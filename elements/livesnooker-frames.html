@@ -57,7 +57,8 @@
       return !!frame.get('endedAt');
     },
     frameUrl: function(frame) {
-      return this.host + 'frame.html?leagueId=' + frame.get('LeagueId') + '&frameId=' + frame.id;
+      leagueId = frame.get('LeagueId') || frame.get('League').id
+      return this.host + 'frame.html?leagueId=' + leagueId + '&frameId=' + frame.id;
     },
     computeControlLink: function(frame) {
       return this.frameUrl(frame) + '&input=true';
