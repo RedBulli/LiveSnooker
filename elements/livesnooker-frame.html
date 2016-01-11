@@ -60,6 +60,7 @@
       event.preventDefault();
       this.$.api.useAnonymously();
       this.$.noauth.innerHTML = "Using anonymously";
+      this.signedIn = true;
     },
     ready: function() {
       this.leagueId = QueryString.leagueId;
