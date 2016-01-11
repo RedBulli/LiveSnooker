@@ -1,7 +1,7 @@
 <link rel="import" href="../vendors/polymer/polymer.html">
 <link rel="import" href="new-frame-form.html">
 <link rel="import" href="uikit.html">
-<link rel="import" href="livesnooker-player-link.html">
+<link rel="import" href="livesnooker-frames.html">
 
 <dom-module name="livesnooker-home">
   <style>
@@ -26,37 +26,9 @@
     <div id="content">
       <template is="dom-if" if="[[league]]">
         <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
-        <ol id="framelist" class="uk-list frames">
-          <template id="unfinished" is="dom-repeat" items="[[unfinishedFrames]]">
-            <li data-id$="[[item.id]]">
-              (<span>[[computeStartDate(item)]]</span>)
-              <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link> - <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
-              <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
-              <template is="dom-if" if="[[writeAdmin]]">
-                <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
-              </template>
-              <template is="dom-if" if="[[item.video]]">
-                VIDEO
-              </template>
-            </li>
-          </template>
-        </ol>
+        <livesnooker-frames frames="[[unfinishedFrames]]" show-controls="[[writeAdmin]]"></livesnooker-frames>
         <h2>Finished frames (<span>[[finishedFrames.length]]</span>)</h2>
-        <ul class="uk-list frames">
-          <template id="finished" is="dom-repeat" items="[[finishedFrames]]">
-            <li>
-              (<span>[[computeEndDate(item)]]</span>)
-              <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
-                <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link>
-              </span>
-              <span> - </span>
-              <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
-                <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
-              </span>
-              <a href="[[computeShowBreaks(item)]]">View breaks</a>
-            </li>
-          </template>
-        </ul>
+        <livesnooker-frames frames="[[finishedFrames]]"></livesnooker-frames>
         <template is="dom-if" if="[[writeAdmin]]">
           <new-frame-form league="[[league]]" players="[[activePlayers]]"></new-frame-form>
         </template>

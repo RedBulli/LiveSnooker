@@ -1,0 +1,84 @@
+<link rel="import" href="../vendors/polymer/polymer.html">
+<link rel="import" href="uikit.html">
+<link rel="import" href="livesnooker-player-link.html">
+
+<dom-module name="livesnooker-frames">
+  <style>
+    .frames {
+      padding-left: 1em;
+    }
+  </style>
+
+  <template>
+    <ol id="framelist" class="uk-list frames">
+      <template is="dom-repeat" items="[[frames]]">
+        <li data-id$="[[item.id]]">
+          <template is="dom-if" if="[[!_isFinished(item)]]">
+            (<span>[[computeStartDate(item)]]</span>)
+            <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link> - <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
+            <a href$="[[computeViewLink(item)]]" on-click="showFrame">Show</a>
+            <template is="dom-if" if="[[showControls]]">
+              <a href$="[[computeControlLink(item)]]" on-click="controlFrame">Control</a>
+            </template>
+            <template is="dom-if" if="[[item.video]]">
+              VIDEO
+            </template>
+          </template>
+          <template is="dom-if" if="[[_isFinished(item)]]">
+            (<span>[[computeEndDate(item)]]</span>)
+            <span class$="[[ computeWinnerClass(item, item.attributes.Player1) ]]">
+              <livesnooker-player-link player="[[item.attributes.Player1]]"></livesnooker-player-link>
+            </span>
+            <span> - </span>
+            <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
+              <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
+            </span>
+            <a href="[[computeShowBreaksLink(item)]]">View breaks</a>
+          </template>
+        </li>
+      </template>
+    </ol>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'livesnooker-frames',
+    properties: {
+      frames: Object,
+      showControls: Boolean
+    },
+    _isFinished: function(frame) {
+      return !!frame.get('endedAt');
+    },
+    frameUrl: function(frame) {
+      return '/frame.html?leagueId=' + frame.get('LeagueId') + '&frameId=' + frame.id;
+    },
+    computeControlLink: function(frame) {
+      return this.frameUrl(frame) + '&input=true';
+    },
+    computeViewLink: function(frame) {
+      return this.frameUrl(frame) + '&input=false';
+    },
+    computeShowBreaksLink: function(frame) {
+      return '/#/leagues/' + frame.get('LeagueId') + '/frames/' + frame.id;
+    },
+    computeStartDate: function(frame) {
+      return new Date(frame.get('createdAt')).toLocaleString();
+    },
+    computeEndDate: function(frame) {
+      return new Date(frame.get('endedAt')).toLocaleString();
+    },
+    computeWinnerClass: function(frame, player) {
+      if (frame.attributes.Winner === player) return "winner";
+    },
+    showFrame: function(event) {
+      event.preventDefault();
+      window.open(event.currentTarget.href, '', 'width=1050, height=600');
+    },
+    controlFrame: function(event) {
+      event.preventDefault();
+      window.open(event.currentTarget.href, '', 'width=1050, height=600');
+    }
+  });
+</script>
