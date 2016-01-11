@@ -36,6 +36,7 @@ Polymer
     user: Object
     onAccount: Object
     anonymous: Boolean
+    socketUrl: String
 
   findOrFetchModel: (klass, attrs) ->
     attributes =
@@ -144,6 +145,7 @@ Polymer
   useAnonymously: ->
     data.anonymous = true
     @fire('iron-signal', {name: "api-ready"}) if apiIsReady()
+    @onApiReady()
 
   ready: ->
     if @host
