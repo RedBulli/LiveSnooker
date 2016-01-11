@@ -33,11 +33,12 @@
             <span class$="[[ computeWinnerClass(item, item.attributes.Player2) ]]">
               <livesnooker-player-link player="[[item.attributes.Player2]]"></livesnooker-player-link>
             </span>
-            <a href="[[computeShowBreaksLink(item)]]">View breaks</a>
+            <a href="#" on-tap="_onShowBreaksClick">View breaks</a>
           </template>
         </li>
       </template>
     </ol>
+    <div id="breakmodal"></div>
   </template>
 </dom-module>
 
@@ -46,22 +47,23 @@
     is: 'livesnooker-frames',
     properties: {
       frames: Object,
-      showControls: Boolean
+      showControls: Boolean,
+      host: {
+        type: String,
+        value: 'https://webappsprogramming.com'
+      }
     },
     _isFinished: function(frame) {
       return !!frame.get('endedAt');
     },
     frameUrl: function(frame) {
-      return '/frame.html?leagueId=' + frame.get('LeagueId') + '&frameId=' + frame.id;
+      return this.host + '/frame.html?leagueId=' + frame.get('LeagueId') + '&frameId=' + frame.id;
     },
     computeControlLink: function(frame) {
       return this.frameUrl(frame) + '&input=true';
     },
     computeViewLink: function(frame) {
       return this.frameUrl(frame) + '&input=false';
-    },
-    computeShowBreaksLink: function(frame) {
-      return '/#/leagues/' + frame.get('LeagueId') + '/frames/' + frame.id;
     },
     computeStartDate: function(frame) {
       return new Date(frame.get('createdAt')).toLocaleString();
@@ -75,6 +77,17 @@
     showFrame: function(event) {
       event.preventDefault();
       window.open(event.currentTarget.href, '', 'width=1050, height=600');
+    },
+    _onShowBreaksClick: function(event) {
+      event.preventDefault();
+      var el = this.$$('#breakmodal');
+      el.innerHTML = '';
+      var frameBreaksModal = this.createFrameBreaksModal(event.model.item);
+      el.appendChild(frameBreaksModal);
+      frameBreaksModal.open();
+    },
+    createFrameBreaksModal: function(frame) {
+      return new FrameBreaksModal(frame.id, frame.get('LeagueId'));
     },
     controlFrame: function(event) {
       event.preventDefault();
