@@ -32,10 +32,7 @@
       league.save(league.attributes, {
         success: function() {
           _this.$.leagueName.value = "";
-          _this.fire('newleague', league)
-          if (Excess) {
-            Excess.RouteManager.navigateTo('/leagues/' + league.id);
-          }
+          _this.fire('newleague', league);
         },
         error: function(data, response) {
           errorsEl.errors = response.responseJSON.error.errors;
