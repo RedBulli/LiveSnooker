@@ -15,7 +15,8 @@
     "uikit": "2.24.3",
     "underscore": "1.8.3",
     "google-signin": "GoogleWebComponents/google-signin#1.2.0",
-    "excess-router": "0.9.11"
+    "excess-router": "0.9.11",
+    "d3": "~3.5.12"
   },
   "devDependencies": {
     "web-component-tester": "~3.3.26"
