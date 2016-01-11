@@ -90,6 +90,15 @@ Polymer
       streamUrl += "?id_token=" + data.authentication.id_token
     streamUrl
 
+  getSocketUrl: ->
+    data.socketUrl
+
+  getSocketUrlQuery: (leagueId) ->
+    query = "league_id=#{leagueId}"
+    if data.authentication
+      query += "&id_token=#{data.authentication.id_token}"
+    query
+
   ajax: (path, settings) ->
     if apiIsReady()
       @ajaxPromise(path, settings)
@@ -141,4 +150,6 @@ Polymer
       @fire('iron-signal', {name: "api-ready"}) if apiIsReady()
     else if data.host
       @host = data.host
+    if @socketUrl
+      data.socketUrl = @socketUrl
     @user = data.user

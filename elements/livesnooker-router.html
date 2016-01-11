@@ -14,7 +14,7 @@
 
 <dom-module id="livesnooker-router">
   <template>
-    <livesnooker-api id="api" host="{{backendHost}}"></livesnooker-api>
+    <livesnooker-api id="api" host="{{backendHost}}" socket-url="[[socketUrl]]"></livesnooker-api>
     <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}" on-google-signin-success="onSignedIn"></google-signin>
     <a id="noauth" on-click="noAuthClicked">Use anonymously</a>
     <header>
@@ -33,7 +33,6 @@
           <livesnooker-league
             league-id="[[leagueId]]"
             league="{{league}}"
-            socket-url="[[socketUrl]]"
             write-admin="{{writeAdmin}}"
             unfinished-frames="{{unfinishedFrames}}"
             finished-frames="{{finishedFrames}}"

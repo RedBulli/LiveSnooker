@@ -1,12 +1,8 @@
 activeSessions = {}
 
-SocketConnection = (socketUrl, leagueId, element, authentication) ->
+SocketConnection = (api, leagueId, element) ->
   onMessageCallbacks = {}
-  query = "league_id=#{leagueId}"
-  if authentication
-    query += "&id_token=#{authentication.id_token}"
-  socket = io.connect(socketUrl, {query: query})
-
+  socket = io.connect(api.getSocketUrl(), {query: api.getSocketUrlQuery(leagueId)})
   socket.on 'message', (data) ->
     frameId = data.message?.sessionid
     if frameId
@@ -28,8 +24,7 @@ Polymer
     socketUrl: String
 
   createConnection: ->
-    if @socketUrl && @leagueId
-      SocketConnection(@socketUrl, @leagueId, @, @$.api.data.authentication)
+    SocketConnection(@$.api, @leagueId, @)
 
   clearOldSessions: ->
     for frameId, val of activeSessions

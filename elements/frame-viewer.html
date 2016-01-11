@@ -15,8 +15,8 @@
       <div class="uk-grid">
         <div class="uk-width-medium-4-5">
           <frame-event-source stream-url="[[streamUrl]]" frame="{{frame}}"></frame-event-source>
-          <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
-          <x-frame-view socket-url="[[socketUrl]]" frame="[[frame]]" video="[[video]]"></x-frame-view>
+          <stream-channel id="stream-channel" league-id="[[frame.attributes.League.id]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+          <x-frame-view frame="[[frame]]" video="[[video]]"></x-frame-view>
           <template is="dom-if" if="[[videoAvailable]]">
             Video: <paper-toggle-button id="video-toggle" on-change="videoToggleChanged"></paper-toggle-button>
           </template>
@@ -41,7 +41,6 @@
       frameId: String,
       leagueId: String,
       streamUrl: String,
-      socketUrl: String,
       video: {
         type: Boolean,
         value: false

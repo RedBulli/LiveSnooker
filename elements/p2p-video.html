@@ -24,8 +24,7 @@
     properties: {
       input: Boolean,
       leagueId: String,
-      frameId: String,
-      socketUrl: String
+      frameId: String
     },
     open: function() {
       this.connection.open(this.frameId);
@@ -46,13 +45,7 @@
       };
 
       var onMessageCallbacks = {};
-
-      var idToken = this.$.api.data.authentication.id_token;
-      var query = "league_id=" + leagueId;
-      if (idToken) {
-        query = query.concat("&id_token=" + idToken);
-      }
-      var socket = io.connect(this.socketUrl, {query: query});
+      var socket = io.connect(this.$.api.getSocketUrl(), {query: this.$.api.getSocketUrlQuery(leagueId)});
 
       socket.on('message', function(data) {
           if(data.sender == connection.userid) return;

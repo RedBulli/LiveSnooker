@@ -17,7 +17,7 @@
   <template>
     <div id="gameview">
       <template is="dom-if" if="[[_video(video)]]" restamp="true">
-        <p2p-video id="video" class="video" on-ready="_onVideoReady" socket-url="[[socketUrl]]" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
+        <p2p-video id="video" class="video" on-ready="_onVideoReady" league-id="[[frame.attributes.League.id]]" frame-id="[[frame.id]]">
             <figure class="uk-overlay">
               <div id="cam" class="video-container" width="640" height="480"></div>
               <figcaption class="uk-overlay-panel uk-overlay-bottom uk-text-center">
@@ -39,7 +39,6 @@
     properties: {
       frame: Object,
       video: Boolean,
-      socketUrl: String,
       videoInput: {
         type: Boolean,
         value: false

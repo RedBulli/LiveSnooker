@@ -15,7 +15,7 @@
         <event-stream stream-url="[[streamUrl]]" on-event="onStreamEvent"></event-stream>
       </template>
       <template is="dom-if" if="[[_isRTCSupported()]]">
-        <stream-channel id="stream-channel" socket-url="[[socketUrl]]" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
+        <stream-channel id="stream-channel" league-id="[[leagueId]]" on-new-stream="newStream" on-stream-closed="streamClosed"></stream-channel>
       </template>
     </template>
   </template>

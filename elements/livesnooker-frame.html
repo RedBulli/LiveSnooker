@@ -6,14 +6,14 @@
 
 <dom-module id="livesnooker-frame">
   <template>
-    <livesnooker-api id="api" host="{{backendHost}}"></livesnooker-api>
+    <livesnooker-api id="api" host="{{backendHost}}" socket-url="[[socketUrl]]"></livesnooker-api>
     <google-signin client-id="{{googleClientId}}" signed-in="{{signedIn}}" hidden$="{{signedIn}}" on-google-signin-success="onSignedIn"></google-signin>
     <a id="noauth" on-click="noAuthClicked">Use anonymously</a>
     <template is="dom-if" if="{{input}}">
-      <frame-controller league-id="{{leagueId}}" frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-controller>
+      <frame-controller league-id="{{leagueId}}" frame-id="{{frameId}}"></frame-controller>
     </template>
     <template is="dom-if" if="{{!input}}">
-      <frame-viewer league-id="{{leagueId}}" frame-id="{{frameId}}" socket-url="{{socketUrl}}"></frame-viewer>
+      <frame-viewer league-id="{{leagueId}}" frame-id="{{frameId}}"></frame-viewer>
     </template>
   </template>
 </dom-module>

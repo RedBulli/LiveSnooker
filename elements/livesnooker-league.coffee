@@ -26,7 +26,6 @@ Polymer
       type: Array
       notify: true
     streamUrl: String
-    socketUrl: String
     writeAdmin:
       type: Boolean
       notify: true
