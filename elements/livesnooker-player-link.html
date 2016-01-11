@@ -17,7 +17,8 @@
   Polymer({
     is: 'livesnooker-player-link',
     properties: {
-      player: Object
+      player: Object,
+      host: String
     },
     _onPlayerClick: function(event) {
       event.preventDefault();
@@ -28,7 +29,7 @@
       statsEl.open();
     },
     createStatsElement: function() {
-      return new LivesnookerPlayerStatsModal(this.player.id, this.player.get('LeagueId'));
+      return new LivesnookerPlayerStatsModal(this.player.id, this.player.get('LeagueId'), this.host);
     }
   });
 </script>

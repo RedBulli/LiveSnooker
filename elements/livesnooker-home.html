@@ -26,9 +26,9 @@
     <div id="content">
       <template is="dom-if" if="[[league]]">
         <h2>Ongoing frames (<span>[[unfinishedFrames.length]]</span>)</h2>
-        <livesnooker-frames host="" frames="[[unfinishedFrames]]" show-controls="[[writeAdmin]]"></livesnooker-frames>
+        <livesnooker-frames frames="[[unfinishedFrames]]" show-controls="[[writeAdmin]]"></livesnooker-frames>
         <h2>Finished frames (<span>[[finishedFrames.length]]</span>)</h2>
-        <livesnooker-frames host="" frames="[[finishedFrames]]"></livesnooker-frames>
+        <livesnooker-frames frames="[[finishedFrames]]"></livesnooker-frames>
         <template is="dom-if" if="[[writeAdmin]]">
           <new-frame-form league="[[league]]" players="[[activePlayers]]"></new-frame-form>
         </template>

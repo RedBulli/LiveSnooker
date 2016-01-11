@@ -20,7 +20,7 @@
           <li>Fails count: <span>[[stats.failCount]]</span></li>
           <li>Fail points: <span>[[stats.failPoints]]</span></li>
         </ul>
-        <a href="[[_fullStatsUrl(player)]]">See full stats</a>
+        <a href="#" on-tap="_fullStatsClick">See full stats</a>
       </template>
     </template>
   </template>
@@ -36,10 +36,16 @@
       },
       leagueId: String,
       player: Object,
-      stats: String
+      stats: String,
+      host: {
+        type: String,
+        value: "/"
+      }
     },
-    _fullStatsUrl: function(player) {
-      return "/#/leagues/" + this.leagueId + "/players/" + player.id;
+    _fullStatsClick: function(event) {
+      event.preventDefault();
+      var url = this.host + "#/leagues/" + this.leagueId + "/players/" + this.player.id;
+      window.open(url, "");
     },
     _potPct: function(stats) {
       return Math.round(100 * stats.potsFromPotAttempts / stats.potAttempts);
@@ -80,7 +86,7 @@
       <div class="uk-modal-dialog">
         <a class="uk-modal-close uk-close"></a>
         <template is="dom-if" if="opened" restamp>
-          <livesnooker-player-stats player-id="[[playerId]]" league-id="[[leagueId]]"></livesnooker-player-stats>
+          <livesnooker-player-stats host="[[host]]" player-id="[[playerId]]" league-id="[[leagueId]]"></livesnooker-player-stats>
         </template>
       </div>
     </div>
@@ -93,11 +99,13 @@
     properties: {
       playerId: String,
       leagueId: String,
-      opened: Boolean
+      opened: Boolean,
+      host: String
     },
-    factoryImpl: function(playerId, leagueId) {
+    factoryImpl: function(playerId, leagueId, host) {
       this.playerId = playerId;
       this.leagueId = leagueId;
+      this.host = host;
     },
     open: function() {
       this.opened = true;
