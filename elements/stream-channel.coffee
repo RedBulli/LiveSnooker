@@ -1,8 +1,13 @@
 activeSessions = {}
 
-SocketConnection = (api, leagueId, element) ->
+SocketConnection = (socket, api, leagueId, element) ->
   onMessageCallbacks = {}
-  socket = io.connect(api.getSocketUrl(), {query: api.getSocketUrlQuery(leagueId)})
+  query = api.getSocketUrlQuery(leagueId)
+  if socket
+    socket.io.opts.query = query
+    socket.connect()
+  else
+    socket = io.connect(api.getSocketUrl(), {query: query})
   socket.on 'message', (data) ->
     frameId = data.message?.sessionid
     if frameId
@@ -21,10 +26,9 @@ Polymer
     leagueId:
       type: String,
       observer: '_onLeagueChange'
-    socketUrl: String
 
   createConnection: ->
-    SocketConnection(@$.api, @leagueId, @)
+    SocketConnection(@socket, @$.api, @leagueId, @)
 
   clearOldSessions: ->
     for frameId, val of activeSessions
@@ -41,14 +45,12 @@ Polymer
 
   _onLeagueChange: ->
     @whenReady.then =>
-      if @connection
-        @connection.close()
-        clearInterval(@intervalId)
-        @connection = null
+      if @socket
+        @socket.disconnect()
       if @leagueId
-        @connection = @createConnection()
-        if @connection
-          @intervalId = setInterval(@clearOldSessions.bind(@, @connection), 10000)
+        unless @socket
+          setInterval(@clearOldSessions.bind(@), 10000)
+        @socket = SocketConnection(@socket, @$.api, @leagueId, @)
 
   ready: ->
     @$.api.data.ready.then =>
