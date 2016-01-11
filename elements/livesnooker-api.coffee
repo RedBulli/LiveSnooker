@@ -35,6 +35,7 @@ Polymer
     host: String
     user: Object
     onAccount: Object
+    anonymous: Boolean
 
   findOrFetchModel: (klass, attrs) ->
     attributes =
@@ -152,4 +153,6 @@ Polymer
       @host = data.host
     if @socketUrl
       data.socketUrl = @socketUrl
+    if @anonymous
+      @useAnonymously()
     @user = data.user
