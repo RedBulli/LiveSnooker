@@ -3,26 +3,13 @@
 <head>
   <meta name="viewport" content="width=device-width" />
   <script src="https://webappsprogramming.com/vendors/webcomponentsjs/webcomponents.min.js"></script>
-  <link rel="import" href="https://webappsprogramming.com/vendors/polymer/polymer.html">
-  <link rel="import" href="https://webappsprogramming.com/elements/livesnooker-api.html">
-  <link rel="import" href="https://webappsprogramming.com/elements/livesnooker-league.html">
-  <link rel="import" href="https://webappsprogramming.com/elements/livesnooker-frames.html">
+  <link rel="import" href="https://webappsprogramming.com/elements/bundle/livesnooker-frames-bundled.html">
 </head>
 
 <body>
   <div>
     This is an example to showcase using only select components.
   </div>
-  <template is="dom-bind">
-    <livesnooker-api
-      id="api"
-      host="https://webappsprogramming.com/api"
-      socket-url="https://webappsprogramming.com/" anonymous></livesnooker-api>
-    <livesnooker-league
-      league-id="a3bbbb96-ddf6-4d3b-bdfa-248786982841"
-      unfinished-frames="{{frames}}"
-      host="/"></livesnooker-league>
-    <livesnooker-frames frames="[[frames]]" host="https://webappsprogramming.com/"></livesnooker-frames>
-  </template>
+  <livesnooker-frames-bundled league-id="a3bbbb96-ddf6-4d3b-bdfa-248786982841"></livesnooker-frames-bundled>
 </body>
 </html>
