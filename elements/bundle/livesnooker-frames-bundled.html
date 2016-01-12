@@ -1,0 +1,27 @@
+<link rel="import" href="../../vendors/polymer/polymer.html">
+<link rel="import" href="../livesnooker-api.html">
+<link rel="import" href="../livesnooker-league.html">
+<link rel="import" href="../livesnooker-frames.html">
+
+<dom-module name="livesnooker-frames-bundled">
+  <template>
+    <livesnooker-api
+      host="https://webappsprogramming.com/api"
+      socket-url="https://webappsprogramming.com/" anonymous></livesnooker-api>
+    <livesnooker-league
+      league-id="[[leagueId]]"
+      unfinished-frames="{{frames}}"
+      host="/"></livesnooker-league>
+    <livesnooker-frames frames="[[frames]]" host="https://webappsprogramming.com/"></livesnooker-frames>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'livesnooker-frames-bundled',
+    properties: {
+      leagueId: String,
+      frames: Array
+    }
+  });
+</script>
